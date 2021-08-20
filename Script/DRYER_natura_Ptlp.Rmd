@@ -1,0 +1,144 @@
+---
+title: "Dryer_natura_Ptlp"
+author: "Marion Boisseaux"
+date: "22/07/2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+  html_document:
+    toc: yes
+    toc_depth: 5
+---
+
+We assessed the leaf turgor loss point, $\pi_{tlp}$ in MPa, from a previously established relationship with the osmotic potential at full hydration, $\pi_{osm}$ in MPa. $\pi_{osm}$ is linked to the equilibrium solute concentration value $C_0$ (in mmol.kg^{-1}) directly measured with a vapor pressure osmometer (Vapro 5600, Wescor, Logan, UT). This is referred as the *osmometer method* (Bartlett et al. 2012a; Maréchaux et al. 2016).
+
+# Uploading Ptlp data
+ 
+Uploading Ptlp data from vapro excel files for all the field days of DRYER natura 2021.
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(plyr)
+library(tidyverse)
+library(knitr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(forcats)
+library(questionr)
+path <- "Rawdata/5_Ptlp"
+
+
+myfiles <- list.files(path=path, pattern = "*.xlsx", full.names = TRUE ) #it will read the file with * being the replaced value each time
+
+data = ldply(myfiles, read_excel)
+
+data <- as_tibble(data)
+data
+
+```
+
+#Tidying dataframe
+
+```{r}
+data <- select(data, - Calibration_Date, - Contamination_Level, - `Scan?` )
+
+data$C0 <- as.numeric(data$C0)
+  
+```
+
+#Calculating Posm et Ptlp
+
+The equilibrium solute concentration value $C_0$ (in mmol.kg^{-1}) was recorded from the osmometer when the difference between two consecutive measurements fell below 5 mmol.kg^{-1}. This value was converted to $\pi_{osm}$ values using the van't Hoff equation:  
+ 
+ $\pi_{osm}$ = $(-2.5/1000)$x$C_0$
+ 
+  where the numerator of the first term represents RxT = 2.5 L.MPa.mol^{-1}^ at 25°C, with R the ideal gas constant and T the temperature in Kelvin degrees.
+  
+The value $\pi_{osm}$ was then converted to $\pi_{tlp}$ using the following equation:  
+ 
+$\pi_{tlp}$= ( 0.799x $\pi_{osm}$ ) -0.665
+
+```{r}
+# Calculate new numeric variables with math formulas
+
+data <- mutate(data, Posmo = (-2.5/1000)* as.numeric(C0))
+data <- mutate(data, Ptlp=(0.799*Posmo)-0.665)
+
+view(data)
+
+```
+
+
+
+#Selecting next run or leaf if first did not work
+
+```{r}
+
+Ptlp_clean <- data %>% filter(Ptlp !=0) %>% distinct(Code, .keep_all = TRUE)
+
+
+
+
+for (i in 1:length(Ptlp$Nr_Leaf)) {
+    
+  if (is.na(Ptlp$Ptlp[i])) {
+    #Ptlp$Ptlp[i]<- Ptlp$Ptlp[i+1]
+    
+  
+  }
+  else {
+    print("wow, that's awesome")
+  }
+}
+
+#-------------------------------
+
+for each Code
+
+variable Ptlp takes value:
+
+for Ptlp$Nr_Leaf = 1 , if variable Ptlp has value, 'then' keep it
+                       if variable Ptlp has NA , 'then' switch to Ptlp$Nr_Leaf=2
+
+
+for Ptlp$Nr_Leaf = 2 , if variable Ptlp has value, 'then' keep it
+                       if variable Ptlp has NA , 'then' keep NA
+
+
+
+```
+
+## Mean species values
+
+
+```{r echo=FALSE}
+
+summarise(Ptlp_clean$Species_Name)
+
+count = count(Ptlp_clean, Species_Name)
+
+group_species<- Ptlp_clean %>% 
+  group_by(Species_Name) %>% 
+  summarize(mean_Ptlp=mean(Ptlp))
+kable(group_species,
+      col.names= c("Species_Name", "Mean $\\pi{tlp}$ values"),
+      align = 'c',
+      label="Mean pi_{tlp} values for 24 species")
+
+group_species <- mutate(group_species, n=count)
+
+ggplot(group_species) +
+  aes(x = Species_Name, y = mean_Ptlp) +
+  geom_boxplot(shape = "circle", fill = "#454611") +
+  labs(
+    x = "Species ",
+    y = "Pressure at turgor loss point (MPa)",
+    title = "Mean Ptlp per species"
+  ) +
+  theme_minimal()
+```

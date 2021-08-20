@@ -1,0 +1,54 @@
+---
+title: "DRYER_natura_RWC"
+author: "Marion Boisseaux"
+date: "25/07/2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+  html_document:
+    toc: yes
+    toc_depth: 5
+---
+
+Leaf water status was evaluated as relative leaf water content (RWC). 
+RWC was calculated as (Cf. Kursar et al 2009):
+
+(fresh weight - dry weight)/ (saturated weight - dry weight) weight)*100 (Barrs & Weatherley 1962). 
+
+Saturated weight was obtained by rehydrating leaves for 24 hours in the dark at low temperatures (4 ºC). Low temperatures prevent oversaturation artifacts that arise due to artificially low osmotic potential resulting from catabolic conversion of starch into sugars (Boyer, James, Munns, Condon
+224 & Passioura 2008, Sapes & Sala 2020 ). 
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(plyr)
+library(tidyverse)
+library(knitr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(forcats)
+library(questionr)
+library(readxl)
+
+RWC <- read_excel("Rawdata/1_RWC/DRYER_RWC.xlsx", 
+    col_types = c("skip", "skip", "skip", 
+        "skip", "skip", "skip", "text", "numeric", 
+        "skip", "skip", "numeric", "numeric", 
+        "skip", "skip", "numeric", "numeric", 
+        "skip", "skip", "numeric", "text", 
+        "numeric", "numeric"))
+View(RWC)
+```
+
+```{r}
+
+RWC <- mutate(RWC, RWC = ((FW - DW)/(SW - DW)*100))
+
+```
+
+
