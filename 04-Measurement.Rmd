@@ -1,0 +1,94 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+# Ecophysiology trait measurements
+
+## $\pi_{TLP}$
+
+```{r measurePtlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
+library(ggplot2)
+Ptlp <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/15unEUBxCQz_2ekJPEkL6M5C12tjvFJ0P7nb0iLh6Caw/edit#gid=0")
+
+ggplot(Ptlp) +
+  aes(x = Species_Name, y = Ptlp) +
+  geom_boxplot(shape = "circle", fill = "#008EFF") +
+  facet_wrap(~Species_Name) +
+  theme_minimal()
+
+p1 <- ggplot(Ptlp) +
+  aes(x = Species_Name, y = Ptlp) +
+  geom_boxplot(shape = "circle", fill = "#008EFF") +
+  theme_minimal()
+p1
+```
+
+## $\frac{Fv}{Fm}$
+
+```{r measureFvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
+library(readxl)
+FvFm <- read_excel("Rawdata/3_FvFm/DRYER_FvFm.xlsx")
+p2 <-ggplot(FvFm) +
+  aes(x = spName, y = `FvFm`) +
+  geom_boxplot(shape = "circle", fill = "#2BDD1A") +
+  theme_minimal()
+p2
+```
+
+## $RWC$
+
+```{r measureRWC, echo=FALSE, fig.cap="$RWC$.", message=FALSE, warning=FALSE}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+RWC <- read_excel("Rawdata/1_RWC/DRYER_RWC.xlsx")
+
+RWC <- mutate(RWC, RWC=((FW-DW)/(SW-DW)*100))
+p3 <- ggplot(RWC) +
+  aes(x = Species_Name, y = RWC) +
+  geom_boxplot(shape = "circle", fill = "#FF8C00") +
+  theme_minimal() 
+p3
+```
+
+## Summary 
+```{r message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(cowplot)
+
+plot_grid(p1, p2, p3, labels = c('A', 'B', 'C'), label_size = 12)
+
+```
+
+
+
+## Leaf area
+
+I used following code in `ImageJ`:
+
+```{bash imageJsoft, eval=F, echo=T}
+run("8-bit");
+setAutoThreshold("Default");
+//run("Threshold...");
+setAutoThreshold("Default");
+setOption("BlackBackground", false);
+run("Convert to Mask", "method=Default background=Light calculate");
+run("Analyze Particles...", "size=1000000-Infinity display summarize");
+setAutoThreshold("Default dark");
+
+```
+
+# Microbial analyses
+
+Weights of samples before sterilization. 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readxl)
+Microbio <- read_excel("Rawdata/7_Microbio/Microbio.xlsx")
+Microbio
+```
+
+
+
+

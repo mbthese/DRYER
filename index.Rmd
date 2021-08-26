@@ -1,0 +1,21 @@
+--- 
+title: "DRYER_Natura"
+subtitle: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
+author: "Marion Boisseaux"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+link-citations: yes
+colorlinks: yes
+description: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
+---
+
+`r if (knitr:::is_html_output()) '# Preface {-}'`
+
+`r if (knitr:::is_html_output()) '![](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)'`
+
+`r if (knitr:::is_html_output()) 'The overall objective of DRYER is to unravel tree-microbiome interactions in response to predicted CC. We will investigate the vulnerability to drought of tree species strongly associated (specialist) or not (generalist) to SFF. Very few studies have cross-examined for SFF species multiple drought traits with the associated microbial community and tested whether the duration of drought periods could influence their resistance and resilience to future droughts. To address this question, we suggest a two-fold multidisciplinary approach which combines field sampling with greenhouse experiment. First, we will determine if the natural variability of mechanistic drought tolerance plant traits are linked to root microbiome of tree species co-occurring in SFF (specialist or generalist).'`
+
+`r if (knitr:::is_html_output()) 'Have a nice reading.'`
+
+`r if (knitr:::is_html_output()) '<div align="right">  *Marion*'`

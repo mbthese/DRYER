@@ -1,0 +1,78 @@
+# Traits
+
+
+This chapter defines measured traits, the organization of the measurements with the associated protocols.
+
+## Soft traits
+
+* **LA**: leaf area $cm^{2}$
+* **LDMC**: leaf dry matter content $g.g^{-1}$
+* **LT**: leaf thickness ($\mu m$)
+* **SLA**: specific leaf area ($g.cm^{-2}$)
+* Plant height ($cm$)
+* Stem diameter ($cm$)
+* Number of leaves
+* Number of leaflets : for compound leaves.
+* **SRL**: Specific root length ($m.g^{-1}$)
+* Root to shoot ratio 
+* total biomass 
+
+## Hydraulic traits
+
+* **RWC**: relative water content (%) is of special interest as it reflects the amount of water present the leaf relative to the maximum it can hold (*INSERER BIBLIO Barrs & Weatherley 1962*)
+* **$\pi_{TLP}$**: leaf water potential at which leaf cells lose turgor (MPa), a key drought tolerance trait. 
+* **$g_{min}$**: leaf minimum conductance $mmol.m^{-2}.s^{-1}$ taking into account water losses through the cuticle and incompletely closed stomata.
+* **Stomatal characteristics (size, density)**: morphological characteristic at the crossroads between water loss and the maximum rate of photosynthesis.(*INSERER BIBLIO Julio V. Schneider 2016*)
+* **Nervation density**: determining the capacity of water supply in leaves. (*INSERER BIBLIO Julio V. Schneider 2016*)
+* Leaf chemistry : To assess the leaves' concentration in carbon, nitrogen and phosphorous.
+
+## Photochemical trait
+ 
+* **$\frac{Fv}{Fm}$**: maximum quantum yield of photosystem II, which reflects photosynthesis efficiency ($\mu mol . m^{-2} . s^{-1}/ \mu mol . m^{-2} . s^{-1}$). It is an indicator of photosynthetic performance, as it has been shown to be sensitive to drought constraints in tropical forests (*INSERER BIBLIO Manzi et al 2021*) but decline after other leaf hydraulic traits (*INSERER BIBLIO Trueba et al 2019*).
+
+## Microbial analyses : bacteria + fungi endophytes
+
+* Leaf and root surface-sterilization, storage -20°C 
+* Leaf and root DNA extraction (high-throughput sequencing of amplicons)
+* PCR with tagged primers and sequencing performing with illumina miSeq and paired technology to obtain reads: Since fungi were shown to be more tolerant than bacteria to water stress (*INSERER BIBLIO Preece 2019*) we will then focus on fungi and in the leaves to unveil any potential corrolations with the leaves' measured traits.
+* Use of OBITools + metabaR packages (pair-end assembly, read assignment, read dereplication, taxonomic assignment, chimera detection, sequence clustering)
+* Goal: relate MOTUs to taxonomic names and search for functional guilds.
+
+
+## Measured traits
+
+* Day 1
+    * Fresh
+        * plant height
+        * stem diameter
+        * thickness (5 points)
+        * scan roots
+        * scan gmin leaves
+        * fresh weight RWC 
+        * **$g_{min}$** weight  
+        * **Stomatal density** nail polish (3 replicates per indivual)
+        * **$\frac{Fv}{Fm}$**
+    
+    * Day 2
+        * saturated weight RWC + scan
+        * **$g_{min}$** finish weights (at least 2 points next day)
+        * **$\pi_{TLP}$** + scan
+        * scan rest of leaves
+    
+    * Day 5 (+72h)
+        * Dry weight RWC
+        * Dry weight all leaves before microbial analyses
+        * Dry weight roots before microbial analyses
+
+
+## Protocols
+
+* [**In natura field** protocol](../3_Protocol/Field_innatura.Rmd)
+* [**$\pi_{TLP}$** protocol](../3_Protocol/Protocole_Ptlp.pdf)
+* [**RWC** protocol](../3_Protocol/RWC_Boisseaux.docx)
+* [**Stomata** protocol](../3_Protocol/Analyse Stomates_Marion.docx)
+* [**FvFm** protocol](../3_Protocol/Fluo_Bellifa.docx)
+* [**gmin** protocol](../3_Protocol/Gmin protocol.docx)
+* [**leaf venation** protocol](../3_Protocol/ProtocolLeafVeins_MB_2.docx) 
+* [**Surface-sterilization for isolation of endophytes** protocol](../3_Protocol/Sterilisation.docx)
+

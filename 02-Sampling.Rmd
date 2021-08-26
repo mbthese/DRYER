@@ -1,0 +1,17 @@
+# Species
+
+We selected 7 species, chosen according to their abundance in SFF and according to *in natura* availability during the wet season of 2021 (January-July 2021). To explore the variability of mechanistic traits linked to drought tolerance and root fungal community, we plan to measure *in natura* 10 seedlings per species known to be strictly affiliated to SFF or not.
+
+```{r echo=TRUE}
+library(readxl)
+library(kableExtra)
+library(ggplot2)
+Sampling <- read_excel("./Document/samling.xlsx")
+kable(Sampling)
+
+ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done > 10)) +
+  geom_col() +
+  coord_flip() +
+  geom_hline(yintercept = 10, linetype = "dashed", col = "lightgrey")
+
+```

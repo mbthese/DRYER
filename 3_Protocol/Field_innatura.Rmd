@@ -1,0 +1,36 @@
+---
+title: "Sampling DRYER in natura"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  bookdown::html_document2: default
+---
+
+## Preparation
+
+- [ ] Book vehicule
+- [ ] Charge satellite phone (if less than 3 person)
+- [ ] Charge GPS (+ take an additionnal pair of batteries)
+- [ ] Tarpaulin for sand extraction
+- [ ] Shovel
+
+
+- [ ] Prepare cooler/bucket with:
+    - [ ] ziplock bags for the roots
+    - [ ] ziplock (large) bags for the entire plant
+    - [ ] ziplock bags for the RWC leaf that were **weighted** beforehand
+    - [ ] a bottle of water
+    - [ ] sharpies
+
+
+## Protocol
+
+- [ ] Mark GPS position 
+- [ ] Annote the ziplock bags with the GPS position and species name
+- [ ] Make sure the seedlings have at least 4-5 leaves for the trait assessment
+- [ ] Using the shovel, uproot the seedling without harming the roots
+- [ ] Place a ziplock back on the roots
+- [ ] Gently detach the third leaf (counting from bottom to top) for the RWC 
+- [ ] Place the whole plant in a large ziplock and carry within the cooler/bucket
+
+
