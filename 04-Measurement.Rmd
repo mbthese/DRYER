@@ -1,9 +1,59 @@
 ---
-output: html_document
-editor_options: 
+output:
+  pdf_document: 
+    toc: yes
+    number_sections: yes
+  html_document: default
+editor_options:
   chunk_output_type: inline
 ---
 # Ecophysiology trait measurements
+
+## Leaf thickness
+
+```{r}
+library(readxl)
+SoftTraits <- read_excel("Rawdata/DRYER_infocollect_morpho.xlsx", 
+    col_types = c("skip", "skip", "numeric", 
+        "skip", "text", "text", "skip", "skip", 
+        "text", "text", "skip", "skip", "skip", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", "numeric",
+        "skip", "skip", "skip"))
+SoftTraits
+
+ggplot(SoftTraits) +
+  aes(x = Genus, y = MeanLeafThickness) +
+  geom_boxplot(shape = "circle", fill = "#112446") +
+  theme_minimal()
+```
+
+
+## Seedling heights
+
+```{r}
+
+library(ggplot2)
+
+ggplot(SoftTraits) +
+ aes(x = Genus, y = `Height (cm)`) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ theme_minimal()
+
+
+
+```
+
+## Stem diameter
+```{r}
+ggplot(SoftTraits) +
+ aes(x = Genus, y = `Stem_diameter (mm)`) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ theme_minimal()
+```
+
+
 
 ## $\pi_{TLP}$
 
@@ -50,21 +100,12 @@ p3 <- ggplot(RWC) +
   geom_boxplot(shape = "circle", fill = "#FF8C00") +
   theme_minimal() 
 p3
-```
-
-## Summary 
-```{r message=FALSE, warning=FALSE}
-
-library(ggplot2)
-library(cowplot)
-
-plot_grid(p1, p2, p3, labels = c('A', 'B', 'C'), label_size = 12)
 
 ```
 
 
-
-## Leaf area
+## Gmin
+###Leaf area
 
 I used following code in `ImageJ`:
 
@@ -78,7 +119,59 @@ run("Convert to Mask", "method=Default background=Light calculate");
 run("Analyze Particles...", "size=1000000-Infinity display summarize");
 setAutoThreshold("Default dark");
 
+
 ```
+
+
+```{r}
+LeafArea <- read_excel("Rawdata/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
+LeafArea
+
+```
+ 
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+Gmin <- read_csv("Rawdata/2_gmin/Gmin_DRYERwithLA.csv", 
+    col_types = cols(idTree = col_skip(), 
+        beta = col_skip(), file = col_skip()))
+ggplot(Gmin) +
+  aes(
+    x = specCode,
+    y = gmin.slope_function,
+    colour = specCode
+  ) +
+  geom_boxplot(shape = "circle", fill = "#112446") +
+  scale_color_brewer(palette = "Accent", direction = 1) +
+  coord_flip() +
+  theme_minimal()
+
+p4 <- ggplot(Gmin) +
+  aes(x = specCode, y = gmin.slope_function) +
+  geom_boxplot(shape = "circle", fill = "#FF69B4") +
+  theme_minimal()
+```
+
+
+
+## Summary 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(cowplot)
+
+plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
+
+```
+
+# Root:shoot ratio
+
+```{r}
+
+```
+
 
 # Microbial analyses
 

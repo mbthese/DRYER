@@ -57,6 +57,48 @@ This chapter defines measured traits, the organization of the measurements with 
         * saturated weight RWC + scan
         * **$g_{min}$** finish weights (at least 2 points next day)
         * **$\pi_{TLP}$** + scan
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         * scan rest of leaves
     
     * Day 5 (+72h)

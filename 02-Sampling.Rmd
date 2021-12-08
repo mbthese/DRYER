@@ -9,9 +9,9 @@ library(ggplot2)
 Sampling <- read_excel("./Document/samling.xlsx")
 kable(Sampling)
 
-ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done > 10)) +
+ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 10)) +
   geom_col() +
   coord_flip() +
-  geom_hline(yintercept = 10, linetype = "dashed", col = "lightgrey")
+  geom_hline(yintercept = 10, linetype = 2, col = "lightgrey")
 
 ```
