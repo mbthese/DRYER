@@ -6,7 +6,7 @@ We selected 7 species, chosen according to their abundance in SFF and according 
 library(readxl)
 library(kableExtra)
 library(ggplot2)
-Sampling <- read_excel("./Document/samling.xlsx")
+Sampling <- read_excel("./Natura_Document/samling.xlsx")
 kable(Sampling)
 
 ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 10)) +

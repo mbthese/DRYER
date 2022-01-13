@@ -1,5 +1,5 @@
 --- 
-title: "DRYER_Natura"
+title: "DRYERproject"
 subtitle: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
 author: "Marion Boisseaux"
 date: "`r Sys.Date()`"

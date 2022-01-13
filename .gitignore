@@ -4,5 +4,8 @@
 .Ruserdata
 _bookdown_*
 
-Document/
-Rawdata/
+Greenhouse_data/
+Greenhouse_document/
+Natura_data/
+Natura_Document/
+

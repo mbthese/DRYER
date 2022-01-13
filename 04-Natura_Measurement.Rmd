@@ -13,7 +13,7 @@ editor_options:
 
 ```{r}
 library(readxl)
-SoftTraits <- read_excel("Rawdata/DRYER_infocollect_morpho.xlsx", 
+SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
     col_types = c("skip", "skip", "numeric", 
         "skip", "text", "text", "skip", "skip", 
         "text", "text", "skip", "skip", "skip", 
@@ -74,11 +74,11 @@ p1 <- ggplot(Ptlp) +
 p1
 ```
 
-## $\frac{Fv}{Fm}$
+## $\frac{Fv}{Fm} in natura$
 
-```{r measureFvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
+```{r FvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
 library(readxl)
-FvFm <- read_excel("Rawdata/3_FvFm/DRYER_FvFm.xlsx")
+FvFm <- read_excel("Natura_data/3_FvFm/DRYER_FvFm.xlsx")
 p2 <-ggplot(FvFm) +
   aes(x = spName, y = `FvFm`) +
   geom_boxplot(shape = "circle", fill = "#2BDD1A") +
@@ -92,7 +92,7 @@ p2
 library(readxl)
 library(dplyr)
 library(ggplot2)
-RWC <- read_excel("Rawdata/1_RWC/DRYER_RWC.xlsx")
+RWC <- read_excel("Natura_data/1_RWC/DRYER_RWC.xlsx")
 
 RWC <- mutate(RWC, RWC=((FW-DW)/(SW-DW)*100))
 p3 <- ggplot(RWC) +
@@ -124,7 +124,7 @@ setAutoThreshold("Default dark");
 
 
 ```{r}
-LeafArea <- read_excel("Rawdata/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
+LeafArea <- read_excel("Natura_data/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
 LeafArea
 
 ```
@@ -134,7 +134,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 
-Gmin <- read_csv("Rawdata/2_gmin/Gmin_DRYERwithLA.csv", 
+Gmin <- read_csv("Natura_data/2_gmin/Gmin_DRYERwithLA.csv", 
     col_types = cols(idTree = col_skip(), 
         beta = col_skip(), file = col_skip()))
 ggplot(Gmin) +
@@ -178,7 +178,7 @@ plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
 Weights of samples before sterilization. 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(readxl)
-Microbio <- read_excel("Rawdata/7_Microbio/Microbio.xlsx")
+Microbio <- read_excel("Natura_data/7_Microbio/Microbio.xlsx")
 Microbio
 ```
 

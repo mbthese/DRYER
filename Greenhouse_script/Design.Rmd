@@ -1,0 +1,182 @@
+---
+title: "Design"
+author: "Marion Boisseaux"
+date: "09/06/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Understanding RCBD design
+
+A randomized block design is an experimental design where the experimental units are in groups called blocks. The treatments are randomly allocated to the experimental units inside each block. When all treatments appear at least once in each block, we have a completely randomized block design. Otherwise, we have an incomplete randomized block design.
+
+This kind of design is used to minimize the effects of systematic error. If the experimenter focuses exclusively on the differences between treatments, the effects due to variations between the different blocks should be eliminated.
+
+# blockdesign package
+The blocksdesign package provides functionality for the construction of block and treatment designs for general linear models.
+
+*blocks*: This is a simple recursive function for nested blocks for unstructured treatments. The function generates designs for treatments with arbitrary levels of replication and with arbitrary depth of nesting where blocks sizes are assumed to be as equal as possible for each level of nesting. The outputs from the blocks function include a
+data frame showing the allocation of treatments to blocks and a table showing the achieved D- and A-efficiency factors for each set of nested blocks together with A-efficiency upper bounds, where available. A plan showing the allocation of treatments to blocks for the bottom level of the design is also included in the output.
+
+The goodness or efficiency of an experimental design can be quantified:   
++ *D-effciency*: a function of the geometric mean of the eigenvalues
++ *A-efficiency* :  a function of the arithmetic mean of the eigenvalues
+Both are based on the idea of average variance, as the variance gets smaller, the efficiencies go lower.
+
+**The best design is the one with the highest A- and D- efficiencies**  
+
+
+## assigning individuals to a treatment 
+
+Completely randomized design for 3 treatments with 35 replicates and 1 control with 40 replicates. 145 replicates total for each species. Assigning each individual to a treatment. 
+
+```{r cars, echo=TRUE}
+#install.packages("blocksdesign")
+a<-blocksdesign::blocks(treatments=3,replicates=105,blocks = 9)
+View(a$Plan)
+View(a$Design)
+
+length(which(a$Design$treatments=="1")) #35 individus aléatoirement choisi pour le traitement 1, current_dry
+
+length(which(a$Design$treatments=="2")) #35 individus aléatoirement choisi pour le traitement 2, projected_dry
+
+> length(which(a$Design$treatments=="3")) #35 individus aléatoirement choisi pour le traitement 3, x_dry
+
+> length(which(a$Design$treatments=="4")) #40 individus aléatoirement choisi pour le traitement 4, c'està dire le controle
+
+```
+
+
+# RCBD design
+
+3 treatments (current, projected, Xdry) x 7 species x 30 indv
+
+1 treatment (control) x 7 species x 40 indv  
+
+```{essai1, echo=TRUE}
+#install.packages("blocksdesign")
+library(tidyverse)
+path <- "Design_setup"
+
+design<-blocksdesign::blocks(treatments=list(21,7),replicates=list(4,5),blocks = list(4,3))
+
+
+View(design$Replication)
+View(design$Blocks_model)
+View(design$Design)
+View(design$Plan)
+
+write_csv(design$Plan,"Design_setup/Plan4.csv" )
+
+
+length(which(design$Design$treatments=="1")) #4 individus aléatoirement choisi par espèce pour le traitement 1, current_dry
+
+design
+```
+
+
+```{r Treatments random, echo=TRUE}
+#install.packages("blocksdesign")
+library(tidyverse)
+path <- "Design_setup"
+
+design<-blocksdesign::blocks(treatments=list(3,1,1),replicates=list(4,5,3),blocks = 4)
+
+
+View(design$Replication)
+View(design$Blocks_model)
+View(design$Design)
+
+View(design$Plan)
+
+write_csv(design$Plan,"Design_setup/Plan_traitement.csv" )
+
+
+
+design
+```
+
+```{r Species random in control blocks, echo=TRUE}
+#install.packages("blocksdesign")
+library(tidyverse)
+path <- "Design_setup"
+
+#pour le control, 7 espèces (8 pour simplifier et on aura des blancs) répliqué 5 fois
+Block_control<-blocksdesign::blocks(treatments=8,replicates=5,blocks = list(5,2))
+
+Block_control
+
+View(Block_control$Replication)
+View(Block_control$Blocks_model)
+View(Block_control$Design)
+View(Block_control$Plan)
+
+write_csv(Block_control$Plan,"Design_setup/Block_control.csv" )
+
+```
+
+```{r Species random in dry blocks}
+#install.packages("blocksdesign")
+library(tidyverse)
+path <- "Design_setup"
+
+#pour les dry blocks (D1=Current; D2= Projected; D3=Xdry), 7 espèces (8 pour simplifier et on aura des blancs) répliqué 4 fois
+Block_D1<-blocksdesign::blocks(treatments=8,replicates=4,blocks = list(4,2))
+
+View(Block_D1$Replication)
+View(Block_D1$Blocks_model)
+View(Block_D1$Design)
+View(Block_D1$Plan)
+
+
+Block_D2<-blocksdesign::blocks(treatments=8,replicates=4,blocks = list(4,2))
+
+Block_D3<-blocksdesign::blocks(treatments=8,replicates=4,blocks = list(4,2))
+
+
+write_csv(Block_D1$Plan,"Design_setup/Block_D1.csv")
+
+write_csv(Block_D2$Plan,"Design_setup/Block_D2.csv")
+
+write_csv(Block_D3$Plan,"Design_setup/Block_D3.csv")
+
+```
+
+
+
+
+# Species 
+
+```{r}
+library(tidyverse)
+library(dplyr)
+path <- "Design_setup"
+
+list_specialist <- c("Epe.fal","Iry.hos","Pte.off","Sym.glo","Vir.sur")
+list_generalist <- c("Jac.cop", "Tac.mel")
+Species <- c(list_specialist , list_generalist )
+
+Species<- tibble(Species)
+Species <- sort(Species$Species)
+Species<- tibble(Species)
+view(Species)
+
+write_csv(Species,"Design_setup/Species.csv" )
+
+```
+
+
+#Treatments
+```{r}
+path <- "Design_setup"
+Water_treatments <- c("Current", "Projected", "Xdry", "Control")
+Water_treatments<- tibble(Water_treatments)
+view(Water_treatments)
+
+write_csv(Water_treatments,"Design_setup/Watertreatements.csv" )
+
+```
+
