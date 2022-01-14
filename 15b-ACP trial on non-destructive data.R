@@ -1,0 +1,92 @@
+#--------------------
+#ACP trial on non-destructive data
+#--------------------
+
+
+#----------install packages
+
+#install.packages("FactoMineR")
+library(FactoMineR)
+#install.packages("Factoshiny")
+library(Factoshiny)
+#install.packages("tidyverse")
+library(tidyverse)
+#install.packages("dplyr")
+library(dplyr)
+#install.packages("googleAuthR")
+library(devtools)
+#install.packages("searchConsoleR")
+library(googleAuthR)
+#install.packages("devtools")
+library(searchConsoleR)
+#install.packages("gargle")
+library(gargle)
+#install.packages("googleAuthR")
+library(googleAuthR)
+#install.packages("googlesheets4")
+library(googlesheets4)
+#install.packages("googledrive")
+library(googledrive)
+#install.packages("factoextra ")
+library(factoextra)
+
+
+
+#authentification for the google sheets where I have the autorisation (I'm not authorized to log on Marion's drive), so this is the function I need : 
+
+gs4_auth(email = "alice.bordes@outlook.com")
+
+#non destructive 
+T0_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "non_destructif")
+
+T0_NONdestructive <- subset(T0_NONdestructive, select = Time:WUE)
+
+T21_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "non_destructif")
+
+T21_NONdestructive <- subset(T21_NONdestructive, select = Time:WUE)
+
+T27_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "non_destructif")
+
+T27_NONdestructive <- subset(T27_NONdestructive, select = Time:WUE)
+
+T51_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "non_destructif")
+
+T51_NONdestructive <- subset(T51_NONdestructive, select = Time:WUE)
+
+T57_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "non_destructif")
+
+T57_NONdestructive <- subset(T57_NONdestructive, select = Time:WUE)
+
+T71_NONdestructive <- 
+  googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "non_destructif")
+
+T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
+
+
+Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
+
+View(Data_NonDes)
+str(Data_NonDes)
+Data_NonDes$Block<-as.character(Data_NonDes$Block)
+Data_NonDes$Sblock<-as.character(Data_NonDes$Sblock)
+Data_NonDes$UniqueCode<-as.character(Data_NonDes$UniqueCode)
+
+
+
+Data_NonDes.acp<-Data_NonDes %>% select(-c(Height,Diameter,Nb_leaves,WiltingStage,RealTreatment,R,gs_bis)) 
+View(Data_NonDes.acp)
+
+PCAshiny(Data_NonDes.acp)
+
+
+
+#-----------
+
+#Anova 
+
+#Quelles sont les modalités qui influent sur le gs ? 
+
+bartlett.test(datagreenhouse.nondestructive$gs)
+
+
+
