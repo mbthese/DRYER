@@ -71,7 +71,30 @@ T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
 
 Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
 
+for (i in (1:nrow(Data_NonDes)))
+{
+  if ((Data_NonDes$Time[i]=="t51")&&(Data_NonDes$Treatment[i]=="D1"))
+    {
+      Data_NonDes$Treatment[i]<-"R1"
+    }
+}
 
+for (i in (1:nrow(Data_NonDes)))
+{
+  if ((Data_NonDes$Time[i]=="t57")&&(Data_NonDes$Treatment[i]=="D2"))
+  {
+    Data_NonDes$Treatment[i]<-"R2"
+  }
+}
+
+for (i in (1:nrow(Data_NonDes)))
+{
+  if ((Data_NonDes$Time[i]=="t101")&&(Data_NonDes$Treatment[i]=="D3"))
+  {
+    Data_NonDes$Treatment[i]<-"R3"
+  }
+}
+View(Data_NonDes)
 
 #destructive
 T0_destructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "destructif")
@@ -102,6 +125,31 @@ T71_destructive <- T71_destructive[1:16]
 
 
 DataDes <- bind_rows(T0_destructive,T21_destructive,T27_destructive, T51_destructive, T57_destructive, T71_destructive)
+View(DataDes)
+
+for (i in (1:nrow(DataDes)))
+{
+  if ((DataDes$Time[i]=="t51")&&(DataDes$Treatment[i]=="D1"))
+  {
+    DataDes$Treatment[i]<-"R1"
+  }
+}
+
+for (i in (1:nrow(DataDes)))
+{
+  if ((DataDes$Time[i]=="t57")&&(DataDes$Treatment[i]=="D2"))
+  {
+    DataDes$Treatment[i]<-"R2"
+  }
+}
+
+for (i in (1:nrow(DataDes)))
+{
+  if ((DataDes$Time[i]=="t101")&&(DataDes$Treatment[i]=="D3"))
+  {
+    DataDes$Treatment[i]<-"R3"
+  }
+}
 View(DataDes)
 
 #diameter,height and nb of leaves
@@ -165,25 +213,32 @@ unique(Data_NonDes$Species)
   bartlett.test(data=Data_NonDes,gs~Treatment)
   bartlett.test(data=Data_NonDes,gs~Species)
     #results : p-val < 0,05 : different variances between groups for each modality (Time, Treatment, Species) --> anova not practicable --> we can use the Anova with Welch correction test (welch_anova_test) (but only for one factor analysis) which doesn't need to fulfill homoscedasticity 
-
+dt.gs.test<-data.frame(c(Time,Treatment,Species),c())
+  
   #creation linear model
   lm.gs.treatment<-lm(data=Data_NonDes,gs~Treatment)
   qqnorm(residuals(lm.gs.treatment),main="Distribution plot of residuals - gs ~ Treatment")
-  ggplot((lm.gs.treatment),aes(x=.resid))+
+  histo.lm.gs.treatment<-ggplot((lm.gs.treatment),aes(x=.resid))+
     geom_histogram(colour="black",fill="white")+
     labs(title="Distribution plot of residuals - gs ~Treatment")
   
   lm.gs.time<-lm(data=Data_NonDes,gs~Time)
   qqnorm(residuals(lm.gs.time),main="Distribution plot of residuals - gs ~ Time")
-  ggplot((lm.gs.time),aes(x=.resid))+
+  histo.lm.gs.time<-ggplot((lm.gs.time),aes(x=.resid))+
     geom_histogram(colour="black",fill="white")+
     labs(title="Distribution plot of residuals - gs ~ Time")
 
   lm.gs.species<-lm(data=Data_NonDes,gs~Species)
   qqnorm(residuals(lm.gs.species),main="Distribution plot of residuals - gs ~ Species")
-  ggplot((lm.gs.species),aes(x=.resid))+
+  histo.lm.gs.species<-ggplot((lm.gs.species),aes(x=.resid))+
     geom_histogram(colour="black",fill="white")+
     labs(title="Distribution plot of residuals - gs ~ Species")
+  
+  windows(4,4)
+  par(mfrow=c(1,3))
+  histo.lm.gs.species
+  histo.lm.gs.time
+  histo.lm.gs.treatment
   
       #result : normality assumption  seems graphically fulfill
 
