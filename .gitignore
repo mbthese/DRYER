@@ -5,7 +5,8 @@
 _bookdown_*
 
 Greenhouse_data/
-Greenhouse_document/
+Greenhouse_document/*
+!Greenhouse_document/maps
 Natura_data/
 Natura_Document/
 
