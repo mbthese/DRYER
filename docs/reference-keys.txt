@@ -54,3 +54,4 @@ gs
 destructive
 rwc-1
 leaf-thickness-1
+root-to-shoot-ratio
