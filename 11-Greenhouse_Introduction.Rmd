@@ -1,4 +1,4 @@
-# (PART) Part two : greenhouse experiement {-}
+# (PART) Part two : greenhouse experiment {-}
 
 # Introduction to the greenhouse experiment {-}
 

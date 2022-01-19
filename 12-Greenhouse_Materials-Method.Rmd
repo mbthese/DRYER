@@ -1,4 +1,4 @@
-
+# Materials & method {-} 
 
 
 ```{r setupinds, include=FALSE}
@@ -17,13 +17,19 @@ library(ggtree)
 library(sf)
 library(leaflet)
 theme_set(bayesplot::theme_default())
-opts_chunk$set(
-  echo = F, message = F, warning = F, fig.height = 6, fig.width = 8,
-  cache = T, cache.lazy = F)
+knitr::opts_chunk$set(
+	echo = F,
+	fig.height = 6,
+	fig.width = 8,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE,
+	cache.lazy = F
+)
 crs <- '+proj=longlat +datum=WGS84' # leaflet CRS
 ```
 
-# Materials & method {-}
+
 
 ## Study species
 
