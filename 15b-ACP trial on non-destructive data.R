@@ -41,6 +41,8 @@ library(DescTools)
 library(ggpubr)
 #install.packages("cowplot")
 library(cowplot)
+#install.packages("readxl")
+library(readxl)
 
 #authentification for the google sheets where I have the autorisation (I'm not authorized to log on Marion's drive), so this is the function I need : 
 
@@ -159,17 +161,43 @@ for (i in (1:nrow(DataDes)))
 View(DataDes)
 
 #diameter,height and nb of leaves
-T0_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1PZOyGfKu66WJ0feJVmBp9NzVJK3BK7fv/edit#gid=770489906", range = "Indv")
 
-T21_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=734171086", range = "hauteur/diametre/nbf")
+DHLT0 <- read_excel("Data_dhl/DiametreHauteurLeafT0.xlsx", 
+                    sheet = "Indv")
 
-T27_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1n3ldEJC4Bf9Oe88nySSKhv6ytAbXHwqW/edit#gid=770489906", range = "Indv")
+DHLT21 <- read_excel("Data_dhl/DiametreHauteurLeafT21.xlsx", 
+                     sheet = "Sheet1")
 
-T51_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/10kbyBcxeZGw495qgXnaCy0YYpv_9Xscs/edit#gid=858865895", range = "Indv")
+DHLT27 <- read_excel("Data_dhl/DiametreHauteurLeafT27.xlsx", 
+                     sheet = "Indv")
 
-T57_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1_UnP4VR6LTcRvTAkWtNRTwoYsdYDCzEX/edit#gid=770489906", range = "Indv")
+DHLT51 <-read_excel("Data_dhl/DiametreHauteurLeafT51 - D1 Recovery.xlsx", 
+                    sheet = "Indv")
+DHLT51$T21_Height<-as.numeric(DHLT51$T21_Height)
 
-T71_dhl<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1PZOyGfKu66WJ0feJVmBp9NzVJK3BK7fv/edit#gid=770489906", range = "Indv")
+DHLT57 <- read_excel("Data_dhl/DiametreHauteurLeafT57-D2-recovery.xlsx", 
+                     sheet = "Indv")
+DHLT57$comment_T71<-as.character(DHLT57$comment_T71)
+DHLT57<-DHLT57[,-c(25:28)]
+
+DHLT71 <- read_excel("Data_dhl/DiametreHauteurLeafT71.xlsx", 
+                     sheet = "Indv")
+
+
+keepT0 <- DHLT0[,1:8]
+keepT21 <- DHLT21[,c((9:11),(13:15))]
+keepT27 <- DHLT27[,14:17]
+keepT51 <- DHLT51[,11:15]
+keepT57 <- DHLT57[,19:23]
+keepT71 <- DHLT71[,25:31]
+
+a<-dplyr::left_join(DHLT0,DHLT21)
+b<-dplyr::left_join(a,DHLT27)
+c<-dplyr::left_join(b,DHLT51)
+d<-dplyr::left_join(c,DHLT57)
+DataDHL<-dplyr::left_join(d,DHLT71)
+View(DHLT57)
+View(DataDHL)
 
 
 
@@ -300,7 +328,7 @@ histo(Data_NonDes,E)
 histo(Data_NonDes,WUE)
 #resluts : E Species no, FvFm Species ~no 
 
-dt.stats.tests(Data_NonDes,gs)
+r<-dt.stats.tests(Data_NonDes,gs)
 dt.stats.tests(Data_NonDes,Chloro)
 dt.stats.tests(Data_NonDes,FvFm)
 dt.stats.tests(Data_NonDes,Asat)
@@ -311,6 +339,9 @@ dt.stats.tests(Data_NonDes,WUE)
 
   
 #result : p-val<0,05 --> significative effet of the variable
+#if effect + normality ok --> test post-hoc :
+  #Tukey test (paiwise.t.test) if equal variances
+  #Tamhane test (tamhaneT2Test) if variances differ
 
 welch_anova_test(data=Data_NonDes,gs~Treatment)
 welch_anova_test(data=Data_NonDes,gs~Species)
