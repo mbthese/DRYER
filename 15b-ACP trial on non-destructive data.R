@@ -33,8 +33,14 @@ library(factoextra)
 library(ggplot2)
 #install.packages("rstatix")
 library(rstatix)
-
-
+#install.packages("openxlsx")
+library(openxlsx)
+#install.packages("DescTools")
+library(DescTools)
+#install.packages("ggpubr")
+library(ggpubr)
+#install.packages("cowplot")
+library(cowplot)
 
 #authentification for the google sheets where I have the autorisation (I'm not authorized to log on Marion's drive), so this is the function I need : 
 
@@ -187,6 +193,85 @@ PCAshiny(Data_NonDes.acp)
 
 #Statistical tests
 
+
+
+
+#my functions
+#############
+
+
+dt.stats.tests<-function(dta,quanti.variable)
+{
+  quanti.variable <- deparse(substitute(quanti.variable))
+  Treatment <- deparse(substitute(Treatment))
+  Species <- deparse(substitute(Species))
+  dta<-drop_na(dta, quanti.variable)
+ 
+  
+  dt.test<-data.frame(
+    Factor=c("Treatment","Species"),
+    bartlett_pvalue=c(bartlett.test(dta[[quanti.variable]]~dta[[Treatment]])$p.value,bartlett.test(dta[[quanti.variable]]~dta[[Species]])$p.value),
+    "equal_variances"=c(bartlett.test(dta[[quanti.variable]]~dta[[Treatment]])$p.value>0.05,bartlett.test(dta[[quanti.variable]]~dta[[Species]])$p.value>0.05)) 
+  
+  print(paste("1) Are the residuals within the Treatment for ", quanti.variable, " following graphically a normal distribution? 2) Are the residuals within the Species for ", quanti.variable, " following graphically a normal distribution?"))
+  answer<-scan(nmax=2, what=logical())
+  
+  dt.test$normality<-answer
+  dt.test$test<-c(rep(0))
+  
+  for (i in 1:nrow(dt.test))
+  {
+    if(dt.test$equal_variances[i]==FALSE && dt.test$normality[i]==TRUE )
+    {
+      dt.test$test[i]<-"Anova with Welch correction"
+     
+    }
+    if(dt.test$equal_variances[i]==FALSE && dt.test$normality[i]==FALSE )
+    {
+      dt.test$test[i]<-"Non-parametric"
+      
+    }
+    if(dt.test$equal_variances[i]==TRUE && dt.test$normality[i]==TRUE )
+    {
+      dt.test$test[i]<-"Anova"
+    
+    }
+  }
+  
+  
+
+  return(dt.test)
+  
+}
+
+
+histo<-function(data,quanti.variable)
+{
+  quanti.variable <- deparse(substitute(quanti.variable))
+  Treatment <- deparse(substitute(Treatment))
+  Species <- deparse(substitute(Species))
+  
+  
+  lm.treatment<-lm(data[[quanti.variable]]~data[[Treatment]])
+  histo.lm.treatment<-ggplot((lm.treatment),aes(x=.resid))+
+    geom_histogram(colour="black",fill="white",bins=30)+
+    labs(title=paste("Distribution plot of residuals - ",quanti.variable," ~ Treatment"))
+  
+  lm.species<-lm(data[[quanti.variable]]~data[[Species]])
+  histo.lm.species<-ggplot((lm.species),aes(x=.resid))+
+    geom_histogram(colour="black",fill="white",bins=30)+
+    labs(title=paste("Distribution plot of residuals - ",quanti.variable," ~ Species"))
+  
+  windows(4,4)
+  figure <- ggarrange(histo.lm.treatment,histo.lm.species,ncol = 2, nrow = 1,common.legend=TRUE)
+  
+  return(figure)
+  
+  
+}
+
+#############
+
 #Quelles sont les modalités qui influent sur le gs ? 
 
 
@@ -194,11 +279,11 @@ PCAshiny(Data_NonDes.acp)
 summary(Data_NonDes)
 Data_NonDes$Time<-as.factor(Data_NonDes$Time)
 unique(Data_NonDes$Time)
-Data_NonDes$Time<-as.factor(Data_NonDes$Treatment)
+Data_NonDes$Treatment<-as.factor(Data_NonDes$Treatment)
 unique(Data_NonDes$Treatment)
-Data_NonDes$Time<-as.factor(Data_NonDes$Species)
+Data_NonDes$Species<-as.factor(Data_NonDes$Species)
 unique(Data_NonDes$Species)
-
+Data_NonDes2<-drop_na(Data_NonDes, gs)
 
 #--------------gs
 
@@ -206,47 +291,43 @@ unique(Data_NonDes$Species)
 #assumptions for anova : normality of residuals, independence of samples, homoscedasticity
 
 
+#normality distribution of the variable Treatment and Species for each effect
+histo(Data_NonDes,gs)
+histo(Data_NonDes,Chloro)
+histo(Data_NonDes,FvFm)
+histo(Data_NonDes,Asat)
+histo(Data_NonDes,E)
+histo(Data_NonDes,WUE)
+#resluts : E Species no, FvFm Species ~no 
 
-#homoscedasticity check : bartlett.test
-  # Interpretation bartlett test : if p-val >= 0,05 --> variances are equal, if p-val>0,05 --> variances are significatively different
-  bartlett.test(data=Data_NonDes,gs~Time)
-  bartlett.test(data=Data_NonDes,gs~Treatment)
-  bartlett.test(data=Data_NonDes,gs~Species)
-    #results : p-val < 0,05 : different variances between groups for each modality (Time, Treatment, Species) --> anova not practicable --> we can use the Anova with Welch correction test (welch_anova_test) (but only for one factor analysis) which doesn't need to fulfill homoscedasticity 
-dt.gs.test<-data.frame(c(Time,Treatment,Species),c())
-  
-  #creation linear model
-  lm.gs.treatment<-lm(data=Data_NonDes,gs~Treatment)
-  qqnorm(residuals(lm.gs.treatment),main="Distribution plot of residuals - gs ~ Treatment")
-  histo.lm.gs.treatment<-ggplot((lm.gs.treatment),aes(x=.resid))+
-    geom_histogram(colour="black",fill="white")+
-    labs(title="Distribution plot of residuals - gs ~Treatment")
-  
-  lm.gs.time<-lm(data=Data_NonDes,gs~Time)
-  qqnorm(residuals(lm.gs.time),main="Distribution plot of residuals - gs ~ Time")
-  histo.lm.gs.time<-ggplot((lm.gs.time),aes(x=.resid))+
-    geom_histogram(colour="black",fill="white")+
-    labs(title="Distribution plot of residuals - gs ~ Time")
-
-  lm.gs.species<-lm(data=Data_NonDes,gs~Species)
-  qqnorm(residuals(lm.gs.species),main="Distribution plot of residuals - gs ~ Species")
-  histo.lm.gs.species<-ggplot((lm.gs.species),aes(x=.resid))+
-    geom_histogram(colour="black",fill="white")+
-    labs(title="Distribution plot of residuals - gs ~ Species")
-  
-  windows(4,4)
-  par(mfrow=c(1,3))
-  histo.lm.gs.species
-  histo.lm.gs.time
-  histo.lm.gs.treatment
-  
-      #result : normality assumption  seems graphically fulfill
+dt.stats.tests(Data_NonDes,gs)
+dt.stats.tests(Data_NonDes,Chloro)
+dt.stats.tests(Data_NonDes,FvFm)
+dt.stats.tests(Data_NonDes,Asat)
+dt.stats.tests(Data_NonDes,E)
+dt.stats.tests(Data_NonDes,WUE)
 
   
+
+  
+#result : p-val<0,05 --> significative effet of the variable
+
 welch_anova_test(data=Data_NonDes,gs~Treatment)
-welch_anova_test(data=Data_NonDes,gs~Time)
 welch_anova_test(data=Data_NonDes,gs~Species)
-  
-  #result : p-val<0,05 for the 3 variables --> effect of the Time, of the Treatment and of the Species on gs
-  
+
+anova(lm(data=Data_NonDes,Chloro~Treatment))
+pairwise.t.test(x=Data_NonDes$Chloro,g=Data_NonDes$Treatment,p.adjust.method = "none")
+welch_anova_test(data=Data_NonDes,Chloro~Species)
+
+welch_anova_test(data=Data_NonDes,FvFm~Treatment)
+
+
+welch_anova_test(data=Data_NonDes,Asat~Treatment)
+welch_anova_test(data=Data_NonDes,Asat~Species)
+
+welch_anova_test(data=Data_NonDes,E~Treatment)
+
+
+welch_anova_test(data=Data_NonDes,WUE~Treatment)
+anova(lm(data=Data_NonDes,WUE~Species))
 
