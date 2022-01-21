@@ -1,5 +1,5 @@
 #--------------------
-#ACP trial on non-destructive data
+#Statistical analysis
 #--------------------
 
 
@@ -182,26 +182,27 @@ DHLT57<-DHLT57[,-c(25:28)]
 
 DHLT71 <- read_excel("Data_dhl/DiametreHauteurLeafT71.xlsx", 
                      sheet = "Indv")
+DHLT71$T71_Height<-as.numeric(DHLT71$T71_Height)
 
-
-keepT0 <- DHLT0[,1:8]
-keepT21 <- DHLT21[,c((9:11),(13:15))]
-keepT27 <- DHLT27[,14:17]
-keepT51 <- DHLT51[,11:15]
-keepT57 <- DHLT57[,19:23]
-keepT71 <- DHLT71[,25:31]
 
 a<-dplyr::left_join(DHLT0,DHLT21)
 b<-dplyr::left_join(a,DHLT27)
 c<-dplyr::left_join(b,DHLT51)
 d<-dplyr::left_join(c,DHLT57)
 DataDHL<-dplyr::left_join(d,DHLT71)
-View(DHLT57)
 View(DataDHL)
 
 
 
 
+
+
+
+#-----------
+
+#Statistical tests
+
+#ACP on non-destructive data
 View(Data_NonDes)
 str(Data_NonDes)
 Data_NonDes$Block<-as.character(Data_NonDes$Block)
@@ -214,14 +215,6 @@ Data_NonDes.acp<-Data_NonDes %>% select(-c(Height,Diameter,Nb_leaves,WiltingStag
 View(Data_NonDes.acp)
 
 PCAshiny(Data_NonDes.acp)
-
-
-
-#-----------
-
-#Statistical tests
-
-
 
 
 #my functions
@@ -306,11 +299,8 @@ histo<-function(data,quanti.variable)
 #-data  
 summary(Data_NonDes)
 Data_NonDes$Time<-as.factor(Data_NonDes$Time)
-unique(Data_NonDes$Time)
 Data_NonDes$Treatment<-as.factor(Data_NonDes$Treatment)
-unique(Data_NonDes$Treatment)
 Data_NonDes$Species<-as.factor(Data_NonDes$Species)
-unique(Data_NonDes$Species)
 Data_NonDes2<-drop_na(Data_NonDes, gs)
 
 #--------------gs
@@ -361,4 +351,36 @@ welch_anova_test(data=Data_NonDes,E~Treatment)
 
 welch_anova_test(data=Data_NonDes,WUE~Treatment)
 anova(lm(data=Data_NonDes,WUE~Species))
+
+
+
+#Is there an effect of the plant greenhouse location (Block & Sblock) on plant growth?
+
+DataDHL.computed<-DataDHL
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Height.21days = T21_Height - T0_Height)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Height.27days = T27_Height - T0_Height)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Height.51days = T51_Height - T0_Height)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Height.57days = T57_Height - T0_Height)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Height.71days = T71_Height - T0_Height)
+
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Diameter.21days = T21_Diameter - T0_Diameter)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Diameter.27days = T27_Diameter - T0_Diameter)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Diameter.51days = T51_Diameter - T0_Diameter)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Diameter.57days = T57_Diameter - T0_Diameter)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Diameter.71days = T71_Diameter - T0_Diameter)
+
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Nbleaves.21days = T21_Nb_leaves - T0_Nb_leaves)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Nbleaves.27days = T27_Nb_leaves - T0_Nb_leaves)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Nbleaves.51days = T51_Nb_leaves - T0_Nb_leaves)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Nbleaves.57days = T57_Nb_leaves - T0_Nb_leaves)
+DataDHL.computed<-dplyr::mutate(DataDHL.computed, delta.Nbleaves.71days = T71_NbLeaves_Total - T0_Nb_leaves)
+
+
+View(DataDHL)
+View(DataDHL.computed)
+
+
+histo(DataDHL.computed,delta.Height.21days)
+
+
 
