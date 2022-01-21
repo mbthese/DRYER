@@ -14,7 +14,10 @@ editor_options:
 ```{r}
 library(readxl)
 SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
-    col_types = c("skip", "skip", "numeric", 
+    # Je ne peux pas ouvrir ce path, il manque le doc ds le dossier je pense
+                         
+                         
+      col_types = c("skip", "skip", "numeric", 
         "skip", "text", "text", "skip", "skip", 
         "text", "text", "skip", "skip", "skip", 
         "numeric", "numeric", "numeric", 

@@ -72,4 +72,3 @@ plot_grid(GreenhouseCollect, RWCDry, Sterilization, Grinding, DNA, PCR, Seq, lab
 
 ```
 
-
