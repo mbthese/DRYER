@@ -10,7 +10,7 @@ colorlinks: yes
 description: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
 ---
 
-`r if (knitr:::is_html_output()) '# Preface {-}'`
+`r if (knitr:::is_html_output()) '# Abstract {-}'`
 
 `r if (knitr:::is_html_output()) '![](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)'`
 
