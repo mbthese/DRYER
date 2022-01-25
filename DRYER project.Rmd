@@ -1,0 +1,1150 @@
+--- 
+title: "DRYERproject"
+subtitle: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
+author: "Marion Boisseaux"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+link-citations: yes
+colorlinks: yes
+description: "Natural variability of mechanistic drought tolerance plant traits linked to root microbiome of SFF tree species"
+---
+
+`r if (knitr:::is_html_output()) '# Preface {-}'`
+
+`r if (knitr:::is_html_output()) '![](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)'`
+
+`r if (knitr:::is_html_output()) 'The overall objective of DRYER is to unravel tree-microbiome interactions in response to predicted CC. We will investigate the vulnerability to drought of tree species strongly associated (specialist) or not (generalist) to SFF. Very few studies have cross-examined for SFF species multiple drought traits with the associated microbial community and tested whether the duration of drought periods could influence their resistance and resilience to future droughts. To address this question, we suggest a two-fold multidisciplinary approach which combines field sampling with greenhouse experiment. First, we will determine if the natural variability of mechanistic drought tolerance plant traits are linked to root microbiome of tree species co-occurring in SFF (specialist or generalist).'`
+
+`r if (knitr:::is_html_output()) 'Have a nice reading.'`
+
+`r if (knitr:::is_html_output()) '<div align="right">  *Marion*'`
+
+<!--chapter:end:index.Rmd-->
+
+# (PART) Part one : in natura sampling {-}
+
+# Introduction *natura sampling* {-}
+
+While most research has had a focus on aboveground dynamics, an important unanswered question in the understanding of plant strategies is the extent to which the microbial community contributes to tropical forest functioning. In roots, the beneficial effects of the microbiome, mycorrhizal fungi or Nitrogen-fixing bacteria, are known to promote nutrient and water uptake, stimulate germination, growth and plant fitness under abiotic stress. The challenge is now to analyze how tree-microbiome interactions will affect the resistance (ability to resist and maintain fitness) and the resilience (ability to recover) of plants in a changing environment. Indeed, more frequent and intense drought events are being forecasted over the Amazon Basin. Previous work was mainly focused on terra firme forests, but few studies address the ecophysiological characteristics of seasonally flooded forests. To tackle this knowledge gap, we suggest a two-fold multidisciplinary approach which combines field sampling with a greenhouse experiment. Seedlings will be sampled in seasonally flooded forests located at Paracou in French Guiana. As mechanistic traits are closely linked to species physiological responses to abiotic environments, we will put into correlation the variation of seedlings’ mechanistic traits values with the microbiome. This project is carried out within the framework of the PhD thesis of M. Boisseaux on the relationships between species’ mechanistic traits and their distribution across contrasted habitats in the tropical forests of French Guiana in a context of climate change. It will provide significant insight into the strategies of tropical species to cope with drought and improve our predictions of ecosystem functioning under future climatic regimes.
+
+## ToDo
+
+- [ ] complete samplings (19 left)
+- [ ] microbial sterilization
+- [ ] microbial PCR
+- [ ] send samples for metabarcoding in Bordeaux
+- [ ] analyze
+- [ ] write
+
+## Calendar
+
+* **August-September**: finish in natura samplings
+
+
+<!--chapter:end:01-Natura_Introduction.Rmd-->
+
+# Species
+
+We selected 7 species, chosen according to their abundance in SFF and according to *in natura* availability during the wet season of 2021 (January-July 2021). To explore the variability of mechanistic traits linked to drought tolerance and root fungal community, we plan to measure *in natura* 10 seedlings per species known to be strictly affiliated to SFF or not.
+
+```{r echo=TRUE}
+library(readxl)
+library(kableExtra)
+library(ggplot2)
+Sampling <- read_excel("./Natura_Document/samling.xlsx")
+kable(Sampling)
+
+ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 10)) +
+  geom_col() +
+  coord_flip() +
+  geom_hline(yintercept = 10, linetype = 2, col = "lightgrey")
+
+```
+
+<!--chapter:end:02-Natura_Sampling.Rmd-->
+
+# Traits
+
+
+This chapter defines measured traits, the organization of the measurements with the associated protocols.
+
+## Soft traits
+
+* **LA**: leaf area $cm^{2}$
+* **LDMC**: leaf dry matter content $g.g^{-1}$
+* **LT**: leaf thickness ($\mu m$)
+* **SLA**: specific leaf area ($g.cm^{-2}$)
+* Plant height ($cm$)
+* Stem diameter ($cm$)
+* Number of leaves
+* Number of leaflets : for compound leaves.
+* **SRL**: Specific root length ($m.g^{-1}$)
+* Root to shoot ratio 
+* total biomass 
+
+## Hydraulic traits
+
+* **RWC**: relative water content (%) is of special interest as it reflects the amount of water present the leaf relative to the maximum it can hold (*INSERER BIBLIO Barrs & Weatherley 1962*)
+* **$\pi_{TLP}$**: leaf water potential at which leaf cells lose turgor (MPa), a key drought tolerance trait. 
+* **$g_{min}$**: leaf minimum conductance $mmol.m^{-2}.s^{-1}$ taking into account water losses through the cuticle and incompletely closed stomata.
+* **Stomatal characteristics (size, density)**: morphological characteristic at the crossroads between water loss and the maximum rate of photosynthesis.(*INSERER BIBLIO Julio V. Schneider 2016*)
+* **Nervation density**: determining the capacity of water supply in leaves. (*INSERER BIBLIO Julio V. Schneider 2016*)
+* Leaf chemistry : To assess the leaves' concentration in carbon, nitrogen and phosphorous.
+
+## Photochemical trait
+ 
+* **$\frac{Fv}{Fm}$**: maximum quantum yield of photosystem II, which reflects photosynthesis efficiency ($\mu mol . m^{-2} . s^{-1}/ \mu mol . m^{-2} . s^{-1}$). It is an indicator of photosynthetic performance, as it has been shown to be sensitive to drought constraints in tropical forests (*INSERER BIBLIO Manzi et al 2021*) but decline after other leaf hydraulic traits (*INSERER BIBLIO Trueba et al 2019*).
+
+## Microbial analyses : bacteria + fungi endophytes
+
+* Leaf and root surface-sterilization, storage -20°C 
+* Leaf and root DNA extraction (high-throughput sequencing of amplicons)
+* PCR with tagged primers and sequencing performing with illumina miSeq and paired technology to obtain reads: Since fungi were shown to be more tolerant than bacteria to water stress (*INSERER BIBLIO Preece 2019*) we will then focus on fungi and in the leaves to unveil any potential corrolations with the leaves' measured traits.
+* Use of OBITools + metabaR packages (pair-end assembly, read assignment, read dereplication, taxonomic assignment, chimera detection, sequence clustering)
+* Goal: relate MOTUs to taxonomic names and search for functional guilds.
+
+
+## Measured traits
+
+* Day 1
+    * Fresh
+        * plant height
+        * stem diameter
+        * thickness (5 points)
+        * scan roots
+        * scan gmin leaves
+        * fresh weight RWC 
+        * **$g_{min}$** weight  
+        * **Stomatal density** nail polish (3 replicates per indivual)
+        * **$\frac{Fv}{Fm}$**
+    
+    * Day 2
+        * saturated weight RWC + scan
+        * **$g_{min}$** finish weights (at least 2 points next day)
+        * **$\pi_{TLP}$** + scan
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        * scan rest of leaves
+    
+    * Day 5 (+72h)
+        * Dry weight RWC
+        * Dry weight all leaves before microbial analyses
+        * Dry weight roots before microbial analyses
+
+
+## Protocols
+
+* [**In natura field** protocol](../3_Protocol/Field_innatura.Rmd)
+* [**$\pi_{TLP}$** protocol](../3_Protocol/Protocole_Ptlp.pdf)
+* [**RWC** protocol](../3_Protocol/RWC_Boisseaux.docx)
+* [**Stomata** protocol](../3_Protocol/Analyse Stomates_Marion.docx)
+* [**FvFm** protocol](../3_Protocol/Fluo_Bellifa.docx)
+* [**gmin** protocol](../3_Protocol/Gmin protocol.docx)
+* [**leaf venation** protocol](../3_Protocol/ProtocolLeafVeins_MB_2.docx) 
+* [**Surface-sterilization for isolation of endophytes** protocol](../3_Protocol/Sterilisation.docx)
+
+
+<!--chapter:end:03-Natura_Traits.Rmd-->
+
+---
+output:
+  pdf_document: 
+    toc: yes
+    number_sections: yes
+  html_document: default
+editor_options:
+  chunk_output_type: inline
+---
+# Ecophysiology trait measurements
+
+## Leaf thickness
+
+```{r}
+library(readxl)
+SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
+    # Je ne peux pas ouvrir ce path, il manque le doc ds le dossier je pense
+                         
+                         
+      col_types = c("skip", "skip", "numeric", 
+        "skip", "text", "text", "skip", "skip", 
+        "text", "text", "skip", "skip", "skip", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", "numeric",
+        "skip", "skip", "skip"))
+SoftTraits
+
+ggplot(SoftTraits) +
+  aes(x = Genus, y = MeanLeafThickness) +
+  geom_boxplot(shape = "circle", fill = "#112446") +
+  theme_minimal()
+```
+
+
+## Seedling heights
+
+```{r}
+
+library(ggplot2)
+
+ggplot(SoftTraits) +
+ aes(x = Genus, y = `Height (cm)`) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ theme_minimal()
+
+
+
+```
+
+## Stem diameter
+```{r}
+ggplot(SoftTraits) +
+ aes(x = Genus, y = `Stem_diameter (mm)`) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ theme_minimal()
+```
+
+
+
+## $\pi_{TLP}$
+
+```{r measurePtlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
+library(ggplot2)
+Ptlp <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/15unEUBxCQz_2ekJPEkL6M5C12tjvFJ0P7nb0iLh6Caw/edit#gid=0")
+
+ggplot(Ptlp) +
+  aes(x = Species_Name, y = Ptlp) +
+  geom_boxplot(shape = "circle", fill = "#008EFF") +
+  facet_wrap(~Species_Name) +
+  theme_minimal()
+
+p1 <- ggplot(Ptlp) +
+  aes(x = Species_Name, y = Ptlp) +
+  geom_boxplot(shape = "circle", fill = "#008EFF") +
+  theme_minimal()
+p1
+```
+
+## $\frac{Fv}{Fm} in natura$
+
+```{r FvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
+library(readxl)
+FvFm <- read_excel("Natura_data/3_FvFm/DRYER_FvFm.xlsx")
+p2 <-ggplot(FvFm) +
+  aes(x = spName, y = `FvFm`) +
+  geom_boxplot(shape = "circle", fill = "#2BDD1A") +
+  theme_minimal()
+p2
+```
+
+## $RWC$
+
+```{r measureRWC, echo=FALSE, fig.cap="$RWC$.", message=FALSE, warning=FALSE}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+RWC <- read_excel("Natura_data/1_RWC/DRYER_RWC.xlsx")
+
+RWC <- mutate(RWC, RWC=((FW-DW)/(SW-DW)*100))
+p3 <- ggplot(RWC) +
+  aes(x = Species_Name, y = RWC) +
+  geom_boxplot(shape = "circle", fill = "#FF8C00") +
+  theme_minimal() 
+p3
+
+```
+
+
+## Gmin
+###Leaf area
+
+I used following code in `ImageJ`:
+
+```{bash imageJsoft, eval=F, echo=T}
+run("8-bit");
+setAutoThreshold("Default");
+//run("Threshold...");
+setAutoThreshold("Default");
+setOption("BlackBackground", false);
+run("Convert to Mask", "method=Default background=Light calculate");
+run("Analyze Particles...", "size=1000000-Infinity display summarize");
+setAutoThreshold("Default dark");
+
+
+```
+
+
+```{r}
+LeafArea <- read_excel("Natura_data/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
+LeafArea
+
+```
+ 
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+Gmin <- read_csv("Natura_data/2_gmin/Gmin_DRYERwithLA.csv", 
+    col_types = cols(idTree = col_skip(), 
+        beta = col_skip(), file = col_skip()))
+ggplot(Gmin) +
+  aes(
+    x = specCode,
+    y = gmin.slope_function,
+    colour = specCode
+  ) +
+  geom_boxplot(shape = "circle", fill = "#112446") +
+  scale_color_brewer(palette = "Accent", direction = 1) +
+  coord_flip() +
+  theme_minimal()
+
+p4 <- ggplot(Gmin) +
+  aes(x = specCode, y = gmin.slope_function) +
+  geom_boxplot(shape = "circle", fill = "#FF69B4") +
+  theme_minimal()
+```
+
+
+
+## Summary 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(cowplot)
+
+plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
+
+```
+
+# Root:shoot ratio
+
+```{r}
+
+```
+
+
+# Microbial analyses
+
+Weights of samples before sterilization. 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readxl)
+Microbio <- read_excel("Natura_data/7_Microbio/Microbio.xlsx")
+Microbio
+```
+
+
+
+
+
+<!--chapter:end:04-Natura_Measurement.Rmd-->
+
+# (PART) Part two : greenhouse experiment {-}
+
+# Introduction to the greenhouse experiment {-}
+
+While most research has had a focus on aboveground dynamics, an important unanswered question in the understanding of plant strategies is the extent to which the microbial community contributes to tropical forest functioning. In roots, the beneficial effects of the microbiome, mycorrhizal fungi or Nitrogen-fixing bacteria, are known to promote nutrient and water uptake, stimulate germination, growth and plant fitness under abiotic stress. The challenge is now to analyze how tree-microbiome interactions will affect the resistance (ability to resist and maintain fitness) and the resilience (ability to recover) of plants in a changing environment. Indeed, more frequent and intense drought events are being forecasted over the Amazon Basin. Previous work was mainly focused on terra firme forests, but few studies address the ecophysiological characteristics of seasonally flooded forests. To tackle this knowledge gap, we suggest a two-fold multidisciplinary approach which combines field sampling with a greenhouse experiment. Seedlings will be sampled in seasonally flooded forests located at Paracou in French Guiana. As mechanistic traits are closely linked to species physiological responses to abiotic environments, we will put into correlation the variation of seedlings’ mechanistic traits values with the microbiome. This project is carried out within the framework of the PhD thesis of M. Boisseaux on the relationships between species’ mechanistic traits and their distribution across contrasted habitats in the tropical forests of French Guiana in a context of climate change. It will provide significant insight into the strategies of tropical species to cope with drought and improve our predictions of ecosystem functioning under future climatic regimes.
+
+## ToDo
+
+- [ ] check labels
+- [ ] analyse soil results
+- [ ] calibrate PSYPRO cables that are missing
+- [ ] analyze
+- [ ] write
+
+## Calendar
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(readxl)
+library(knitr)
+
+library(ggplot2)
+calendar <- read_excel("Greenhouse_document/calendar/calendar.xlsx")
+                       
+kable(calendar)
+
+calendar$Campaign <- factor(calendar$Campaign, levels = c("T0", "D1", "D2", "D3", "R1", "R2", "R3"))
+
+GreenhouseCollect <- ggplot(calendar) +
+ aes(x = Campaign, weight = `Greenhouse collect`) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+RWCDry <- ggplot(calendar) +
+ aes(x = Campaign, weight = `RWC dry`) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+Sterilization <- ggplot(calendar) +
+ aes(x = Campaign, weight = Sterilization) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+Grinding <- ggplot(calendar) +
+ aes(x = Campaign, weight = Grinding) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+DNA <- ggplot(calendar) +
+ aes(x = Campaign, weight = `DNA extraction`) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+PCR <- ggplot(calendar) +
+ aes(x = Campaign, weight = `PCR with tagged primers`) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+Seq <- ggplot(calendar) +
+ aes(x = Campaign, weight = Sequencing) +
+ geom_bar(fill = "#7BDF7B") +
+ theme_minimal()
+
+## Summary 
+
+library(ggplot2)
+library(cowplot)
+
+
+plot_grid(GreenhouseCollect, RWCDry, Sterilization, Grinding, DNA, PCR, Seq, labels = c('Greenhouse Collect', 'RWC Dry', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Sequencing'), label_size = 12)
+
+```
+
+
+<!--chapter:end:11-Greenhouse_Introduction.Rmd-->
+
+# Materials & method {-} 
+
+
+```{r setupinds, include=FALSE}
+rm(list = ls()) ; invisible(gc()) ; set.seed(42)
+library(readxl)
+library(knitr)
+library(kableExtra)
+if(knitr:::is_html_output()) options(knitr.table.format = "html") 
+if(knitr:::is_latex_output()) options(knitr.table.format = "latex") 
+library(tidyverse)
+# devtools::install_github("jinyizju/V.PhyloMaker")
+library(V.PhyloMaker)
+library(ggfortify)
+# devtools::install_github("YuLab-SMU/ggtree")
+library(ggtree)
+library(sf)
+library(leaflet)
+theme_set(bayesplot::theme_default())
+knitr::opts_chunk$set(
+	echo = F,
+	fig.height = 6,
+	fig.width = 8,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE,
+	cache.lazy = F
+)
+crs <- '+proj=longlat +datum=WGS84' # leaflet CRS
+```
+
+
+
+## Study species
+
+We selected 7 species, chosen according to their abundance in SFF and according to *in natura* availability during the wet season of 2021 (January-September 2021). 
+
+
+```{r speciesTab, echo=FALSE, message=FALSE, warning=FALSE}
+species <- data.frame(taxon = c(
+  "Eperua_falcata", 
+  "Iryanthera hostmannii", 
+  "Jacaranda_copaia subsp. copaia",
+  "Pterocarpus_officinalis",
+  "Symphonia_globulifera",
+  "Tachigali_melinonii",
+  "Virola_surinamensis"
+)) %>% 
+  separate(taxon, c("Genus", "Species"), sep = "_", remove = F)
+kable(select(species, Genus, Species), caption = "Studied species.")
+```
+
+```{r speciesPhylo, echo=FALSE, fig.cap="Selected", message=FALSE, warning=FALSE}
+
+
+paracou <- read_csv("Greenhouse_document/phylogeny/Paracou_database20210830.csv") %>% 
+  dplyr::select(Family, Genus, Species) %>% 
+  unique() %>% 
+  full_join(species) %>% 
+  mutate(species = paste(Genus, Species), genus = Genus, family = Family) %>% 
+  dplyr::select(species, genus, family, taxon) %>% 
+  mutate(taxon = as.character(taxon))
+#tree <- phylo.maker(sp.list = paracou, tree = GBOTB.extended, nodes = nodes.info.1, scenarios = "S3")
+#save(tree, file = "./document/phylogeny/phylogeny.Rdata")
+load("Greenhouse_document/phylogeny/phylogeny.Rdata")
+fortify(tree$scenario.3) %>% 
+  mutate(species = gsub("_", " ", label)) %>% 
+  left_join(paracou) %>% 
+  ggtree(aes(col = taxon), layout="circular") + 
+  geom_tiplab2(aes(alpha = !is.na(taxon), size = !is.na(taxon))) +
+  theme_tree(legend.position='right', legend.text = element_text(face = "italic")) +
+  scale_alpha_manual("taxon", values = c(0.2, 1)) +
+  scale_size_manual("taxon", values = c(1, 2))
+```
+
+## Sampling strategy
+
+Samplings were carried outside the permanent plots of Paracou Station (5°18’N, 52°55’W), a lowland tropical rainforest in French Guiana, South America. The sampling area is characterized
+by a rugged landscape formed by the alternation of 40–50 m high hills, slopes and bottomlands, varying in soil drainage type and water table depth (Gourlet-Fleury et al., 2004). Out of the three habitat types, species were only  collected in the bottomlands. Bottomlands were described by Ferry et al 2010 with hydromorphic soils and a water table between 0 and 60 cm in depth depending on the season. We opted to sample 1 year-old seedlings as they are easy to access and represent a crucial stage in the establishment of a species. Indeed, the ability of seedlings to survive during drought has been shown to be a key determinant of species distributions for tropical forests (Kursar et al 2009), since the seed-to-seedling transition is where mortality from drought and resource limitation are critical.
+
+**Maps of seedling sampling**:
+
+* [Eperua_falcata](Greenhouse_document/maps/DRYER - Eperua falcata.pdf)
+* [Iryanthera_hostmannii](Greenhouse_document/maps/DRYER - Iryanthera hostmannii.pdf)
+* [Jacaranda_copaia subsp. copaia](Greenhouse_document/maps/DRYER - Jacaranda copaia.pdf)
+* [Pterocarpus_officinalis](Greenhouse_document/maps/DRYER - Pterocarpus officinalis.pdf)
+* [Symphonia_globulifera](Greenhouse_document/maps/DRYER - Symphonia globulifera.pdf)
+* [Tachigali_melinonii](Greenhouse_document/maps/DRYER - Tachigali melinonii.pdf)
+* [Virola_surinamensis](Greenhouse_document/maps/DRYER - Virola surinamensis.pdf) 
+
+**Field protocol**:
+* [Field_protocol](./3_Protocol/Field.Rmd)
+
+![Sampling material](Greenhouse_document/Photos/Recolte_plantule.jpg "Sampling material") 
+
+## Greenhouse experiment
+
+After collecting the seedlings, they were immediately brought back to the campus for grounding. Seedlings were then directly transplanted into 4 L pots filled with a sandy substrate composed of a 1:2 mixture of a brown ferralitic clay soil from terra firme forest. Seedlings were pooled in batch, organized by species and GPS position (1 GPS position equaled to 1 mothertree) (see *Field Protocol* for more details). Seedlings were grown in a shadehouse during at least one month and irrigated two times a day (8h and 18h during 5 mins). When the mortality rate was stable, seedlings were then placed into the greenhouse for the experiment according to a randomized block design.
+
+![Shadehouse](Greenhouse_document/Photos/Shadehouse.jpg "Shadehouse") 
+![Batch arrangement](Greenhouse_document/Photos/Eperua_falcata_Avril_2021.jpg "Batch arrangement - here Eperua falcata batch 6") 
+
+rotate.image(img, angle = 90, compress=NULL)
+
+The daily rainfall recorded by the Sinnamary Weather Station (MétéoFrance) over the past 64 years (1955-2019) enabled us to calculate the annual mean ± SD maximum number of consecutive days without rainfall (detection limit 0.2 mm) in a dry season (August-November): 21 ± 5 days. A decrease up to 30 % in precipitation trend is projected in the Amazon region by 2100 (3). The maximum number of consecutive days without rainfall was 71 days in 1976. We then ask ourselves could an ‘‘extreme’’ event of the past become more common in the future? Drought was induced by completely withholding water. We exposed seedlings to four different watering treatments, followed by a recovery period of one month (21).
+
+1. Well-watered every 2-3 days to field capacity (*Control* (C0))
+2. Water withheld during 21 days (*Current-DRY* (D1))
+3. Water withheld during 27 days, the projected norm 21 days + 30 % (*Projected-DRY* (D2))
+4. Water withheld during 71 days, a rare event (*X-DRY* (D3))
+
+```{r pressure, echo=FALSE, fig.cap="Greenhouse design", out.width = '100%'}
+knitr::include_graphics("Greenhouse_document/design/CEBA_design.png")
+
+```
+
+### Randomized design
+
+A randomized block design is an experimental design where the experimental units are in groups called blocks. The treatments are randomly allocated to the experimental units inside each block. When all treatments appear at least once in each block, we have a completely randomized block design. This kind of design is used to minimize the effects of systematic error. If the experimenter focuses exclusively on the differences between treatments, the effects due to variations between the different blocks should be eliminated.
+
+I used the blocksdesign package for the construction of block and treatment designs:
+
+**blocksdesign::blocks(treatments=list(3,1,1),replicates=list(4,5,3),blocks = 4)**
+
+*4 blocks containing:*
+*3 different water treatments repeated 4 times*
+*1 control treatment repeated 5 times (they are more individuals for the control group)*
+*1 "imaginary" treatment repeated 3 times to have an even design*
+
+The goodness or efficiency of an experimental design can be quantified:   
++ *D-effciency*: a function of the geometric mean of the eigenvalues
++ *A-efficiency* :  a function of the arithmetic mean of the eigenvalues
+Both are based on the idea of average variance, as the variance gets smaller, the efficiencies go lower. **The best design is the one with the highest A- and D- efficiencies**  
+
+For the following block and treatment design, I obtained 0.9793704 and
+0.9787234 for the A- and D- efficiencies respectively.
+
+Inside each treatment block, I organized the 7 species randomly. Again, 7 is an odd number, so I used an 8th imaginary species to obtain an even design. Example for the control group: 
+
+**blocksdesign::blocks(treatments=8,replicates=5,blocks = list(5,2))**
+
+Individuals for each species were then randomly assigned within each species block in order to mix mothertree origin within treatments.
+
+```{r echo=FALSE, fig.cap="Greenhouse design", out.width = '100%'}
+knitr::include_graphics("Greenhouse_document/design/DesignMarion.png")
+
+```
+
+We finally were able to have :
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+Sampling <- read_excel("Greenhouse_document/sampling.xlsx")
+                       
+kable(Sampling)
+
+ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 136)) +
+  geom_col() +
+  coord_flip() +
+  geom_hline(yintercept = 10, linetype = 2, col = "lightgrey")
+
+```
+
+
+
+<!--chapter:end:12-Greenhouse_Materials-Method.Rmd-->
+
+# Traits
+
+
+This chapter defines measured traits, the organization of the measurements with the associated protocols.
+
+## Soft traits
+
+* **LA**: leaf area $cm^{2}$
+* **LDMC**: leaf dry matter content $g.g^{-1}$
+* **LT**: leaf thickness ($\mu m$)
+* **SLA**: specific leaf area ($g.cm^{-2}$)
+* Plant height ($cm$)
+* Stem diameter ($cm$)
+* Number of leaves
+* Number of leaflets : for compound leaves.
+* **SRL**: Specific root length ($m.g^{-1}$)
+* Root to shoot ratio 
+* total biomass 
+* Wilting stage* : D0 non-wilted leaf, D1 slightly wilted, D2 wilted, and D3 severly wilted.
+
+## Hydraulic traits
+
+* **RWC**: relative water content (%) is of special interest as it reflects the amount of water present the leaf relative to the maximum it can hold (*INSERER BIBLIO Barrs & Weatherley 1962*)
+* **$\pi_{TLP}$**: leaf water potential at which leaf cells lose turgor (MPa), a key drought tolerance trait. 
+* **$\phi_{midday}$** : midday leaf water potential (MPa). A measure affected by any cuticular or stomatal transpiration and, thus, broadly captures the integrated effects of plant traits and the environment on the minimum water potential a plant reaches (Giles et al, 2020).
+* **$g_{min}$**: leaf minimum conductance $mmol.m^{-2}.s^{-1}$ taking into account water losses through the cuticle and incompletely closed stomata.
+* **Stomatal characteristics (size, density)**: morphological characteristic at the crossroads between water loss and the maximum rate of photosynthesis.(*INSERER BIBLIO Julio V. Schneider 2016*)
+* **Nervation density**: determining the capacity of water supply in leaves. (*INSERER BIBLIO Julio V. Schneider 2016*)
+* Leaf chemistry : To assess the leaves' concentration in carbon, nitrogen and phosphorous.
+
+## Photochemical trait
+ 
+* **$\frac{Fv}{Fm}$**: maximum quantum yield of photosystem II, which reflects photosynthesis efficiency ($\mu mol . m^{-2} . s^{-1}/ \mu mol . m^{-2} . s^{-1}$). It is an indicator of photosynthetic performance, as it has been shown to be sensitive to drought constraints in tropical forests (*INSERER BIBLIO Manzi et al 2021*) but decline after other leaf hydraulic traits (*INSERER BIBLIO Trueba et al 2019*).
+* **Chlorophyll content**: 
+* **$A_{sat}$**: 
+
+## Microbial analyses : bacteria + fungi leaf and root endophytes
+
+* Leaf and root surface-sterilization, storage -20°C 
+* Leaf and root DNA extraction (high-throughput sequencing of amplicons)
+* PCR with tagged primers and sequencing performing with illumina miSeq and paired technology to obtain reads: Since fungi were shown to be more tolerant than bacteria to water stress (*INSERER BIBLIO Preece 2019*) we will then focus on fungi and in the leaves to unveil any potential corrolations with the leaves' measured traits.
+* Use of OBITools + metabaR packages (pair-end assembly, read assignment, read dereplication, taxonomic assignment, chimera detection, sequence clustering)
+* Goal: relate MOTUs to taxonomic names and search for functional guilds.
+
+        
+
+
+
+## Protocols
+
+* [**$\pi_{TLP}$** protocol](../3_Protocol/Protocole_Ptlp.pdf)
+* [**RWC** protocol](../3_Protocol/RWC_Boisseaux.docx)
+* [**Stomata** protocol](../3_Protocol/Analyse Stomates_Marion.docx)
+* [**FvFm** protocol](../3_Protocol/Fluo_Bellifa.docx)
+* [**gmin** protocol](../3_Protocol/Gmin protocol.docx)
+* [**leaf venation** protocol](../3_Protocol/ProtocolLeafVeins_MB_2.docx) 
+* [**Surface-sterilization for isolation of endophytes** protocol](../3_Protocol/Sterilisation.docx)
+
+
+<!--chapter:end:13-Greenhouse_Traits.Rmd-->
+
+c# Results
+
+## All individuals
+
+### Seedling heights
+
+```{r Height, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(dplyr)
+library(readxl)
+
+DHLT0 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT0.xlsx", 
+    sheet = "Indv", col_types = c("text", "numeric",
+        "numeric", "numeric", "numeric", 
+        "text", "skip", "skip", "text", "numeric", 
+        "numeric", "numeric", "text"))
+
+DHLT21 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT21.xlsx", 
+    sheet = "Sheet1", col_types = c("text","numeric", 
+        "numeric", "numeric", "numeric", 
+        "text", "skip", "skip", "text", "numeric", 
+        "numeric", "numeric", "text"))
+
+DHLT27 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT27.xlsx", 
+    sheet = "Indv", col_types = c("text","numeric", 
+        "numeric", "numeric", "numeric", 
+        "text", "skip", "skip", "text", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "text"))
+
+DHLT51 <-read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT51 - D1 Recovery.xlsx", 
+    sheet = "Sheet1")
+
+DHLT57 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT57-D2-recovery.xlsx", 
+    sheet = "Indv", col_types = c("text","numeric", 
+        "numeric", "numeric", "numeric", 
+        "text", "skip", "skip", "text", "skip", 
+        "skip", "skip", "skip", "skip", "skip", 
+        "skip", "skip", "skip", "skip", "numeric", 
+        "numeric", "numeric", "text", "numeric", 
+        "text"))
+ 
+
+DataDHL <- bind_rows(DHLT0, DHLT21, DHLT27, DHLT51, DHLT57)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+
+library(dplyr)
+library(ggplot2)
+
+DataDHL %>%
+ filter(!(Remarques %in% c("Feuilles : 12 elastique vert / 8 elastique rose; Hauteur : 16 vert / 14,5 rose\r\ndiametre: rose 5.20 / vert 5,87", 
+"5 bleu, 5 rouge\r\nhauteur: 24.5 bleu / 32 rouge", "feuille: 7 bleu / 1 sans elastique\r\nhauteur: 44 bleu/ 8.5 autre\r\ndiamtre: bleu 4,67/ sans elastique 2,86\r\ncas special: je compte que la branche bleue qui est principale", 
+"3 rouge, 2 orange\r\nhauteur: rouge 28 / orange 18\r\ndiametre: rouge 2,86/ 1.89 orange", "feuille : 8 (bleue) / 5 (verte)\r\nhauteur: 47.5 (bleue) / 16.5 ( verte)", 
+"fourche: (rouge) 10 / (verte) 8\r\nhauteur (rouge) 16 / (verte) 12.5\r\ndiametre: rose 2,38 / verte 1.87", 
+"4 bleu, 6 rose\r\nhauteur 19 bleue/ 32 rose\r\ndiametre tige bleue 2.76 / tige rose 4.04 / diametre endessous 7.84", 
+"fourche: 8(violet) / 1 (orange)\r\nhauteur: violet 52.5 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\ndiametre: 4,87 violet / 1.49 orange", 
+"6 violet, 11 orange\r\n20 violet (hauteur) / 44 (orange)\r\ndiametre 6,36 pris à la base", "10 bleu clair, 6 bleu foncé\r\nhauteur: bleu clair 23.5/ bleu foncé 16\r\ndiametre à la base", 
+"7 bleu, 10 vert, 4 orange partant de la bleue \r\nhauteur bleu: 30 / 26 vert\r\ndiametre : 3,81 bleu / 3.25 verte", 
+"11 orange, 5 rouge\r\nhauteur: orange 45 / rouge rien", "8 verts / 6 orange\r\n22.5 verte / 20 orange : hauteur\r\ndiametre : 4,74 à la base", 
+"4 orange +
+ 4 bleus\r\nhauteur: 18.5 orange / 13 bleue\r\ndiametre : orange 3,55 / bleue 2.31", "4 vert et 8 rouge\r\nhauteur: 14 verte/ rouge 35\r\ndiametre : verte 2,42 / rouge 3.79"
+)) | is.na(Remarques)) %>%
+ filter(!(RemarquesT21 %in% c("hauteur: 38 bleu / 37 rouge\r\n7 bleu, 6 rouge", 
+"hauteur: 51 (bleue) / 19 ( verte)\r\ndiametre: 522 / (269)\r\nfeuille : 11 (bleue) / 6 (verte)", "hauteur 19 bleue/ 37 rose\r\ndiametre tige bleue 2.35 / tige rose 4.08 \r\n4 bleu, 7 rose", 
+"hauteur: violet 56 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\n 9(violet) / 1 (orange)", 
+"20 violet (hauteur) / 51 (orange)\r\n6 violet, 13 orange", "12 bleu clair, 8 bleu foncé\r\n\r\nhauteur: bleu clair 25/ bleu foncé 16.5\r\n", 
+"hauteur: 14 verte/ rouge 40\r\ndiametre : verte 2,93 / rouge 3.98\r\n4 vert et 10 rouge")) | is.na(RemarquesT21)) %>%
+ filter(!(T27_Remarques %in% c("Hauteur : 18 vert / 18 rose\r\ndiametre: rose 442 / vert 433", "hauteur orange 30, rose 27.5 \r\ndiametre: rouge 301/ 258 orange"
+ )) | is.na(T27_Remarques)) %>%
+ ggplot() +
+ aes(x = Time, y = Height, colour = Treatment) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ scale_color_manual(values = list(C0 = "#3C8DE6", D1 = "#31B425", D2 = "#FFE609", D3 = "#FF9F4A")) +
+ labs(x = "Time", y = "Species", title = "Plant growth ", subtitle = "Height measurements") +
+ theme_minimal() +
+ facet_wrap(vars(Species), scales = "free")
+
+
+```
+Quick lookout: pteoff at t21 days?? 
+
+### Stem diameter
+```{r Stem diameter, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+
+
+library(dplyr)
+library(ggplot2)
+
+DataDHL %>%
+ filter(!(Remarques %in% c("Feuilles : 12 elastique vert / 8 elastique rose; Hauteur : 16 vert / 14,5 rose\r\ndiametre: rose 5.20 / vert 5,87", 
+"5 bleu, 5 rouge\r\nhauteur: 24.5 bleu / 32 rouge", "feuille: 7 bleu / 1 sans elastique\r\nhauteur: 44 bleu/ 8.5 autre\r\ndiamtre: bleu 4,67/ sans elastique 2,86\r\ncas special: je compte que la branche bleue qui est principale", 
+"3 rouge, 2 orange\r\nhauteur: rouge 28 / orange 18\r\ndiametre: rouge 2,86/ 1.89 orange", "feuille : 8 (bleue) / 5 (verte)\r\nhauteur: 47.5 (bleue) / 16.5 ( verte)", 
+"fourche: (rouge) 10 / (verte) 8\r\nhauteur (rouge) 16 / (verte) 12.5\r\ndiametre: rose 2,38 / verte 1.87", 
+"4 bleu, 6 rose\r\nhauteur 19 bleue/ 32 rose\r\ndiametre tige bleue 2.76 / tige rose 4.04 / diametre endessous 7.84", 
+"fourche: 8(violet) / 1 (orange)\r\nhauteur: violet 52.5 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\ndiametre: 4,87 violet / 1.49 orange", 
+"6 violet, 11 orange\r\n20 violet (hauteur) / 44 (orange)\r\ndiametre 6,36 pris à la base", "10 bleu clair, 6 bleu foncé\r\nhauteur: bleu clair 23.5/ bleu foncé 16\r\ndiametre à la base", 
+"7 bleu, 10 vert, 4 orange partant de la bleue \r\nhauteur bleu: 30 / 26 vert\r\ndiametre : 3,81 bleu / 3.25 verte", 
+"11 orange, 5 rouge\r\nhauteur: orange 45 / rouge rien", "8 verts / 6 orange\r\n22.5 verte / 20 orange : hauteur\r\ndiametre : 4,74 à la base", 
+"4 orange +
+ 4 bleus\r\nhauteur: 18.5 orange / 13 bleue\r\ndiametre : orange 3,55 / bleue 2.31", "4 vert et 8 rouge\r\nhauteur: 14 verte/ rouge 35\r\ndiametre : verte 2,42 / rouge 3.79"
+)) | is.na(Remarques)) %>%
+ filter(!(RemarquesT21 %in% c("hauteur: 38 bleu / 37 rouge\r\n7 bleu, 6 rouge", 
+"hauteur: 51 (bleue) / 19 ( verte)\r\ndiametre: 522 / (269)\r\nfeuille : 11 (bleue) / 6 (verte)", "hauteur 19 bleue/ 37 rose\r\ndiametre tige bleue 2.35 / tige rose 4.08 \r\n4 bleu, 7 rose", 
+"hauteur: violet 56 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\n 9(violet) / 1 (orange)", 
+"20 violet (hauteur) / 51 (orange)\r\n6 violet, 13 orange", "12 bleu clair, 8 bleu foncé\r\n\r\nhauteur: bleu clair 25/ bleu foncé 16.5\r\n", 
+"hauteur: 14 verte/ rouge 40\r\ndiametre : verte 2,93 / rouge 3.98\r\n4 vert et 10 rouge")) | is.na(RemarquesT21)) %>%
+ filter(!(T27_Remarques %in% c("Hauteur : 18 vert / 18 rose\r\ndiametre: rose 442 / vert 433", "hauteur orange 30, rose 27.5 \r\ndiametre: rouge 301/ 258 orange"
+ )) | is.na(T27_Remarques)) %>%
+ ggplot() +
+ aes(x = Time, y = Diameter, colour = Treatment) +
+ geom_boxplot(shape = "circle", fill = "#112446") +
+ scale_color_manual(values = list(C0 = "#487DF2", D1 = "#31B425", D2 = "#EBEC20", D3 = "#F49E09")) +
+ labs(x = "Time", y = "Stem diameter (mm)", title = "Plant growth", subtitle = "Stem diameter measurements") +
+ theme_minimal() +
+ facet_wrap(vars(Species), scales = "free")
+
+```
+
+### Number of leaves
+```{r echo=FALSE}
+library(ggplot2)
+
+```
+
+## Wilting stages
+
+Link to indesign document
+
+
+
+
+
+
+# Non Destructive 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+library(dplyr)
+
+T0_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "non_destructif")
+
+T0_NONdestructive <- subset(T0_NONdestructive, select = Time:WUE)
+
+T21_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "non_destructif")
+
+T21_NONdestructive <- subset(T21_NONdestructive, select = Time:WUE)
+ 
+T27_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "non_destructif")
+
+T27_NONdestructive <- subset(T27_NONdestructive, select = Time:WUE)
+
+T51_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "non_destructif")
+
+T51_NONdestructive <- subset(T51_NONdestructive, select = Time:WUE)
+
+T57_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "non_destructif")
+
+T57_NONdestructive <- subset(T57_NONdestructive, select = Time:WUE)
+
+T71_NONdestructive <- 
+googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "non_destructif")
+
+T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
+
+
+Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
+
+library(rio)
+#export(Data, "datagreenhouse.csv")
+
+
+```
+
+
+
+## $\frac{Fv}{Fm}$
+
+```{r measureFvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$.", message=FALSE, warning=TRUE}
+ggplot(Data_NonDes) +
+  aes(x = Time, y = FvFm, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+ labs(title = "FvFm") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#4064CB",
+      D1 = "#31B425",
+      D2 = "#ECE320",
+      D3 = "#FF7961"
+    )
+  ) +
+  theme_minimal() +
+  facet_wrap(vars(Species), scales = "free")
+
+
+```
+
+## Asat
+```{r echo=FALSE, message=FALSE, warning=TRUE}
+A <- ggplot(Data_NonDes) +
+  aes(x = Time, y = Asat, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+ labs(title = "Carbon assimilation (µmolCO2.m².s-1)") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#6D90F8",
+      D1 = "#63E31D",
+      D2 = "#ECE320",
+      D3 = "#FF7961"
+    )
+  ) +
+  theme_minimal() +
+  facet_wrap(vars(Species), scales = "free")
+
+plot(A)
+```
+
+
+## E 
+```{r echo=FALSE}
+ggplot(Data_NonDes) +
+  aes(x = Time, y = E, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+ labs(title = "Evapotranspiration") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#6D90F8",
+      D1 = "#63E31D",
+      D2 = "#ECE320",
+      D3 = "#FF7961"
+    )
+  ) +
+  theme_minimal() +
+  facet_wrap(vars(Species), scales = "free")
+```
+
+## WUE
+```{r echo=FALSE}
+ggplot(Data_NonDes) +
+  aes(x = Time, y = WUE, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+ labs(title = "Water use efficiency (µmolCO2.mmolH2O)") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#6D90F8",
+      D1 = "#63E31D",
+      D2 = "#ECE320",
+      D3 = "#FF7961"
+    )
+  ) +
+  theme_minimal() +
+  facet_wrap(vars(Species), scales = "free")
+```
+
+## gs
+
+```{r echo=FALSE}
+#rajouter les gs fait entre t0 et j21
+ggplot(Data_NonDes) +
+  aes(x = Time, y = gs, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+ labs(title = "Stomatal conductance (mmolH2O.m².s-1)") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#6D90F8",
+      D1 = "#63E31D",
+      D2 = "#ECE320",
+      D3 = "#FF7961"
+    )
+  ) +
+  theme_minimal() +
+  facet_wrap(vars(Species), scales = "free")
+```
+
+
+# Destructive
+
+
+```{r include=FALSE}
+library(dplyr)
+
+T0_destructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "destructif")
+
+T0_destructive <- T0_destructive[1:14]
+
+T21_destructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "destructif")
+
+T21_destructive <- select(T21_destructive, select = -c(14:18))
+T21_destructive <- T21_destructive[1:14]
+ 
+T27_destructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "destructif")
+
+T27_destructive <- T27_destructive[1:19]
+
+T51_destructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "destructif")
+
+T51_destructive <- T51_destructive[1:16]
+
+T57_destructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "destructif")
+
+T57_destructive <- T57_destructive[1:16]
+
+T71_destructive <- 
+googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "destructif")
+
+T71_destructive <- T71_destructive[1:16]
+
+
+DataDes <- bind_rows(T0_destructive,T21_destructive,T27_destructive, T51_destructive, T57_destructive, T71_destructive)
+
+```
+## RWC
+
+
+The relative water content (RWC; %) was calculated as (fresh weight - dry weight) / (turgid weight - dry weight) * 100.
+
+```{r}
+DataDes <- DataDes %>% mutate(RWC = (RWC_FW- RWC_DW)/(RWC_SW - RWC_DW)*100)
+
+
+
+library(ggplot2)
+
+ggplot(DataDes) +
+ aes(x = Time, y = RWC, fill = Treatment) +
+ geom_boxplot(shape = "circle") +
+ scale_fill_manual(values = list(
+ C0 = "#6D91F8", D1 = "#25C100", D2 = "#C2B8BE",  D3 = "#FF7961")) +
+ theme_minimal() +
+   facet_wrap(vars(Species))
+```
+
+
+## Leaf thickness
+```{r}
+
+
+```
+
+
+
+##Leaf surface
+## Root to shoot ratio 
+
+
+
+<!--chapter:end:14-Greenhouse_Measurement.Rmd-->
+
+---
+title: "ACP trials on non destructive data"
+author: "Alice"
+date: "17/01/2022"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+#----------install packages
+
+#install.packages("FactoMineR")
+library(FactoMineR)
+#install.packages("Factoshiny")
+library(Factoshiny)
+#install.packages("tidyverse")
+library(tidyverse)
+#install.packages("dplyr")
+library(dplyr)
+#install.packages("googleAuthR")
+library(devtools)
+#install.packages("searchConsoleR")
+library(googleAuthR)
+#install.packages("devtools")
+library(searchConsoleR)
+#install.packages("gargle")
+library(gargle)
+#install.packages("googleAuthR")
+library(googleAuthR)
+#install.packages("googlesheets4")
+library(googlesheets4)
+#install.packages("googledrive")
+library(googledrive)
+
+
+#authentification for the google sheets where I have the autorisation (I'm not authorized to log on Marion's drive), so this is the function I need : 
+
+gs4_auth(email = "alice.bordes@outlook.com")
+
+```
+
+
+
+```{r loading data, include=FALSE}
+#non destructive 
+T0_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "non_destructif")
+
+T0_NONdestructive <- subset(T0_NONdestructive, select = Time:WUE)
+
+T21_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "non_destructif")
+
+T21_NONdestructive <- subset(T21_NONdestructive, select = Time:WUE)
+
+T27_NONdestructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "non_destructif")
+
+T27_NONdestructive <- subset(T27_NONdestructive, select = Time:WUE)
+
+T51_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "non_destructif")
+
+T51_NONdestructive <- subset(T51_NONdestructive, select = Time:WUE)
+
+T57_NONdestructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "non_destructif")
+
+T57_NONdestructive <- subset(T57_NONdestructive, select = Time:WUE)
+
+T71_NONdestructive <- 
+  googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "non_destructif")
+
+T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
+
+
+Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
+
+str(Data_NonDes)
+Data_NonDes$Block<-as.character(Data_NonDes$Block)
+Data_NonDes$Sblock<-as.character(Data_NonDes$Sblock)
+Data_NonDes$UniqueCode<-as.character(Data_NonDes$UniqueCode)
+View(Data_NonDes)
+
+
+#preparation data for ACP
+
+Data_NonDes.acp<-Data_NonDes %>% select(-c(Height,Diameter,Nb_leaves,WiltingStage,RealTreatment,R,gs_bis)) 
+View(Data_NonDes.acp)
+
+```
+
+
+Data Summary
+```{r data summary, include=FALSE}
+str(Data_NonDes.acp)
+head(Data_NonDes.acp)
+```
+
+
+*Questions : How are the functional hydraulic traits correlated ? Which are the main drivers influenced by the water Treatment ?
+
+|| ACP on non-destructive data
+
+```{r data acp, include=FALSE}
+
+#PCAshiny(Data_NonDes.acp)
+
+```
+
+
+<!--chapter:end:15-ACP_trial_on_non-destructive_data.Rmd-->
+
