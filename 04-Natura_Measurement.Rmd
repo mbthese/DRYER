@@ -172,8 +172,38 @@ plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
 # Root:shoot ratio
 
 ```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+
+analyses_sol <- read_excel("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/analyses_sol.xls", sheet = "Feuil1")
+
+analyses_sol <- analyses_sol %>% mutate(`sable(%)` = `Sables fins(%)` + `Sables grossiers(%)` , `limon(%)` = `Limons fins(%)` + `Limons grossiers(%)`)
+
+sample <- c(rep("Greenhouse" , 3) , rep("Paracou" , 3))
+soil_type <- rep(c("sable" , "limon" , "argile") , 2)
+value <- c(85.3,7.7,7,83.2,7.1,9.7)
+data <- data.frame(sample,soil_type,value)
+ 
+# Stacked
+
+ggplot(data, aes(fill=soil_type, y=value, x=sample)) + 
+    geom_bar(position="fill", stat="identity")
+
+
+library(ggplot2)
+
+ggplot(analyses_sol) +
+ aes(x = `Code Echantillon`, weight = `P-PO4(mg/kg)`) +
+ geom_bar(fill = "#BF7C2A") +
+ labs(x = "Echantillon", y = "P-PO4 (mg/kg)", title = "Phosphore assimilable ", subtitle = "(Olsen)") +
+ theme_minimal()
+
 
 ```
+
+# Soil analysis
 
 
 # Microbial analyses

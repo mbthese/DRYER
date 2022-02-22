@@ -152,4 +152,40 @@ CalibrationPsyproNONA<- drop_na(CalibrationPsypro)
 
 PSYPRO_THESE(Path_calibration = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib.csv", Path_psyprofolder = 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_input',Time = 'T71', Species = 'Ef_Ih', Series = '0', Path_results = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_results_1312/T71/Ef_Ih/0")
 
+------------------
+  
+  
+library(devtools)
+install_github("LafontRapnouilTristan/EcophyCofog")
 
+path_to_calibration <- "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib102021.csv"
+psypro_output <- 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_input' #output of psypro but the inout to the function
+
+#faire une boucle pour faire les 6 series
+#vecteur espèces, et faire une boucle dans une boucle
+
+library(EcophyCofog)
+
+files<-list.files(psypro_output)
+species <- c("Ef_Ih", "Jc_Po", "Sg_Tm", "Vs")
+usedset <- c("0","1","2","3","4", "5", "6")
+
+for (i in files) {
+  for (j in species){
+    for (k in usedset){
+      psypro(usedset = k,
+             lim = c(-1,25),
+             ID_vec = c(NA,NA,NA,NA,NA,NA,NA,NA),
+             psypro_output = paste0(psypro_output,"/", i,"/", j, "/"),
+             path_to_calibration = path_to_calibration)
+    }
+    
+     }
+  
+}
+
+psypro(usedset = 0,
+  lim = c(-1,25),
+  ID_vec = c(NA,NA,NA,NA,NA,NA,NA,NA),
+  psypro_output = psypro_output,
+  path_to_calibration = path_to_calibration)

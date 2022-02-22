@@ -512,3 +512,124 @@ tirage_T71_NONdestructif <- tirage_T71_NONdestructif %>% rename(Real_Treatment =
 library(rio)
 export(tirage_T71_NONdestructif, "tirage_T71_NONdestructif.csv")
 
+#T101 - R3 --------------
+
+
+#Dry treatment D3
+
+#Retirer individus déjà selectionnés en T0, T21, T27, T51, T57-----
+
+t0_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "destructif")
+
+t21_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=822184942", range= "destructif")
+
+t27_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942", range= "destructif")
+
+t51_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=822184942", range = "destructif")
+
+t57_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=539250691", range = "destructif")
+
+t71_destructifs <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=822184942", range = "destructif")
+
+#install.packages("dplyr")
+#install.packages("stringr")
+#install.packages("tibble")
+library(tibble)
+library(dplyr)
+library(stringr)
+library(readxl)
+library(tidyr)
+data <- read_excel("Greenhouse_data/20211018_amont/DiametreHauteurLeaf.xlsx", 
+                   sheet = "Indv")
+
+dataomit <- drop_na(data, Height)
+
+data2<- dataomit
+
+Bilan_20211115 <- anti_join(data2, t0_destructifs, by= "UniqueCode")
+
+Bilan_20211122 <- anti_join(Bilan_20211115, t21_destructifs, by= "UniqueCode")
+
+Bilan_20211214 <- anti_join(Bilan_20211122, t27_destructifs, by= "UniqueCode")
+
+Bilan_20211220 <- anti_join(Bilan_20211214, t51_destructifs, by="UniqueCode" )
+
+Bilan_20220105 <- anti_join(Bilan_20211220, t57_destructifs, by= "UniqueCode")
+
+Bilan_20220203 <- anti_join(Bilan_20220105, t71_destructifs, by= "UniqueCode")
+
+
+#S'il y a des morts entre temps------
+
+mortality <-read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/202112_01_mortality/mortality.stages310122.csv", header=TRUE, sep=";")
+
+Dead <- subset(mortality, Alive_31_01!="0")
+
+Dead <- anti_join(Bilan_20220203, Dead, by= "UniqueCode") 
+
+Bilan_20220203_update <- anti_join(Bilan_20220203, Dead, by ="UniqueCode")
+
+Bilan <- Bilan_20220203_update
+
+#comme on ne s'interesse plus aux D1 et D2----
+
+restant <- Bilan %>% count(Species, Treatment)
+
+#pour chaque espèce, je veux 5 individus dans le groupe traitement D3 et 3 individus dans le groupe control C0. -----
+
+
+sp <- NULL
+trtmt <- c(rep(c(rep("C0",3),rep("D3",5)),5))
+code <- NULL
+Bilan <- subset(Bilan, Species != "Epe.fal" & Species != "Vir.sur" ) 
+#Il n'y a plus de Virsur ni de Epefal en D3: morts, sinon boucle ne fonctionne pas
+
+for (i in levels(as.factor(Bilan$Species))){
+  control_frame <- Bilan[Bilan$Species== i&Bilan$Treatment == "C0",]
+  a <-sample(control_frame$UniqueCode, 3, replace = FALSE)
+  
+  D3_frame <- Bilan[Bilan$Species== i&Bilan$Treatment == "D3",]
+  b <-sample(D3_frame$UniqueCode, 5, replace = TRUE)
+  code <- c(code,a,b) #stockage
+  sp <- c(sp,rep(i,8)) #creation vecteur espèces mais on peut faire en dehors de la boucle comme trtmt
+  
+  
+}
+tirage_T101 <- data.frame(species=sp,treatment=trtmt,UniqueCode=code)
+
+Bilan <- Bilan %>% select(UniqueCode, Block, Sblock, Treatment, Remarques)
+
+tirage_T101 <- tirage_T101 %>% left_join(Bilan, by = "UniqueCode")
+
+tirage_T101 <- tirage_T101 %>% relocate(UniqueCode)
+
+tirage_T101 <- tirage_T101 %>% relocate(Block, .after = UniqueCode)
+
+tirage_T101<- tirage_T101%>% relocate(Sblock, .after = Block)
+tirage_T101<- tirage_T101%>% relocate(treatment, .after = Sblock)
+
+
+tirage_T101<- tirage_T101%>% add_column (Height = NA, Diameter = NA, Nb_leaves = NA, Chloro = NA, gs = NA, FvFm = NA, Asat = NA)
+
+tirage_T101_NONdestructif<- tirage_T101%>% relocate(Remarques, .after = Asat)
+
+tirage_T101_NONdestructif <- tirage_T101_NONdestructif %>% rename(Real_Treatment = Treatment)
+
+library(rio)
+export(tirage_T101_NONdestructif, "tirage_T101_NONdestructif.csv")
+
+#Ajout Epe.fal et Vir.sur Controle---------
+
+ControlGroup <- Bilan[Bilan$Treatment == "C0", ]  
+
+#Eperua falcata 
+
+epefal_C0 <- ControlGroup[ControlGroup$Species == "Epe.fal", ] 
+
+T101_epefal_NONdestruction <-sample(epefal_C0$UniqueCode, 3, replace = FALSE)
+#results: 217;508;494
+
+#Virola surinamensis
+virsur_C0 <- ControlGroup[ControlGroup$Species== "Vir.sur",]
+T101_virsur_NONdestruction <-sample(virsur_C0$UniqueCode, 3, replace = FALSE)
+#1results: 320;455;318
