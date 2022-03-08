@@ -30,42 +30,6 @@ calendar <- read_excel("Greenhouse_document/calendar/calendar.xlsx")
                        
 kable(calendar)
 
-calendar$Campaign <- factor(calendar$Campaign, levels = c("in narura", "T0", "D1", "D2", "D3", "R1", "R2", "R3"))
-
-GreenhouseCollect <- ggplot(calendar) +
- aes(x = Project) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-RWCDry <- ggplot(calendar) +
- aes(x = Project, weight = `RWC dry`) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-Sterilization <- ggplot(calendar) +
- aes(x = Project, weight = Sterilization) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-Grinding <- ggplot(calendar) +
- aes(x = Project, weight = Grinding) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-DNA <- ggplot(calendar) +
- aes(x = Project, weight = `DNA extraction`) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-PCR <- ggplot(calendar) +
- aes(x = Project, weight = `PCR with tagged primers`) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
-
-Seq <- ggplot(calendar) +
- aes(x = Project, weight = Sequencing) +
- geom_bar(fill = "#7BDF7B") +
- theme_minimal()
 
 ## Summary 
 

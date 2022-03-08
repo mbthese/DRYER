@@ -1,0 +1,16 @@
+---
+title: "Litterature"
+author: "Marion Boisseaux"
+date: "08/03/2022"
+output: html_document
+---
+
+# Waterlogging litterature
+
+- From **Abiotic Stress Physiology of Horticultural Crops** *edited by N.K. Srinivasa Rao, K.S. Shivashankara, R.H. Laxman*
+
+Section 1.3 : one of the earliest responses to soil flooding is a reduction in stomatal conductance, inhibition of stomatal aperture. Low O2 level may also reduce hydraulic conductivity and csqtly decrease root permeability. This descrease in hydraulic permeability may b liked to aqaporins [...] limiting water uptake and this leading to internal water deficit. Oxygen deficiency generally induces a rapid reduction in the rate of photoS which is generally considered as the result of reduced stomatal aperture, decrease in leaf chloro content + early leaf senescence and a reduction in LA. Waterlogged soils reduce the translocation of photoS product from 'source' to 'sink' root. As a result, the maintenance of photoS acitivity and accumulation of soluble sugar in roots are clearly important adaptations to flooding. 
+
+# general potential hypotheses
+
+with waterlogging: i should find a decrease of stomatal conductance corrolated with an increase of leaf water potential. 
