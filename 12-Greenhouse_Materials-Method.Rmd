@@ -163,6 +163,48 @@ ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 136)) +
 
 # Soil analyses
 
+Seedlings will directly be transplanted into 4 L pots filled with a sandy substrate composed of a 1:2 mixture of a brown ferralitic clay soil from *terra firme* forest.
+
+This soil from several pots was compared to *in natura* soil where the seedlings were taken in Paracou, outside of permanent plots. 
+
+The soil analyses by the Soil Analyses Laboratory of the Cirad, Montpellier. 
+
+Overall, the substrate used in our experiment is slightly less **acidic** than in natura conditions.
+
+
+```{r}
+
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(gt)
+library(glue)
+
+analyses_sol <- read_excel("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/analyses_sol.xls",
+sheet = "Feuil2")
+
+analyses_sol <- analyses_sol[-c(7:11), ] 
+analyses_sol <- analyses_sol[-c(19:20), ] 
+
+analyses_sol_table <- gt(analyses_sol)
+
+analyses_sol_table <- 
+  analyses_sol_table %>%
+  tab_header(
+    title = "Soil composition of the greenhouse pots compared to seasonally flooded soils of Paracou.",
+    subtitle = "Greenhouse and Paracou are composite samples n = 8; 8 different pots and 8 different locations in Paracou. For Paracou, soil was sampled in the 0-10 cm horizon.") %>%
+  cols_label(`Soil Tests` = md("**Soil Tests**"), Greenhouse = md("**Greenhouse**"), Paracou = md("**Paracou**") )%>%
+  tab_source_note(source_note = "Results expressed in relation to the soil prepared according to the NF ISO 11464 standard, Cirad, Montpellier.") %>%
+  tab_footnote(footnote = "For available phosphorous, the Olsen method was used, best method for acid soils.", locations = cells_body(columns = `Soil Tests`, rows =9 ))
+
+analyses_sol_table %>%
+  gtsave(
+    "analyses_sol_table.png", expand = 10,
+    path = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/")
+
+```
+
+
 ```{r Soil analyses, echo=FALSE}
 library(readxl)
 library(dplyr)
