@@ -163,7 +163,7 @@ ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 136)) +
 
 # Soil analyses
 
-```{r}
+```{r Soil analyses, echo=FALSE}
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -189,4 +189,8 @@ ggplot(data, aes(fill=soil, y=value, x=sample, label= value)) + geom_bar(positio
   ylab("Percentage (%)")
 
 ```
+
+In each case, we have a loamy sandy soil: 
+
+![Texture triangle](../Soil/Triangle_texture_Paracou_Greenhouse.png "Paracou and Greenhouse texture triangles") 
 
