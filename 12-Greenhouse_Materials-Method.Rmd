@@ -161,4 +161,32 @@ ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 136)) +
 
 ```
 
+# Soil analyses
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+
+analyses_sol <- read_excel("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/analyses_sol.xls",
+sheet = "Feuil1")
+
+analyses_sol <- analyses_sol %>% mutate(sabletotal = `Sables fins(%)` + `Sables grossiers(%)` , limontotal = `Limons fins(%)` + `Limons grossiers(%)`)
+
+
+sample <- c(rep("Greenhouse",3), rep("Paracou",3))
+soil <- c("clay", "limon", "sand")
+value <- c(analyses_sol$`Argiles(%)`[1],analyses_sol$limontotal[1] , analyses_sol$sabletotal[1] , analyses_sol$`Argiles(%)`[2], analyses_sol$limontotal[2], analyses_sol$sabletotal[2] )
+
+data <- data.frame(sample, soil, value)
+
+# Stacked
+ggplot(data, aes(fill=soil, y=value, x=sample, label= value)) + geom_bar(position="stack", stat="identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5)) + 
+  ggtitle("Soil proportions of Paracou's seasonnaly flooded soil compared to soil in greenhouse pots") + 
+  xlab("Samples") + 
+  ylab("Percentage (%)")
+
+```
 
