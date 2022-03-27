@@ -37,7 +37,7 @@ library(googledrive)
 
 #authentification for the google sheets where I have the autorisation (I'm not authorized to log on Marion's drive), so this is the function I need : 
 
-gs4_auth(email = "alice.bordes@outlook.com")
+#gs4_auth(email = "alice.bordes@outlook.com")
 
 ```
 

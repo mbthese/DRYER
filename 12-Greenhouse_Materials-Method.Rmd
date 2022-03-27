@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Materials & method {-} 
 
 
@@ -161,7 +166,7 @@ ggplot(Sampling, aes(paste(Genus, Species), Done, fill = Done >= 136)) +
 
 ```
 
-# Soil analyses
+## Soil analyses
 
 Seedlings will directly be transplanted into 4 L pots filled with a sandy substrate composed of a 1:2 mixture of a brown ferralitic clay soil from *terra firme* forest.
 
@@ -172,7 +177,7 @@ The soil analyses by the Soil Analyses Laboratory of the Cirad, Montpellier.
 Overall, the substrate used in our experiment is slightly less **acidic** than in natura conditions.
 
 
-```{r}
+```{r echo=FALSE}
 
 library(readxl)
 library(dplyr)
@@ -201,6 +206,8 @@ analyses_sol_table %>%
   gtsave(
     "analyses_sol_table.png", expand = 10,
     path = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/")
+
+View(analyses_sol)
 
 ```
 
