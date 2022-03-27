@@ -1,3 +1,5 @@
+tab:species
+fig:speciesPhylogeny
 fig:measurePtlp-1
 fig:measurePtlp-2
 fig:FvFm
@@ -17,7 +19,8 @@ photochemical-trait
 microbial-analyses-bacteria-fungi-endophytes
 measured-traits
 protocols
-ecophysiology-trait-measurements
+measurements
+ecophysiology-trait-measurement
 leaf-thickness
 seedling-heights
 stem-diameter
@@ -25,8 +28,9 @@ pi_tlp
 fracfvfm-in-natura
 rwc
 gmin
-summary
+leaf-area
 rootshoot-ratio
+summary
 soil-analysis
 microbial-analyses
 comments

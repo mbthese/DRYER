@@ -7,11 +7,13 @@ output:
 editor_options:
   chunk_output_type: inline
 ---
-# Ecophysiology trait measurements
+# Measurements
 
-## Leaf thickness
+## Ecophysiology trait measurement 
 
-```{r echo=FALSE}
+### Leaf thickness
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(readxl)
 library(ggplot2)
 SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
@@ -25,7 +27,7 @@ SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx",
         "numeric", "numeric", "numeric", 
         "numeric", "numeric", "numeric", "numeric",
         "skip", "skip", "skip"))
-SoftTraits
+
 
 ggplot(SoftTraits) +
   aes(x = Genus, y = MeanLeafThickness) +
@@ -34,9 +36,9 @@ ggplot(SoftTraits) +
 ```
 
 
-## Seedling heights
+### Seedling heights
 
-```{r}
+```{r echo=FALSE}
 
 library(ggplot2)
 
@@ -49,8 +51,8 @@ ggplot(SoftTraits) +
 
 ```
 
-## Stem diameter
-```{r}
+### Stem diameter
+```{r echo=FALSE}
 ggplot(SoftTraits) +
  aes(x = Genus, y = `Stem_diameter (mm)`) +
  geom_boxplot(shape = "circle", fill = "#112446") +
@@ -59,7 +61,7 @@ ggplot(SoftTraits) +
 
 
 
-## $\pi_{TLP}$
+### $\pi_{TLP}$
 
 ```{r measurePtlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -78,7 +80,7 @@ p1 <- ggplot(Ptlp) +
 p1
 ```
 
-## $\frac{Fv}{Fm} in natura$
+### $\frac{Fv}{Fm} in natura$
 
 ```{r FvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
 library(readxl)
@@ -90,7 +92,7 @@ p2 <-ggplot(FvFm) +
 p2
 ```
 
-## $RWC$
+### $RWC$
 
 ```{r measureRWC, echo=FALSE, fig.cap="$RWC$.", message=FALSE, warning=FALSE}
 library(readxl)
@@ -108,8 +110,8 @@ p3
 ```
 
 
-## Gmin
-###Leaf area
+### Gmin
+#### Leaf area
 
 I used following code in `ImageJ`:
 
@@ -127,13 +129,13 @@ setAutoThreshold("Default dark");
 ```
 
 
-```{r}
+```{r echo=FALSE}
 LeafArea <- read_excel("Natura_data/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
 LeafArea
 
 ```
  
-```{r}
+```{r echo=FALSE}
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -158,9 +160,12 @@ p4 <- ggplot(Gmin) +
   theme_minimal()
 ```
 
+## Root:shoot ratio
+
+to fill
 
 
-## Summary 
+### Summary 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 library(ggplot2)
@@ -170,9 +175,10 @@ plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
 
 ```
 
-# Root:shoot ratio
 
-```{r}
+## Soil analysis
+
+```{r echo=FALSE}
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -204,10 +210,7 @@ ggplot(analyses_sol) +
 
 ```
 
-# Soil analysis
-
-
-# Microbial analyses
+## Microbial analyses
 
 Weights of samples before sterilization. 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}

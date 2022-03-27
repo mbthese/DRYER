@@ -2,7 +2,50 @@
 
 We selected 7 species, chosen according to their abundance in SFF and according to *in natura* availability during the wet season of 2021 (January-July 2021). To explore the variability of mechanistic traits linked to drought tolerance and root fungal community, we plan to measure *in natura* 10 seedlings per species known to be strictly affiliated to SFF or not.
 
-```{r echo=TRUE}
+
+```{r species, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(kableExtra)
+
+species <- data.frame(taxon = c(
+  "Eperua_falcata", 
+  "Iryanthera hostmannii", 
+  "Jacaranda_copaia subsp. copaia",
+  "Pterocarpus_officinalis",
+  "Symphonia_globulifera",
+  "Tachigali_melinonii",
+  "Virola_surinamensis"
+)) %>% 
+  separate(taxon, c("Genus", "Species"), sep = "_", remove = F)
+kable(select(species, Genus, Species), caption = "Studied species.")
+```
+
+```{r speciesPhylogeny, echo=FALSE, fig.cap="Selected", message=FALSE, warning=FALSE}
+library(ggtree)
+
+paracou <- read_csv("Greenhouse_document/phylogeny/Paracou_database20210830.csv") %>% 
+  dplyr::select(Family, Genus, Species) %>% 
+  unique() %>% 
+  full_join(species) %>% 
+  mutate(species = paste(Genus, Species), genus = Genus, family = Family) %>% 
+  dplyr::select(species, genus, family, taxon) %>% 
+  mutate(taxon = as.character(taxon))
+#tree <- phylo.maker(sp.list = paracou, tree = GBOTB.extended, nodes = nodes.info.1, scenarios = "S3")
+#save(tree, file = "./document/phylogeny/phylogeny.Rdata")
+load("Greenhouse_document/phylogeny/phylogeny.Rdata")
+fortify(tree$scenario.3) %>% 
+  mutate(species = gsub("_", " ", label)) %>% 
+  left_join(paracou) %>% 
+  ggtree(aes(col = taxon), layout="circular") + 
+  geom_tiplab2(aes(alpha = !is.na(taxon), size = !is.na(taxon))) +
+  theme_tree(legend.position='right', legend.text = element_text(face = "italic")) +
+  scale_alpha_manual("taxon", values = c(0.2, 1)) +
+  scale_size_manual("taxon", values = c(1, 2))
+```
+
+
+```{r echo=FALSE}
 library(readxl)
 library(kableExtra)
 library(ggplot2)
