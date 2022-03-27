@@ -6,14 +6,128 @@ While most research has had a focus on aboveground dynamics, an important unansw
 
 ## ToDo
 
-- [ ] complete samplings (19 left)
-- [ ] microbial sterilization
+
 - [ ] microbial PCR
 - [ ] send samples for metabarcoding in Bordeaux
+- [ ] Stomata to see
+- [ ] Winrhizo
+- [ ] Leaf veins with Christine Scoffoni
 - [ ] analyze
 - [ ] write
 
+
+
 ## Calendar
 
-* **August-September**: finish in natura samplings
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(readxl)
+library(knitr)
+library(dplyr)
+library(tidyverse)
+
+library(ggplot2)
+calendar <- read_excel("Greenhouse_document/calendar/calendar.xlsx")
+                       
+calendar_natura <- filter(calendar, calendar$Project == 'Natura')
+
+Campaign <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+RWCdry <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `RWC dry`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+Sterilization <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        Sterilization) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+
+Grinding <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        Grinding) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+DNA_extraction <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `DNA extraction`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+PCR <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `PCR with tagged primers`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
+Sequencing <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `Sequencing`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+## Summary 
+
+library(ggplot2)
+library(cowplot)
+
+
+plot_grid(Campaign, RWCdry, Sterilization, Grinding, DNA_extraction, PCR , Sequencing, labels = c('Campaign', 'RWC Dry', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Sequencing'), label_size = 12)
+
+```

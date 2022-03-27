@@ -1,9 +1,6 @@
-tab:speciesTab
-fig:speciesPhylo
-fig:pressure
-fig:unnamed-chunk-2
 todo
 calendar
+calendar-1
 species
 traits
 soft-traits
@@ -23,12 +20,11 @@ gmin
 summary
 todo-1
 summary-1
-calendar-1
+calendar-2
 study-species
 sampling-strategy
 greenhouse-experiment
 randomized-design
-soil-analyses
 traits-1
 soft-traits-1
 hydraulic-traits-1
@@ -51,3 +47,10 @@ leaf-thickness-1
 root-to-shoot-ratio
 waterlogging-litterature
 general-potential-hypotheses
+tab:speciesTab
+fig:speciesPhylo
+fig:pressure
+fig:unnamed-chunk-2
+soil-analyses
+check-all-pictures-of-destroyed-plants
+comments

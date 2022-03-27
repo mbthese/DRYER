@@ -11,10 +11,11 @@ editor_options:
 
 ## Leaf thickness
 
-```{r}
+```{r echo=FALSE}
 library(readxl)
+library(ggplot2)
 SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
-    # Je ne peux pas ouvrir ce path, il manque le doc ds le dossier je pense
+  
                          
                          
       col_types = c("skip", "skip", "numeric", 

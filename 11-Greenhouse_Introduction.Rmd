@@ -4,40 +4,129 @@
 
 While most research has had a focus on aboveground dynamics, an important unanswered question in the understanding of plant strategies is the extent to which the microbial community contributes to tropical forest functioning. In roots, the beneficial effects of the microbiome, mycorrhizal fungi or Nitrogen-fixing bacteria, are known to promote nutrient and water uptake, stimulate germination, growth and plant fitness under abiotic stress. The challenge is now to analyze how tree-microbiome interactions will affect the resistance (ability to resist and maintain fitness) and the resilience (ability to recover) of plants in a changing environment. Indeed, more frequent and intense drought events are being forecasted over the Amazon Basin. Previous work was mainly focused on terra firme forests, but few studies address the ecophysiological characteristics of seasonally flooded forests. To tackle this knowledge gap, we suggest a two-fold multidisciplinary approach which combines field sampling with a greenhouse experiment. Seedlings will be sampled in seasonally flooded forests located at Paracou in French Guiana. As mechanistic traits are closely linked to species physiological responses to abiotic environments, we will put into correlation the variation of seedlings’ mechanistic traits values with the microbiome. This project is carried out within the framework of the PhD thesis of M. Boisseaux on the relationships between species’ mechanistic traits and their distribution across contrasted habitats in the tropical forests of French Guiana in a context of climate change. It will provide significant insight into the strategies of tropical species to cope with drought and improve our predictions of ecosystem functioning under future climatic regimes.
 
+
+## Comments
+
+* Check all pictures of destroyed plants : All plants were photographed before destruction except on the first t0 campaign. 
+
+
 ## ToDo
 
 - [ ] calibrate PSYPRO cables that are missing
+- [ ] winrhizo
+- [ ] leaf area : Jean-Yves Goret
 - [ ] analyze
 - [ ] write
-
-## Summary
-
-# Check all pictures of destroyed plants
-
-All plants were photographed before destruction except on the first t0 campaign. 
-
-
-## Calendar
-
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 library(readxl)
 library(knitr)
+library(dplyr)
+library(tidyverse)
 
 library(ggplot2)
 calendar <- read_excel("Greenhouse_document/calendar/calendar.xlsx")
                        
-kable(calendar)
+calendar_greenhouse <- filter(calendar, calendar$Project != 'Natura')
+
+Campaign <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = Campaign) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
+
+RWCdry <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `RWC dry`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
+
+Sterilization <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        Sterilization) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
 
 
+Grinding <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        Grinding) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
+
+DNA_extraction <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `DNA extraction`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
+
+PCR <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `PCR with tagged primers`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
+
+Sequencing <- ggplot(calendar_greenhouse) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `Sequencing`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "Greenhouse campaigns", y = "Completed") +
+  theme_minimal()
 ## Summary 
 
 library(ggplot2)
 library(cowplot)
 
 
-plot_grid(GreenhouseCollect, RWCDry, Sterilization, Grinding, DNA, PCR, Seq, labels = c('Greenhouse Collect', 'RWC Dry', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Sequencing'), label_size = 12)
+plot_grid(Campaign, RWCdry, Sterilization, Grinding, DNA_extraction, PCR , Sequencing, labels = c('Campaign', 'RWC Dry', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Sequencing'), label_size = 12)
 
 ```
 
