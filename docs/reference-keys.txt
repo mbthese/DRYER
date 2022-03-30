@@ -62,3 +62,4 @@ rwc-1
 leaf-thickness-1
 waterlogging-litterature
 general-potential-hypotheses
+root-to-shoot-ratio
