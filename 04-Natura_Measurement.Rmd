@@ -5,13 +5,13 @@ output:
     number_sections: yes
   html_document: default
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 # Measurements
 
 ## Ecophysiology trait measurement 
 
-### Leaf thickness
+### Import data
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(readxl)
@@ -28,11 +28,44 @@ SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx",
         "numeric", "numeric", "numeric", "numeric",
         "skip", "skip", "skip"))
 
+SoftTraits <- SoftTraits %>%
+  mutate(Genus = case_when(
+    Species == 'falcata' ~ 'Eperua',
+    Species == 'hostmannii' ~ 'Iryanthera',
+    Species == 'copaia' ~ 'Jacaranda',
+    Species == 'officinalis' ~ 'Pterocarpus',
+    Species == 'globulifera' ~ 'Symphonia',
+    Species == 'melinonii' ~ 'Tachigali',
+    Species == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
 
+SoftTraits$name <- paste(SoftTraits$Genus, SoftTraits$Species)
+
+
+```
+### Leaf thickness
+
+```{r}
 ggplot(SoftTraits) +
-  aes(x = Genus, y = MeanLeafThickness) +
-  geom_boxplot(shape = "circle", fill = "#112446") +
-  theme_minimal()
+  aes(x = name, y = MeanLeafThickness, fill = name) +
+  geom_boxplot(shape = "circle") +
+  scale_x_discrete(guide = guide_axis(angle = 30)) +
+  scale_fill_hue(direction = 1) +
+  labs(
+    title = "Mean leaf thickness of the seedlings",
+    subtitle = " in natura",
+    x = "Species",
+    y = "Mean leaf thickness (mm)" ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    )
+  )
 ```
 
 
@@ -42,11 +75,38 @@ ggplot(SoftTraits) +
 
 library(ggplot2)
 
-ggplot(SoftTraits) +
- aes(x = Genus, y = `Height (cm)`) +
- geom_boxplot(shape = "circle", fill = "#112446") +
- theme_minimal()
+SoftTraits <- SoftTraits %>%
+  mutate(Genus = case_when(
+    Species == 'falcata' ~ 'Eperua',
+    Species == 'hostmannii' ~ 'Iryanthera',
+    Species == 'copaia' ~ 'Jacaranda',
+    Species == 'officinalis' ~ 'Pterocarpus',
+    Species == 'globulifera' ~ 'Symphonia',
+    Species == 'melinonii' ~ 'Tachigali',
+    Species == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
 
+SoftTraits$name <- paste(SoftTraits$Genus, SoftTraits$Species)
+
+ggplot(SoftTraits) +
+  aes(x = name, y = `Height (cm)`, fill = name) +
+  geom_boxplot(shape = "circle") +
+  scale_x_discrete(guide = guide_axis(angle = 30)) +
+  scale_fill_hue(direction = 1) +
+  labs(
+    title = "Height of the seedlings",
+    subtitle = " in natura",
+    x = "Species") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    )
+  )
 
 
 ```
@@ -65,18 +125,72 @@ ggplot(SoftTraits) +
 
 ```{r measurePtlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
 library(ggplot2)
+library(ggpubr)
+
 Ptlp <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/15unEUBxCQz_2ekJPEkL6M5C12tjvFJ0P7nb0iLh6Caw/edit#gid=0")
 
+Ptlp$Species_Name[Ptlp$Species_Name == "Epe.fal"] <- "falcata"
+Ptlp$Species_Name[Ptlp$Species_Name == "Iry.hos"] <- "hostmannii"
+Ptlp$Species_Name[Ptlp$Species_Name == "Jac.cop"] <- "copaia"
+Ptlp$Species_Name[Ptlp$Species_Name == "Pte.off"] <- "officinalis"
+Ptlp$Species_Name[Ptlp$Species_Name == "Sym.glo"] <- "globulifera"
+Ptlp$Species_Name[Ptlp$Species_Name == "Tac.mel"] <- "melinonii"
+Ptlp$Species_Name[Ptlp$Species_Name == "Vir.sur"] <- "surinamensis"
+
+Ptlp <- Ptlp %>% mutate(Genus = "")
+
+Ptlp <- Ptlp %>%
+  mutate(Genus = case_when(
+    Species_Name == 'falcata' ~ 'Eperua',
+    Species_Name == 'hostmannii' ~ 'Iryanthera',
+    Species_Name == 'copaia' ~ 'Jacaranda',
+    Species_Name == 'officinalis' ~ 'Pterocarpus',
+    Species_Name == 'globulifera' ~ 'Symphonia',
+    Species_Name == 'melinonii' ~ 'Tachigali',
+    Species_Name == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
+
+Ptlp$name <- paste(Ptlp$Genus, Ptlp$Species_Name)
+
+
+shapiro.test(Ptlp$Ptlp) # W = 0.96004, p-value = 0.06093 meets the normality assumption.
+
+Ptlp$name <- as.factor(Ptlp$name)
+
+compare_means(Ptlp ~ name, data = Ptlp, method = "t.test", paired = FALSE)
+
+modelPtlp <- lm(Ptlp ~ name, data = Ptlp)
+summary(modelPtlp)
+
 ggplot(Ptlp) +
-  aes(x = Species_Name, y = Ptlp) +
+  aes(x = name, y = Ptlp) +
   geom_boxplot(shape = "circle", fill = "#008EFF") +
   facet_wrap(~Species_Name) +
   theme_minimal()
 
 p1 <- ggplot(Ptlp) +
-  aes(x = Species_Name, y = Ptlp) +
-  geom_boxplot(shape = "circle", fill = "#008EFF") +
-  theme_minimal()
+  aes(x = name, y = Ptlp, fill = name) +
+  geom_boxplot(shape = "circle") +
+  theme_minimal()+ 
+  stat_compare_means(method = "anova")+
+  stat_compare_means(label = "p.signif", method = "t.test",
+                     ref.group = "Eperua falcata") +
+  scale_fill_hue(direction = 1) +
+  labs(
+    title = "Turgor loss point of the seedlings",
+    subtitle = " in natura",
+    x = "Species",
+    y = "Turgor loss point (MPa)" ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    )
+  )
 p1
 ```
 

@@ -1,4 +1,4 @@
-#ANOVA Camille
+#ANOVA Camille ----
 
 #the p-value for one-way ANOVA is less than 0.05 indicates that at least one of the tratment groups differens from the others. 
 
@@ -70,4 +70,14 @@ summary(modelemixte)
 #note pour apres: s'il faut transformer: miux vaut (jeanne) utiliser modele generalisé linéaire. generaliser : mettre une fontion lien comme log(). 
 
 
-effet aléatoire: voir s'il y a une variance au niveau des blocs. 
+#effet aléatoire: voir s'il y a une variance au niveau des blocs. 
+
+# Cours Marie-Pierre Etienne --------
+
+#install.package('remotes')
+remotes::install_github('MarieEtienne/coursesdata')
+bats<- coursesdata::bats
+bats$Diet <- as.factor(bats$Diet)
+
+model_bat <- lm(AUD ~ Diet, data = bats)
+summary(model_bat) #< p-value : 2e-16 *** il y a des différences entre les espèces.

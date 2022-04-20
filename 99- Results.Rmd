@@ -1,5 +1,5 @@
 ---
-title: "Sciart"
+title: "Results"
 author: "Marion Boisseaux"
 date: "15/04/2022"
 output: html_document
@@ -305,9 +305,42 @@ log_plot <- ggplot(RS_nonatura) +
 RSplot + stat_compare_means()
 ```
 
-## For Sciart publication 
 
 Tachigali or Pterocarpus where there are significant differences
+
+```{r}
+tacmel <- RS %>% filter(name %in% "Tachigali melinonii")
+
+tacmel <- tacmel %>% filter(!Time %in% "t0")
+
+tacmel %>%
+  group_by(Time, Treatment) %>%
+  identify_outliers(RootShoot)
+
+tacmel <- tacmel %>% filter(!UniqueCode %in% "54")
+
+tacmel %>%
+ filter(!(Time %in% "natura")) %>%
+ filter(!(Treatment %in% "natura")) %>%
+ ggplot() +
+  aes(x = Time, y = RootShoot, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0725CB",
+      D1 = "#1BE04A",
+      D2 = "#D4EB20",
+      D3 = "#E00F0F"
+    )) +
+  labs(
+    x = "Time",
+    y = "Root to shoot ratio",
+    title = "Root to shoot ratio of Tachigali melinonii across different drought treatments"
+  ) + 
+  theme_minimal() + 
+  stat_compare_means()
+
+```
 
 ```{r}
 pteoff <- RS %>% filter(name %in% "Pterocarpus officinalis")
@@ -338,6 +371,34 @@ pteoff %>%
   ) + 
   theme_minimal() + 
   stat_compare_means()
+
+```
+
+#For Sciart
+
+```{r}
+epefal <- RS %>% filter(name %in% "Eperua falcata")
+
+epefal %>%
+ filter(!(Time %in% "natura")) %>%
+ filter(!(Treatment %in% "natura")) %>%
+ ggplot() +
+  aes(x = Time, y = RootShoot, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0725CB",
+      D1 = "#1BE04A",
+      D2 = "#D4EB20",
+      D3 = "#E00F0F"
+    )) +
+  labs(
+    x = "Time",
+    y = "Root to shoot ratio",
+    title = "Root to shoot ratio of Eperua falcata across different drought treatments"
+  ) + 
+  theme_minimal() 
+
 
 ```
 
@@ -442,9 +503,6 @@ Tacmel_Chloro <- ALL %>%
 
 Tacmel_Chloro <- mutate(Tacmel_Chloro, CC= 0.186 * Chloro^2 +3.37 * Chloro +169.3 )
 
-
-
-  
 ```
 
 
@@ -453,3 +511,29 @@ Tacmel_Chloro <- mutate(Tacmel_Chloro, CC= 0.186 * Chloro^2 +3.37 * Chloro +169.
 Chlorophyll fluorescence was measured as the ratio of variable to maximum fluorescence (FV/FM) in the convention of Maxwell and Johnson (2000). FV/FM measures the maximum quantum efficiency of PSII photochemistry (Genty et al., 1989)
 
 FV/FM is considered a sensitive indicator of photosynthetic performance (Maxwell and Johnson, 2000) and has been used to monitor photosynthetic function during severe drought stress (e.g. Ings et al., 2013; García de la Serrana et al., 2015; Chen et al., 2016; Yao et al., 2018). Optimal FV/FM values are ~0.8 (Björkman and Demmig, 1987). FV/FM before drought did not significantly differ among families or treatment *(P > 0.05).* We used FV/FM as a rapid, nondestructive method to compare relative differences in effects of severe drought among groups.
+
+## For sciart
+
+```{r}
+ALL %>%
+ filter(name %in% "Pterocarpus officinalis") %>%
+  filter(!(Time %in% c("t51", "t57", "t101"))) %>%
+ ggplot() +
+  aes(x = Time, y = FvFm, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0725CB",
+      D1 = "#1BE04A",
+      D2 = "#D4EB20",
+      D3 = "#E00F0F"
+    )) +
+  theme_minimal() +
+  labs(
+    x = "Time",
+    y = "FvFm",
+    title = "Chlorophyll fluorescence of Pterocarpus officinalis across different drought treatments"
+  )
+  facet_wrap(vars(name))
+```
+
