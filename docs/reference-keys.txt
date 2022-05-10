@@ -63,3 +63,17 @@ leaf-thickness-1
 waterlogging-litterature
 general-potential-hypotheses
 root-to-shoot-ratio
+import-data
+root-to-shoot-ratio-1
+check-normality-of-root-shoot-data
+statistical-significances
+species-per-species-stat-compare-means
+plot
+chlorophyll-content
+cholorphyll-fluorescence
+for-sciart
+lswc
+pca
+plant-morphology
+morphology-of-the-leaf
+leaf-hydraulic-traits

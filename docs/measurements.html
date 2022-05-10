@@ -24,7 +24,7 @@
 <meta name="author" content="Marion Boisseaux" />
 
 
-<meta name="date" content="2022-03-27" />
+<meta name="date" content="2022-05-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,13 @@
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <script async defer src="https://hypothes.is/embed.js"></script>
 
 
@@ -155,32 +162,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="measurements.html"><a href="measurements.html"><i class="fa fa-check"></i><b>3</b> Measurements</a><ul>
 <li class="chapter" data-level="3.1" data-path="measurements.html"><a href="measurements.html#ecophysiology-trait-measurement"><i class="fa fa-check"></i><b>3.1</b> Ecophysiology trait measurement</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="measurements.html"><a href="measurements.html#leaf-thickness"><i class="fa fa-check"></i><b>3.1.1</b> Leaf thickness</a></li>
-<li class="chapter" data-level="3.1.2" data-path="measurements.html"><a href="measurements.html#seedling-heights"><i class="fa fa-check"></i><b>3.1.2</b> Seedling heights</a></li>
-<li class="chapter" data-level="3.1.3" data-path="measurements.html"><a href="measurements.html#stem-diameter"><i class="fa fa-check"></i><b>3.1.3</b> Stem diameter</a></li>
-<li class="chapter" data-level="3.1.4" data-path="measurements.html"><a href="measurements.html#pi_tlp"><i class="fa fa-check"></i><b>3.1.4</b> <span class="math inline">\(\pi_{TLP}\)</span></a></li>
-<li class="chapter" data-level="3.1.5" data-path="measurements.html"><a href="measurements.html#fracfvfm-in-natura"><i class="fa fa-check"></i><b>3.1.5</b> <span class="math inline">\(\frac{Fv}{Fm} in natura\)</span></a></li>
-<li class="chapter" data-level="3.1.6" data-path="measurements.html"><a href="measurements.html#rwc"><i class="fa fa-check"></i><b>3.1.6</b> <span class="math inline">\(RWC\)</span></a></li>
-<li class="chapter" data-level="3.1.7" data-path="measurements.html"><a href="measurements.html#gmin"><i class="fa fa-check"></i><b>3.1.7</b> Gmin</a></li>
+<li class="chapter" data-level="3.1.1" data-path="measurements.html"><a href="measurements.html#summary"><i class="fa fa-check"></i><b>3.1.1</b> Summary</a></li>
+<li class="chapter" data-level="3.1.2" data-path="measurements.html"><a href="measurements.html#soil-analysis"><i class="fa fa-check"></i><b>3.1.2</b> Soil analysis</a></li>
+<li class="chapter" data-level="3.1.3" data-path="measurements.html"><a href="measurements.html#microbial-analyses"><i class="fa fa-check"></i><b>3.1.3</b> Microbial analyses</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="measurements.html"><a href="measurements.html#rootshoot-ratio"><i class="fa fa-check"></i><b>3.2</b> Root:shoot ratio</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="measurements.html"><a href="measurements.html#summary"><i class="fa fa-check"></i><b>3.2.1</b> Summary</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="measurements.html"><a href="measurements.html#soil-analysis"><i class="fa fa-check"></i><b>3.3</b> Soil analysis</a></li>
-<li class="chapter" data-level="3.4" data-path="measurements.html"><a href="measurements.html#microbial-analyses"><i class="fa fa-check"></i><b>3.4</b> Microbial analyses</a></li>
 </ul></li>
 <li class="part"><span><b>II Part two : greenhouse experiment</b></span></li>
 <li class="chapter" data-level="" data-path="introduction-to-the-greenhouse-experiment.html"><a href="introduction-to-the-greenhouse-experiment.html"><i class="fa fa-check"></i>Introduction to the greenhouse experiment</a><ul>
-<li class="chapter" data-level="3.5" data-path="introduction-to-the-greenhouse-experiment.html"><a href="introduction-to-the-greenhouse-experiment.html#comments"><i class="fa fa-check"></i><b>3.5</b> Comments</a></li>
-<li class="chapter" data-level="3.6" data-path="introduction-to-the-greenhouse-experiment.html"><a href="introduction-to-the-greenhouse-experiment.html#todo-1"><i class="fa fa-check"></i><b>3.6</b> ToDo</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-the-greenhouse-experiment.html"><a href="introduction-to-the-greenhouse-experiment.html#comments"><i class="fa fa-check"></i><b>3.2</b> Comments</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-the-greenhouse-experiment.html"><a href="introduction-to-the-greenhouse-experiment.html#todo-1"><i class="fa fa-check"></i><b>3.3</b> ToDo</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="materials-method.html"><a href="materials-method.html"><i class="fa fa-check"></i>Materials &amp; method</a><ul>
-<li class="chapter" data-level="3.7" data-path="materials-method.html"><a href="materials-method.html#study-species"><i class="fa fa-check"></i><b>3.7</b> Study species</a></li>
-<li class="chapter" data-level="3.8" data-path="materials-method.html"><a href="materials-method.html#sampling-strategy"><i class="fa fa-check"></i><b>3.8</b> Sampling strategy</a></li>
-<li class="chapter" data-level="3.9" data-path="materials-method.html"><a href="materials-method.html#greenhouse-experiment"><i class="fa fa-check"></i><b>3.9</b> Greenhouse experiment</a><ul>
-<li class="chapter" data-level="3.9.1" data-path="materials-method.html"><a href="materials-method.html#randomized-design"><i class="fa fa-check"></i><b>3.9.1</b> Randomized design</a></li>
+<li class="chapter" data-level="3.4" data-path="materials-method.html"><a href="materials-method.html#study-species"><i class="fa fa-check"></i><b>3.4</b> Study species</a></li>
+<li class="chapter" data-level="3.5" data-path="materials-method.html"><a href="materials-method.html#sampling-strategy"><i class="fa fa-check"></i><b>3.5</b> Sampling strategy</a></li>
+<li class="chapter" data-level="3.6" data-path="materials-method.html"><a href="materials-method.html#greenhouse-experiment"><i class="fa fa-check"></i><b>3.6</b> Greenhouse experiment</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="materials-method.html"><a href="materials-method.html#randomized-design"><i class="fa fa-check"></i><b>3.6.1</b> Randomized design</a></li>
 </ul></li>
-<li class="chapter" data-level="3.10" data-path="materials-method.html"><a href="materials-method.html#soil-analyses"><i class="fa fa-check"></i><b>3.10</b> Soil analyses</a></li>
+<li class="chapter" data-level="3.7" data-path="materials-method.html"><a href="materials-method.html#soil-analyses"><i class="fa fa-check"></i><b>3.7</b> Soil analyses</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="traits-1.html"><a href="traits-1.html"><i class="fa fa-check"></i><b>4</b> Traits</a><ul>
 <li class="chapter" data-level="4.1" data-path="traits-1.html"><a href="traits-1.html#soft-traits-1"><i class="fa fa-check"></i><b>4.1</b> Soft traits</a></li>
@@ -188,26 +186,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="traits-1.html"><a href="traits-1.html#photochemical-trait-1"><i class="fa fa-check"></i><b>4.3</b> Photochemical trait</a></li>
 <li class="chapter" data-level="4.4" data-path="traits-1.html"><a href="traits-1.html#microbial-analyses-bacteria-fungi-leaf-and-root-endophytes"><i class="fa fa-check"></i><b>4.4</b> Microbial analyses : bacteria + fungi leaf and root endophytes</a></li>
 <li class="chapter" data-level="4.5" data-path="traits-1.html"><a href="traits-1.html#protocols-1"><i class="fa fa-check"></i><b>4.5</b> Protocols</a></li>
-<li class="chapter" data-level="4.6" data-path="traits-1.html"><a href="traits-1.html#all-individuals"><i class="fa fa-check"></i><b>4.6</b> All individuals</a><ul>
-<li class="chapter" data-level="4.6.1" data-path="traits-1.html"><a href="traits-1.html#seedling-heights-1"><i class="fa fa-check"></i><b>4.6.1</b> Seedling heights</a></li>
-<li class="chapter" data-level="4.6.2" data-path="traits-1.html"><a href="traits-1.html#stem-diameter-1"><i class="fa fa-check"></i><b>4.6.2</b> Stem diameter</a></li>
-<li class="chapter" data-level="4.6.3" data-path="traits-1.html"><a href="traits-1.html#number-of-leaves"><i class="fa fa-check"></i><b>4.6.3</b> Number of leaves</a></li>
-</ul></li>
-<li class="chapter" data-level="4.7" data-path="traits-1.html"><a href="traits-1.html#wilting-stages"><i class="fa fa-check"></i><b>4.7</b> Wilting stages</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="non-destructive.html"><a href="non-destructive.html"><i class="fa fa-check"></i><b>5</b> Non Destructive</a><ul>
-<li class="chapter" data-level="5.1" data-path="non-destructive.html"><a href="non-destructive.html#fracfvfm"><i class="fa fa-check"></i><b>5.1</b> <span class="math inline">\(\frac{Fv}{Fm}\)</span></a></li>
-<li class="chapter" data-level="5.2" data-path="non-destructive.html"><a href="non-destructive.html#asat"><i class="fa fa-check"></i><b>5.2</b> Asat</a></li>
-<li class="chapter" data-level="5.3" data-path="non-destructive.html"><a href="non-destructive.html#e"><i class="fa fa-check"></i><b>5.3</b> E</a></li>
-<li class="chapter" data-level="5.4" data-path="non-destructive.html"><a href="non-destructive.html#wue"><i class="fa fa-check"></i><b>5.4</b> WUE</a></li>
-<li class="chapter" data-level="5.5" data-path="non-destructive.html"><a href="non-destructive.html#gs"><i class="fa fa-check"></i><b>5.5</b> gs</a></li>
+<li class="chapter" data-level="5.1" data-path="non-destructive.html"><a href="non-destructive.html#all-individuals"><i class="fa fa-check"></i><b>5.1</b> All individuals</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="non-destructive.html"><a href="non-destructive.html#seedling-heights"><i class="fa fa-check"></i><b>5.1.1</b> Seedling heights</a></li>
+<li class="chapter" data-level="5.1.2" data-path="non-destructive.html"><a href="non-destructive.html#stem-diameter"><i class="fa fa-check"></i><b>5.1.2</b> Stem diameter</a></li>
+<li class="chapter" data-level="5.1.3" data-path="non-destructive.html"><a href="non-destructive.html#number-of-leaves"><i class="fa fa-check"></i><b>5.1.3</b> Number of leaves</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="destructive.html"><a href="destructive.html"><i class="fa fa-check"></i><b>6</b> Destructive</a><ul>
-<li class="chapter" data-level="6.1" data-path="destructive.html"><a href="destructive.html#rwc-1"><i class="fa fa-check"></i><b>6.1</b> RWC</a></li>
-<li class="chapter" data-level="6.2" data-path="destructive.html"><a href="destructive.html#leaf-thickness-1"><i class="fa fa-check"></i><b>6.2</b> Leaf thickness</a></li>
+<li class="chapter" data-level="5.2" data-path="non-destructive.html"><a href="non-destructive.html#wilting-stages"><i class="fa fa-check"></i><b>5.2</b> Wilting stages</a></li>
+<li class="chapter" data-level="5.3" data-path="non-destructive.html"><a href="non-destructive.html#fracfvfm"><i class="fa fa-check"></i><b>5.3</b> <span class="math inline">\(\frac{Fv}{Fm}\)</span></a></li>
+<li class="chapter" data-level="5.4" data-path="non-destructive.html"><a href="non-destructive.html#asat"><i class="fa fa-check"></i><b>5.4</b> Asat</a></li>
+<li class="chapter" data-level="5.5" data-path="non-destructive.html"><a href="non-destructive.html#e"><i class="fa fa-check"></i><b>5.5</b> E</a></li>
+<li class="chapter" data-level="5.6" data-path="non-destructive.html"><a href="non-destructive.html#wue"><i class="fa fa-check"></i><b>5.6</b> WUE</a></li>
+<li class="chapter" data-level="5.7" data-path="non-destructive.html"><a href="non-destructive.html#gs"><i class="fa fa-check"></i><b>5.7</b> gs</a></li>
+<li class="chapter" data-level="5.8" data-path="non-destructive.html"><a href="non-destructive.html#rwc"><i class="fa fa-check"></i><b>5.8</b> RWC</a></li>
+<li class="chapter" data-level="5.9" data-path="non-destructive.html"><a href="non-destructive.html#leaf-thickness"><i class="fa fa-check"></i><b>5.9</b> Leaf thickness</a></li>
+<li class="chapter" data-level="5.10" data-path="non-destructive.html"><a href="non-destructive.html#root-to-shoot-ratio"><i class="fa fa-check"></i><b>5.10</b> Root to shoot ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="waterlogging-litterature.html"><a href="waterlogging-litterature.html"><i class="fa fa-check"></i><b>7</b> Waterlogging litterature</a></li>
-<li class="chapter" data-level="8" data-path="general-potential-hypotheses.html"><a href="general-potential-hypotheses.html"><i class="fa fa-check"></i><b>8</b> general potential hypotheses</a></li>
+<li class="chapter" data-level="6" data-path="waterlogging-litterature.html"><a href="waterlogging-litterature.html"><i class="fa fa-check"></i><b>6</b> Waterlogging litterature</a></li>
+<li class="chapter" data-level="7" data-path="general-potential-hypotheses.html"><a href="general-potential-hypotheses.html"><i class="fa fa-check"></i><b>7</b> general potential hypotheses</a></li>
+<li class="chapter" data-level="8" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html"><i class="fa fa-check"></i><b>8</b> Root to shoot ratio</a><ul>
+<li class="chapter" data-level="8.1" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#check-normality-of-root-shoot-data"><i class="fa fa-check"></i><b>8.1</b> Check normality of root shoot data</a></li>
+<li class="chapter" data-level="8.2" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#statistical-significances"><i class="fa fa-check"></i><b>8.2</b> Statistical significances</a></li>
+<li class="chapter" data-level="8.3" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#species-per-species-stat-compare-means"><i class="fa fa-check"></i><b>8.3</b> Species per species stat compare means</a></li>
+<li class="chapter" data-level="8.4" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#plot"><i class="fa fa-check"></i><b>8.4</b> Plot</a></li>
+<li class="chapter" data-level="8.5" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#chlorophyll-content"><i class="fa fa-check"></i><b>8.5</b> Chlorophyll content</a></li>
+<li class="chapter" data-level="8.6" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#cholorphyll-fluorescence"><i class="fa fa-check"></i><b>8.6</b> Cholorphyll fluorescence</a></li>
+<li class="chapter" data-level="8.7" data-path="root-to-shoot-ratio-1.html"><a href="root-to-shoot-ratio-1.html#for-sciart"><i class="fa fa-check"></i><b>8.7</b> For sciart</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/mbthese/DRYER" target="blank">Source</a></li>
 
@@ -235,96 +241,118 @@ This book is in <b><a href="open.html#open">Open Review</a></b>. I want your fee
 <h1><span class="header-section-number">Chapter 3</span> Measurements</h1>
 <div id="ecophysiology-trait-measurement" class="section level2">
 <h2><span class="header-section-number">3.1</span> Ecophysiology trait measurement</h2>
-<div id="leaf-thickness" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Leaf thickness</h3>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-</div>
-<div id="seedling-heights" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Seedling heights</h3>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-</div>
-<div id="stem-diameter" class="section level3">
-<h3><span class="header-section-number">3.1.3</span> Stem diameter</h3>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-</div>
-<div id="pi_tlp" class="section level3">
-<h3><span class="header-section-number">3.1.4</span> <span class="math inline">\(\pi_{TLP}\)</span></h3>
-<div class="figure"><span style="display:block;" id="fig:measurePtlp-1"></span>
-<img src="DRYER-project_files/figure-html/measurePtlp-1.png" alt="$\pi_{TLP}$." width="672" />
-<p class="caption">
-Figure 3.1: <span class="math inline">\(\pi_{TLP}\)</span>.
-</p>
-</div>
-<div class="figure"><span style="display:block;" id="fig:measurePtlp-2"></span>
-<img src="DRYER-project_files/figure-html/measurePtlp-2.png" alt="$\pi_{TLP}$." width="672" />
-<p class="caption">
-Figure 3.2: <span class="math inline">\(\pi_{TLP}\)</span>.
-</p>
-</div>
-</div>
-<div id="fracfvfm-in-natura" class="section level3">
-<h3><span class="header-section-number">3.1.5</span> <span class="math inline">\(\frac{Fv}{Fm} in natura\)</span></h3>
+<p>Import data</p>
+<p>Leaf thickness</p>
+<p>Seedling heights</p>
+<p>Stem diameter</p>
+<p><span class="math inline">\(\pi_{TLP}\)</span></p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  Ptlp$Ptlp
+## W = 0.96004, p-value = 0.06093</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  logPtlp
+## W = 0.97547, p-value = 0.3089</code></pre>
+<pre><code>## # A tibble: 21 x 8
+##    .y.   group1                group2           p p.adj p.format p.signif method
+##    &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; 
+##  1 Ptlp  Eperua falcata        Iryanther~ 2.51e-1 1     0.25056  ns       T-test
+##  2 Ptlp  Eperua falcata        Jacaranda~ 9.43e-1 1     0.94279  ns       T-test
+##  3 Ptlp  Eperua falcata        Pterocarp~ 6.94e-2 0.69  0.06942  ns       T-test
+##  4 Ptlp  Eperua falcata        Symphonia~ 6.14e-4 0.012 0.00061  ***      T-test
+##  5 Ptlp  Eperua falcata        Tachigali~ 1.01e-1 0.81  0.10142  ns       T-test
+##  6 Ptlp  Eperua falcata        Virola su~ 1.54e-3 0.028 0.00154  **       T-test
+##  7 Ptlp  Iryanthera hostmannii Jacaranda~ 1.42e-1 0.85  0.14224  ns       T-test
+##  8 Ptlp  Iryanthera hostmannii Pterocarp~ 3.77e-1 1     0.37686  ns       T-test
+##  9 Ptlp  Iryanthera hostmannii Symphonia~ 6.22e-3 0.1   0.00622  **       T-test
+## 10 Ptlp  Iryanthera hostmannii Tachigali~ 3.22e-2 0.39  0.03223  *        T-test
+## # ... with 11 more rows</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Ptlp ~ name, data = Ptlp)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.41408 -0.08569  0.00541  0.10544  0.35695 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                 -1.804973   0.053914 -33.479  &lt; 2e-16 ***
+## nameIryanthera hostmannii    0.110975   0.084019   1.321 0.192691    
+## nameJacaranda copaia        -0.006021   0.084019  -0.072 0.943162    
+## namePterocarpus officinalis  0.198041   0.078335   2.528 0.014740 *  
+## nameSymphonia globulifera    0.365831   0.078335   4.670 2.37e-05 ***
+## nameTachigali melinonii     -0.246292   0.100864  -2.442 0.018269 *  
+## nameVirola surinamensis      0.310811   0.076246   4.076 0.000167 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1705 on 49 degrees of freedom
+##   (36 observations deleted due to missingness)
+## Multiple R-squared:  0.5483, Adjusted R-squared:  0.493 
+## F-statistic: 9.914 on 6 and 49 DF,  p-value: 3.788e-07</code></pre>
+<p><span class="math inline">\(\frac{Fv}{Fm} in natura\)</span></p>
 <div class="figure"><span style="display:block;" id="fig:FvFm"></span>
 <img src="DRYER-project_files/figure-html/FvFm-1.png" alt="$\frac{Fv}{Fm}$." width="672" />
 <p class="caption">
-Figure 3.3: <span class="math inline">\(\frac{Fv}{Fm}\)</span>.
+Figure 3.1: <span class="math inline">\(\frac{Fv}{Fm}\)</span>.
 </p>
 </div>
-</div>
-<div id="rwc" class="section level3">
-<h3><span class="header-section-number">3.1.6</span> <span class="math inline">\(RWC\)</span></h3>
-<div class="figure"><span style="display:block;" id="fig:measureRWC"></span>
-<img src="DRYER-project_files/figure-html/measureRWC-1.png" alt="$RWC$." width="672" />
-<p class="caption">
-Figure 3.4: <span class="math inline">\(RWC\)</span>.
-</p>
-</div>
-</div>
-<div id="gmin" class="section level3">
-<h3><span class="header-section-number">3.1.7</span> Gmin</h3>
-<div id="leaf-area" class="section level4">
-<h4><span class="header-section-number">3.1.7.1</span> Leaf area</h4>
+<p>LSWC</p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  LSWC$LSWC
+## W = 0.93772, p-value = 0.001456</code></pre>
+<p>Gmin
+Leaf area</p>
 <p>I used following code in <code>ImageJ</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="measurements.html#cb1-1"></a><span class="ex">run</span>(<span class="st">&quot;8-bit&quot;</span>);</span>
-<span id="cb1-2"><a href="measurements.html#cb1-2"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default&quot;</span>);</span>
-<span id="cb1-3"><a href="measurements.html#cb1-3"></a><span class="ex">/</span>/<span class="ex">run</span>(<span class="st">&quot;Threshold...&quot;</span>);</span>
-<span id="cb1-4"><a href="measurements.html#cb1-4"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default&quot;</span>);</span>
-<span id="cb1-5"><a href="measurements.html#cb1-5"></a><span class="ex">setOption</span>(<span class="st">&quot;BlackBackground&quot;</span>, false);</span>
-<span id="cb1-6"><a href="measurements.html#cb1-6"></a><span class="ex">run</span>(<span class="st">&quot;Convert to Mask&quot;</span>, <span class="st">&quot;method=Default background=Light calculate&quot;</span>);</span>
-<span id="cb1-7"><a href="measurements.html#cb1-7"></a><span class="ex">run</span>(<span class="st">&quot;Analyze Particles...&quot;</span>, <span class="st">&quot;size=1000000-Infinity display summarize&quot;</span>);</span>
-<span id="cb1-8"><a href="measurements.html#cb1-8"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default dark&quot;</span>);</span></code></pre></div>
-<pre><code>## # A tibble: 72 x 3
-##    Species Code  LeafArea_cm2
-##    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;
-##  1 Epe.fal 2             9.58
-##  2 Epe.fal 19           23.0 
-##  3 Epe.fal 20           22.0 
-##  4 Epe.fal 21           20.0 
-##  5 Epe.fal 25           13.9 
-##  6 Epe.fal 28           22.2 
-##  7 Epe.fal 36           35.6 
-##  8 Epe.fal 43           17.6 
-##  9 Epe.fal 44           18.6 
-## 10 Epe.fal 45           17.4 
-## # ... with 62 more rows</code></pre>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-</div>
-</div>
-</div>
-<div id="rootshoot-ratio" class="section level2">
-<h2><span class="header-section-number">3.2</span> Root:shoot ratio</h2>
-<p>to fill</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="measurements.html#cb6-1"></a><span class="ex">run</span>(<span class="st">&quot;8-bit&quot;</span>);</span>
+<span id="cb6-2"><a href="measurements.html#cb6-2"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default&quot;</span>);</span>
+<span id="cb6-3"><a href="measurements.html#cb6-3"></a><span class="ex">/</span>/<span class="ex">run</span>(<span class="st">&quot;Threshold...&quot;</span>);</span>
+<span id="cb6-4"><a href="measurements.html#cb6-4"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default&quot;</span>);</span>
+<span id="cb6-5"><a href="measurements.html#cb6-5"></a><span class="ex">setOption</span>(<span class="st">&quot;BlackBackground&quot;</span>, false);</span>
+<span id="cb6-6"><a href="measurements.html#cb6-6"></a><span class="ex">run</span>(<span class="st">&quot;Convert to Mask&quot;</span>, <span class="st">&quot;method=Default background=Light calculate&quot;</span>);</span>
+<span id="cb6-7"><a href="measurements.html#cb6-7"></a><span class="ex">run</span>(<span class="st">&quot;Analyze Particles...&quot;</span>, <span class="st">&quot;size=1000000-Infinity display summarize&quot;</span>);</span>
+<span id="cb6-8"><a href="measurements.html#cb6-8"></a><span class="ex">setAutoThreshold</span>(<span class="st">&quot;Default dark&quot;</span>);</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  Gmin$gmin.slope_function
+## W = 0.46319, p-value = 8.708e-15</code></pre>
+<p><em>I deliberately removed 3 point (1 tac.mel and 2 sym.glo because gmin was really high - have to check data)</em></p>
+<p>Root:shoot ratio</p>
+<p>Specific root length</p>
+<div id="htmlwidget-4be3ed39bd82345472dc" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4be3ed39bd82345472dc">{"x":{"visdat":{"523c2d232503":["function () ","plotlyVisDat"]},"cur_data":"523c2d232503","attrs":{"523c2d232503":{"y":{},"x":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Name","type":"category","categoryorder":"array","categoryarray":["Eperua falcata","Iryanthera hostmannii","Jacaranda copaia","Pterocarpus officinalis","Symphonia globulifera","Tachigali melinonii","Virola surinamensis"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"SRL"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"rgba(31,119,180,0.5)","y":[594.43994211288,202.166885102665,835.737851662404,597.496062992126,936.156445556946,700.195950359242,148.163369495852,411.38566131026,134.920720720721,167.937062937063,182.838108077744,269.331096196868,127.45873987101,105.795440542206,247.836038052602,461.350245499182,240.533220338983,598.807604562738,100.443942133816,238.416651517906,124.667498751872,210.091923641703,151.762993762994,200.721620079863,40.3205872311369,823.80835117773,966.659090909091,269.326263871763,99.5649324047521,549.362025316456,114.669724770642,68.6904969485615,129.286697247706,128.286990508096,118.824178298064,162.889398280802,291.605812897366,148.331058020478,101.114316820904,344.181682799702,223.723543888433,169.069162766511,101.821472814866,91.8893901420217,47.7232323232323,290.036411784177,168.899339498018,106.607380830343,129.042352424841,227.379875886525,107.252143413874,61.9742115892496,183.85009487666,243.767015706806,149.408652127279,327.757088846881,223.095556617296,360.713744793639,232.36515291937,349.437541308658,260.59429280397,295.090072320842,164.760120350109,180.375138734739,115.056497175141,174.44452717796,184.718141870684,176.137368421053,408.118236472946,405.393157894737,469.47889485802,243.398355413431],"x":["Iryanthera hostmannii","Eperua falcata","Jacaranda copaia","Tachigali melinonii","Symphonia globulifera","Symphonia globulifera","Iryanthera hostmannii","Symphonia globulifera","Iryanthera hostmannii","Symphonia globulifera","Symphonia globulifera","Symphonia globulifera","Pterocarpus officinalis","Pterocarpus officinalis","Symphonia globulifera","Symphonia globulifera","Symphonia globulifera","Symphonia globulifera","Eperua falcata","Eperua falcata","Eperua falcata","Pterocarpus officinalis","Pterocarpus officinalis","Virola surinamensis","Eperua falcata","Jacaranda copaia","Jacaranda copaia","Eperua falcata","Iryanthera hostmannii","Jacaranda copaia","Iryanthera hostmannii","Iryanthera hostmannii","Iryanthera hostmannii","Iryanthera hostmannii","Jacaranda copaia","Eperua falcata","Tachigali melinonii","Iryanthera hostmannii","Iryanthera hostmannii","Tachigali melinonii","Tachigali melinonii","Tachigali melinonii","Eperua falcata","Eperua falcata","Eperua falcata","Tachigali melinonii","Tachigali melinonii","Tachigali melinonii","Pterocarpus officinalis","Pterocarpus officinalis","Pterocarpus officinalis","Eperua falcata","Iryanthera hostmannii","Jacaranda copaia","Jacaranda copaia","Tachigali melinonii","Virola surinamensis","Pterocarpus officinalis","Pterocarpus officinalis","Pterocarpus officinalis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Virola surinamensis","Tachigali melinonii","Jacaranda copaia","Jacaranda copaia","Jacaranda copaia"],"type":"box","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <div id="summary" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Summary</h3>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<h3><span class="header-section-number">3.1.1</span> Summary</h3>
+<div id="pca" class="section level4">
+<h4><span class="header-section-number">3.1.1.1</span> PCA</h4>
+<p><img src="DRYER-project_files/figure-html/DRYER-natura%20PCA-1.png" width="672" /><img src="DRYER-project_files/figure-html/DRYER-natura%20PCA-2.png" width="672" /><img src="DRYER-project_files/figure-html/DRYER-natura%20PCA-3.png" width="672" /><img src="DRYER-project_files/figure-html/DRYER-natura%20PCA-4.png" width="672" /></p>
+</div>
+<div id="plant-morphology" class="section level4">
+<h4><span class="header-section-number">3.1.1.2</span> Plant morphology</h4>
+<p><img src="DRYER-project_files/figure-html/Natura%20morpho-1.png" width="672" /></p>
+</div>
+<div id="morphology-of-the-leaf" class="section level4">
+<h4><span class="header-section-number">3.1.1.3</span> Morphology of the leaf</h4>
+<p><img src="DRYER-project_files/figure-html/natura%20leaf%20morpho-1.png" width="672" /></p>
+</div>
+<div id="leaf-hydraulic-traits" class="section level4">
+<h4><span class="header-section-number">3.1.1.4</span> Leaf hydraulic traits</h4>
+<p><img src="DRYER-project_files/figure-html/natura%20leaf%20hydrualics-1.png" width="672" /><img src="DRYER-project_files/figure-html/natura%20leaf%20hydrualics-2.png" width="672" /></p>
 </div>
 </div>
-<div id="soil-analysis" class="section level2">
-<h2><span class="header-section-number">3.3</span> Soil analysis</h2>
-<p><img src="DRYER-project_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="DRYER-project_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<div id="soil-analysis" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Soil analysis</h3>
+<p><img src="DRYER-project_files/figure-html/soil%20analysis-1.png" width="672" /><img src="DRYER-project_files/figure-html/soil%20analysis-2.png" width="672" /></p>
 </div>
-<div id="microbial-analyses" class="section level2">
-<h2><span class="header-section-number">3.4</span> Microbial analyses</h2>
+<div id="microbial-analyses" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Microbial analyses</h3>
 <p>Weights of samples before sterilization.</p>
 <pre><code>## # A tibble: 72 x 11
 ##    User_Initial_Ba~ Balance Date_Field          Species_Name  Code   Root  Shoot
@@ -342,6 +370,7 @@ Figure 3.4: <span class="math inline">\(RWC\)</span>.
 ## # ... with 62 more rows, and 4 more variables: Leaves &lt;dbl&gt;,
 ## #   Comment_Weight_Bag &lt;chr&gt;, Comment_Field &lt;lgl&gt;, Comment_Lab &lt;lgl&gt;</code></pre>
 
+</div>
 </div>
 </div>
 

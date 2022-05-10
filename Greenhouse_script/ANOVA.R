@@ -77,7 +77,78 @@ summary(modelemixte)
 #install.package('remotes')
 remotes::install_github('MarieEtienne/coursesdata')
 bats<- coursesdata::bats
+
+#question: est ce que le volume auditif depend du regime alimentaire?
+#representer les données en fonction des questions que l'on se pose (boxplot)
+library(plotly) #pour les données intéractives
+library(ggplot2)
+
+p<- ggplot(bats) +
+ aes(x = Diet, y = AUD, fill = Diet) +
+ geom_boxplot(shape = "circle") +
+ scale_fill_hue(direction = 1) +
+ theme_minimal()
+
+
+ggplotly(p)
+
+
+#ecrire le modele
 bats$Diet <- as.factor(bats$Diet)
 
 model_bat <- lm(AUD ~ Diet, data = bats)
 summary(model_bat) #< p-value : 2e-16 *** il y a des différences entre les espèces.
+
+#verification graphique du modele
+library(ggfortify)
+autoplot(model_bat)
+
+
+#modele lineaire
+#lien entre deux variables quantitatives
+
+library(coursesdata)
+library(ggplot2)
+library(dplyr)
+data(usdata)
+
+ggplot(usdata) +
+ aes(x = pop, y = SO2) +
+ geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+ theme_minimal()
+
+Mpop <- lm(SO2 ~ pop, data = usdata)
+model.matrix(Mpop) %>% head(n=42)
+
+Mpop <- lm(SO2 ~ pop + temp + manuf, data = usdata)
+Mpop <- lm(SO2 ~ . -City, data = usdata) #toutes les variables sauf city
+model.matrix(Mpop) %>% head(n=3)
+
+#tester si la variable est liée à au moins une autre
+
+summary(Mpop)
+
+M1 <- lm(SO2 ~ temp + manuf + wind + precip + days, data = usdata)
+anova(M1, Mpop)
+
+
+plot(usdata)
+
+#modele sur les données chauve-souris
+
+Mchauv <- lm(AUD~Diet : BRW, data = bats)
+plot(Mchauv)
+
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(broom)
+
+ggplot(bats) +
+ aes(x = BRW, y = AUD, colour = Diet, add = "reg.line") +
+ geom_point(shape = "circle", size = 1.5) +
+stat_regline_equation(aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"), color = Diet)
+)
+
+summary(Mchauv)

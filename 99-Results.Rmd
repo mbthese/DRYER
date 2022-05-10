@@ -302,7 +302,7 @@ log_plot <- ggplot(RS_nonatura) +
   facet_wrap(vars(name), scales = "free_y")
 
 #  Add p-value cannot add it though 
-RSplot + stat_compare_means()
+RS_plot + stat_compare_means()
 ```
 
 
@@ -377,9 +377,9 @@ pteoff %>%
 #For Sciart
 
 ```{r}
-epefal <- RS %>% filter(name %in% "Eperua falcata")
+tacmel <- RS %>% filter(name %in% "Tachigali melinonii")
 
-epefal %>%
+tacmel %>%
  filter(!(Time %in% "natura")) %>%
  filter(!(Treatment %in% "natura")) %>%
  ggplot() +
@@ -395,7 +395,7 @@ epefal %>%
   labs(
     x = "Time",
     y = "Root to shoot ratio",
-    title = "Root to shoot ratio of Eperua falcata across different drought treatments"
+    title = "Root to shoot ratio of Tachigali melinonii across different drought treatments"
   ) + 
   theme_minimal() 
 
@@ -478,6 +478,8 @@ ALL$name <- paste(ALL$Genus, ALL$Species)
 ```
 
 ## Chlorophyll content
+
+Leaf chlorophyll content was determined with a SPAD-502 instrument converted with an allometric model (Coste et al. 2010).
 
 From equations developped by Coste 2008. 
 y is the chlorophyll in $\mu mol . m²$

@@ -11,11 +11,12 @@ editor_options:
 
 ## Ecophysiology trait measurement 
 
-### Import data
+Import data
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r Natura data import, echo=FALSE, message=FALSE, warning=FALSE}
 library(readxl)
 library(ggplot2)
+library(dplyr)
 SoftTraits <- read_excel("Natura_data/DRYER_infocollect_morpho.xlsx", 
   
                          
@@ -44,16 +45,18 @@ SoftTraits$name <- paste(SoftTraits$Genus, SoftTraits$Species)
 
 
 ```
-### Leaf thickness
 
-```{r}
-ggplot(SoftTraits) +
+
+Leaf thickness
+
+```{r Natura- Leaf thickness, echo=FALSE, message=FALSE, warning=FALSE}
+l1 <- ggplot(SoftTraits) +
   aes(x = name, y = MeanLeafThickness, fill = name) +
   geom_boxplot(shape = "circle") +
   scale_x_discrete(guide = guide_axis(angle = 30)) +
   scale_fill_hue(direction = 1) +
   labs(
-    title = "Mean leaf thickness of the seedlings",
+    title = "Mean leaf thickness",
     subtitle = " in natura",
     x = "Species",
     y = "Mean leaf thickness (mm)" ) +
@@ -69,9 +72,9 @@ ggplot(SoftTraits) +
 ```
 
 
-### Seedling heights
+Seedling heights
 
-```{r echo=FALSE}
+```{r Natura - Seedling height, echo=FALSE, message=FALSE, warning=FALSE}
 
 library(ggplot2)
 
@@ -89,7 +92,7 @@ SoftTraits <- SoftTraits %>%
 
 SoftTraits$name <- paste(SoftTraits$Genus, SoftTraits$Species)
 
-ggplot(SoftTraits) +
+p1 <- ggplot(SoftTraits) +
   aes(x = name, y = `Height (cm)`, fill = name) +
   geom_boxplot(shape = "circle") +
   scale_x_discrete(guide = guide_axis(angle = 30)) +
@@ -111,21 +114,52 @@ ggplot(SoftTraits) +
 
 ```
 
-### Stem diameter
-```{r echo=FALSE}
-ggplot(SoftTraits) +
- aes(x = Genus, y = `Stem_diameter (mm)`) +
- geom_boxplot(shape = "circle", fill = "#112446") +
- theme_minimal()
+Stem diameter
+```{r Natura - stem diameter, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+
+SoftTraits <- SoftTraits %>%
+  mutate(Genus = case_when(
+    Species == 'falcata' ~ 'Eperua',
+    Species == 'hostmannii' ~ 'Iryanthera',
+    Species == 'copaia' ~ 'Jacaranda',
+    Species == 'officinalis' ~ 'Pterocarpus',
+    Species == 'globulifera' ~ 'Symphonia',
+    Species == 'melinonii' ~ 'Tachigali',
+    Species == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
+
+SoftTraits$name <- paste(SoftTraits$Genus, SoftTraits$Species)
+
+p2 <- ggplot(SoftTraits) +
+  aes(x = name, y = `Stem_diameter (mm)`, fill = name) +
+  geom_boxplot(shape = "circle") +
+  scale_x_discrete(guide = guide_axis(angle = 30)) +
+  scale_fill_hue(direction = 1) +
+  labs(
+    title = "Stem diameter of the seedlings",
+    subtitle = " in natura",
+    x = "Species") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    )
+  )
 ```
 
 
 
-### $\pi_{TLP}$
+$\pi_{TLP}$
 
-```{r measurePtlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
+```{r Natura- Ptlp, echo=FALSE, fig.cap="$\\pi_{TLP}$.", message=FALSE, warning=FALSE}
 library(ggplot2)
 library(ggpubr)
+library(dplyr)
 
 Ptlp <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/15unEUBxCQz_2ekJPEkL6M5C12tjvFJ0P7nb0iLh6Caw/edit#gid=0")
 
@@ -156,6 +190,10 @@ Ptlp$name <- paste(Ptlp$Genus, Ptlp$Species_Name)
 
 shapiro.test(Ptlp$Ptlp) # W = 0.96004, p-value = 0.06093 meets the normality assumption.
 
+logPtlp<- log10(abs(Ptlp$Ptlp))
+
+shapiro.test(logPtlp) # W = 0.97547, p-value = 0.3089 way better
+
 Ptlp$name <- as.factor(Ptlp$name)
 
 compare_means(Ptlp ~ name, data = Ptlp, method = "t.test", paired = FALSE)
@@ -163,17 +201,11 @@ compare_means(Ptlp ~ name, data = Ptlp, method = "t.test", paired = FALSE)
 modelPtlp <- lm(Ptlp ~ name, data = Ptlp)
 summary(modelPtlp)
 
-ggplot(Ptlp) +
-  aes(x = name, y = Ptlp) +
-  geom_boxplot(shape = "circle", fill = "#008EFF") +
-  facet_wrap(~Species_Name) +
-  theme_minimal()
-
-p1 <- ggplot(Ptlp) +
+h1 <- ggplot(Ptlp) +
   aes(x = name, y = Ptlp, fill = name) +
   geom_boxplot(shape = "circle") +
   theme_minimal()+ 
-  stat_compare_means(method = "anova")+
+  stat_compare_means(method = "anova", label.y=-1.4)+
   stat_compare_means(label = "p.signif", method = "t.test",
                      ref.group = "Eperua falcata") +
   scale_fill_hue(direction = 1) +
@@ -189,43 +221,90 @@ p1 <- ggplot(Ptlp) +
     plot.subtitle = element_text(
       face = "italic",
       hjust = 0.5
-    )
+    ),
+    axis.text = element_text(size = 15),
+    axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)
   )
-p1
 ```
 
-### $\frac{Fv}{Fm} in natura$
+ $\frac{Fv}{Fm} in natura$
 
-```{r FvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$."}
+```{r FvFm, echo=FALSE, fig.cap="$\\frac{Fv}{Fm}$.", message=FALSE, warning=FALSE}
 library(readxl)
 FvFm <- read_excel("Natura_data/3_FvFm/DRYER_FvFm.xlsx")
-p2 <-ggplot(FvFm) +
+fvfm <-ggplot(FvFm) +
   aes(x = spName, y = `FvFm`) +
   geom_boxplot(shape = "circle", fill = "#2BDD1A") +
   theme_minimal()
-p2
+fvfm
 ```
 
-### $RWC$
+ LSWC
 
 ```{r measureRWC, echo=FALSE, fig.cap="$RWC$.", message=FALSE, warning=FALSE}
 library(readxl)
 library(dplyr)
 library(ggplot2)
-RWC <- read_excel("Natura_data/1_RWC/DRYER_RWC.xlsx")
+library(ggpubr)
 
-RWC <- mutate(RWC, RWC=((FW-DW)/(SW-DW)*100))
-p3 <- ggplot(RWC) +
-  aes(x = Species_Name, y = RWC) +
-  geom_boxplot(shape = "circle", fill = "#FF8C00") +
-  theme_minimal() 
-p3
+LSWC <- read_excel("Natura_data/1_RWC/DRYER_RWC.xlsx")
 
+LSWC <- mutate(LSWC, LSWC=(SW-DW)/DW)
+
+LSWC$Species_Name[LSWC$Species_Name == "Epe.fal"] <- "falcata"
+LSWC$Species_Name[LSWC$Species_Name == "Iry.hos"] <- "hostmannii"
+LSWC$Species_Name[LSWC$Species_Name == "Jac.cop"] <- "copaia"
+LSWC$Species_Name[LSWC$Species_Name == "Pte.off"] <- "officinalis"
+LSWC$Species_Name[LSWC$Species_Name == "Sym.glo"] <- "globulifera"
+LSWC$Species_Name[LSWC$Species_Name == "Tac.mel"] <- "melinonii"
+LSWC$Species_Name[LSWC$Species_Name == "Vir.sur"] <- "surinamensis"
+
+LSWC <- LSWC %>% mutate(Genus = "")
+
+LSWC <- LSWC %>%
+  mutate(Genus = case_when(
+    Species_Name == 'falcata' ~ 'Eperua',
+    Species_Name == 'hostmannii' ~ 'Iryanthera',
+    Species_Name == 'copaia' ~ 'Jacaranda',
+    Species_Name == 'officinalis' ~ 'Pterocarpus',
+    Species_Name == 'globulifera' ~ 'Symphonia',
+    Species_Name == 'melinonii' ~ 'Tachigali',
+    Species_Name == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
+
+LSWC$name <- paste(LSWC$Genus, LSWC$Species_Name)
+
+
+shapiro.test(LSWC$LSWC) # W = 0.96004, p-value = 0.001 does not meet the normality assumption. wilcoxon test
+
+
+ h2 <- ggplot(LSWC) +
+  aes(x = name, y = LSWC, fill = name) +
+  geom_boxplot(shape = "circle") +
+  theme_minimal()+ 
+  scale_fill_hue(direction = 1) + 
+  labs(
+    title = "Leaf saturated water content",
+    subtitle = " in natura",
+    x = "Species",
+    y = "LSWC (g/g)" ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    ),
+    axis.text = element_text(size = 15),
+    axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)
+  )
 ```
 
 
-### Gmin
-#### Leaf area
+Gmin
+Leaf area
 
 I used following code in `ImageJ`:
 
@@ -243,13 +322,62 @@ setAutoThreshold("Default dark");
 ```
 
 
-```{r echo=FALSE}
+```{r Natura : leaf area, echo=FALSE, warning=FALSE}
+
 LeafArea <- read_excel("Natura_data/2_gmin/LeafAreaFinalResultsDRYERnatura.xlsx", col_types = c("text", "text", "skip",        "numeric", "skip", "skip", "skip", "skip"))
-LeafArea
+
+LeafArea$Species[LeafArea$Species == "Epe.fal"] <- "falcata"
+LeafArea$Species[LeafArea$Species == "Iry.hos"] <- "hostmannii"
+LeafArea$Species[LeafArea$Species == "Jac.cop"] <- "copaia"
+LeafArea$Species[LeafArea$Species == "Pte.off"] <- "officinalis"
+LeafArea$Species[LeafArea$Species == "Sym.glo"] <- "globulifera"
+LeafArea$Species[LeafArea$Species == "Tac.mel"] <- "melinonii"
+LeafArea$Species[LeafArea$Species == "Vir.sur"] <- "surinamensis"
+
+LeafArea <- LeafArea %>%
+  mutate(Genus = "")
+
+LeafArea <- LeafArea %>%
+  mutate(Genus = case_when(
+    Species == 'falcata' ~ 'Eperua',
+    Species == 'hostmannii' ~ 'Iryanthera',
+    Species == 'copaia' ~ 'Jacaranda',
+    Species == 'officinalis' ~ 'Pterocarpus',
+    Species == 'globulifera' ~ 'Symphonia',
+    Species == 'melinonii' ~ 'Tachigali',
+    Species == 'surinamensis' ~ 'Virola',
+    TRUE ~ Genus)
+  )
+
+LeafArea$name <- paste(LeafArea$Genus, LeafArea$Species)
+
+LeafArea <- LeafArea %>% filter(!Code %in% "58")
+LeafArea <- LeafArea %>% filter(!Code %in% "36")
+
+
+l2<- ggplot(LeafArea) +
+  aes(x = name, y = LeafArea_cm2, fill = name) +
+  geom_boxplot(shape = "circle") +
+  scale_x_discrete(guide = guide_axis(angle = 30)) +
+  scale_fill_hue(direction = 1) +
+  labs(
+    title = "Leaf area",
+    subtitle = " in natura",
+    x = "Species",
+    y = "Leaf area (cm²)" ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5
+    )
+  )
 
 ```
  
-```{r echo=FALSE}
+```{r Natura : gmin, echo=FALSE, message=FALSE, warning=FALSE}
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -257,42 +385,150 @@ library(ggplot2)
 Gmin <- read_csv("Natura_data/2_gmin/Gmin_DRYERwithLA.csv", 
     col_types = cols(idTree = col_skip(), 
         beta = col_skip(), file = col_skip()))
-ggplot(Gmin) +
-  aes(
-    x = specCode,
-    y = gmin.slope_function,
-    colour = specCode
-  ) +
-  geom_boxplot(shape = "circle", fill = "#112446") +
-  scale_color_brewer(palette = "Accent", direction = 1) +
-  coord_flip() +
-  theme_minimal()
 
-p4 <- ggplot(Gmin) +
-  aes(x = specCode, y = gmin.slope_function) +
-  geom_boxplot(shape = "circle", fill = "#FF69B4") +
-  theme_minimal()
+shapiro.test(Gmin$gmin.slope_function) # W = 0.96004, p-value = 0.001 does not meet the normality assumption.
+
+
+h3 <- Gmin %>%
+ filter(gmin.slope_function >= 0.3 & gmin.slope_function <= 5.6) %>%
+ ggplot() +
+  aes(x = specCode, y = gmin.slope_function, fill = specCode) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_hue(direction = 1) +
+  labs(
+    x = "Species",
+    y = "Minimal conductance (mmol.m-2.s-1)",
+    fill = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.y = element_text(size = 15L),
+    axis.title.x = element_text(size = 15L)
+  )
+
+
 ```
 
-## Root:shoot ratio
+*I deliberately removed 3 point (1 tac.mel and 2 sym.glo because gmin was really high - have to check data)*
 
-to fill
+
+Root:shoot ratio
+
+```{r rootshoot ratio natura, echo=FALSE, message=FALSE, warning=FALSE}
+library(googlesheets4)
+
+
+RootShoot_excel<- read_sheet("https://docs.google.com/spreadsheets/d/13NVmdKXHo6wZKErSje-4_Iv8C-6uHz_KuBTiUL6oifE/edit#gid=783989826", range = "traits") 
+
+
+
+library(ggplot2)
+
+p3 <- ggplot(RootShoot_excel) +
+ aes(x = Name, y = RootShoot, fill = Name) +
+ geom_boxplot(shape = "circle") +
+ scale_fill_hue(direction = 1) +
+ labs(y = "Root to shoot ratio ", title = "Root to shoot ratio") +
+ theme_minimal()+
+  theme(legend.position = "none",axis.text.x = element_text(angle = 30, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5))
+
+```
+
+Specific root length 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(googlesheets4)
+
+SRL <- read_sheet("https://docs.google.com/spreadsheets/d/13NVmdKXHo6wZKErSje-4_Iv8C-6uHz_KuBTiUL6oifE/edit#gid=27160926", range = "traits")
+
+
+library(ggplot2)
+
+p4 <-ggplot(SRL) +
+ aes(x = Name, y = SRL, fill = Name) +
+ geom_boxplot(shape = "circle") +
+ scale_fill_hue(direction = 1) +
+ labs(title = "Specific root length",subtitle = " in natura", x = " ", y = "Specific root length (cm.g-1)") +
+ theme_minimal()+
+  theme(legend.position = "none", axis.text.x = element_text(angle = 30, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(
+      face = "italic",
+      hjust = 0.5))
+
+library(plotly)
+
+plot_ly(data = SRL, y = ~SRL, x=~Name, type = "box")
+```
 
 
 ### Summary 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-library(ggplot2)
-library(cowplot)
+#### PCA
 
-plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
+```{r DRYER-natura PCA, echo=FALSE, message=FALSE, warning=FALSE}
+library(FactoMineR)
+library(Factoshiny)
+
+data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/13NVmdKXHo6wZKErSje-4_Iv8C-6uHz_KuBTiUL6oifE/edit#gid=27160926", range = "traits")
+
+#resultPCA <- Factoshiny(data[,c(2:6,10,11,13,14,20,21,22,23,27,28)])
+
+res.PCA<-PCA(data[, c(2:6, 10, 11, 13, 14, 20, 21, 22, 23, 27, 28)][,-c(2,3,4)],quali.sup=c(2),graph=FALSE)
+plot.PCA(res.PCA,choix='var',habillage = 'contrib',title="Graphe des variables de l'ACP")
+plot.PCA(res.PCA,invisible=c('ind.sup'),title="Graphe des individus de l'ACP",cex=1.2,cex.main=1.2,cex.axis=1.2,col.quali='#11FF00',label =c('quali'))
+
+#Rdim 3 et 4
+res.PCA<-PCA(data[, c(2:6, 10, 11, 13, 14, 20, 21, 22, 23, 27, 28)][,-c(2,3,4)],quali.sup=c(2),graph=FALSE)
+plot.PCA(res.PCA,axes=c(3,4),choix='var',habillage = 'contrib',title="Graphe des variables de l'ACP")
+plot.PCA(res.PCA,axes=c(3,4),invisible=c('ind.sup'),title="Graphe des individus de l'ACP",cex=1.2,cex.main=1.2,cex.axis=1.2,col.quali='#11FF00',label =c('quali'))
 
 ```
 
 
-## Soil analysis
+#### Plant morphology
 
-```{r echo=FALSE}
+```{r Natura morpho, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(cowplot)
+#p1 plant height 
+#p2 plant stem diameter
+#p3 root to shoot ratio
+#p4 SRL
+
+plot_grid(p1, p2, p3, p4, labels = c('A', 'B', 'C', 'D'), label_size = 12)
+```
+
+
+#### Morphology of the leaf
+
+```{r natura leaf morpho, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(cowplot)
+#l1 leaf thickness
+#l2 leaf area
+
+plot_grid(l1, l2, labels = c('A', 'B'), label_size = 12)
+```
+
+#### Leaf hydraulic traits
+
+```{r natura leaf hydrualics, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(cowplot)
+#h1 Pltp
+#h2 lswc
+#h3 gmin
+plot_grid(h1, h2, labels = c('A', 'B'), label_size = 12)
+plot(h3)
+
+```
+
+
+### Soil analysis
+
+```{r soil analysis, echo=FALSE, message=FALSE, warning=FALSE}
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -324,7 +560,7 @@ ggplot(analyses_sol) +
 
 ```
 
-## Microbial analyses
+### Microbial analyses
 
 Weights of samples before sterilization. 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}

@@ -44,18 +44,12 @@ Campaign <- ggplot(calendar_natura) +
   labs(x = "natura campaign", y = "Completed") +
   theme_minimal()
 
-RWCdry <- ggplot(calendar_natura) +
-  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
-        `RWC dry`) +
-  geom_bar() +
-  scale_fill_manual(
-    values = list(
-      leaves = "#0DEB1E",
-      roots = "#FFAB61"
-    )
-  ) +
-  labs(x = "natura campaign", y = "Completed") +
-  theme_minimal()
+#RWCdry <- ggplot(calendar_natura) +
+#  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = `RWC dry`) +  geom_bar() +  scale_fill_manual(    values = list(
+#      leaves = "#0DEB1E",
+#      roots = "#FFAB61" )  ) +
+#  labs(x = "natura campaign", y = "Completed") +
+#  theme_minimal()
 
 Sterilization <- ggplot(calendar_natura) +
   aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
@@ -110,6 +104,19 @@ PCR <- ggplot(calendar_natura) +
   labs(x = "natura campaign", y = "Completed") +
   theme_minimal()
 
+Purification <- ggplot(calendar_natura) +
+  aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
+        `Purification`) +
+  geom_bar() +
+  scale_fill_manual(
+    values = list(
+      leaves = "#0DEB1E",
+      roots = "#FFAB61"
+    )
+  ) +
+  labs(x = "natura campaign", y = "Completed") +
+  theme_minimal()
+
 Sequencing <- ggplot(calendar_natura) +
   aes(x = factor(Project, level = c('T0', 'D1', 'D2', 'D3', 'R1', 'R2', 'R3')), fill = Organ, weight = 
         `Sequencing`) +
@@ -128,6 +135,6 @@ library(ggplot2)
 library(cowplot)
 
 
-plot_grid(Campaign, RWCdry, Sterilization, Grinding, DNA_extraction, PCR , Sequencing, labels = c('Campaign', 'RWC Dry', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Sequencing'), label_size = 12)
+plot_grid(Campaign, Sterilization, Grinding, DNA_extraction, PCR , Purification, Sequencing, labels = c('Campaign', 'Sterilization', 'Grinding', 'DNA', 'PCR', 'Purification', 'Sequencing'), label_size = 12)
 
 ```
