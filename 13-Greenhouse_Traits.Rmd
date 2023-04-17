@@ -11,7 +11,15 @@ This chapter defines measured traits, the organization of the measurements with 
 * **SLA**: specific leaf area ($g.cm^{-2}$)
 * Plant height ($cm$)
 * Stem diameter ($cm$)
-* Number of leaves
+* Number of leaves 
+
+  + Notes on Number of leaves : 
+  + NbLeaves	includes NbLeaves_dead but not NbLeaves_Future
+  + NbLeaves_dead included in Nb_Leaves
+  + NbLeaves_Future	not included in NbLeaves
+  + elastique toujours avec feuilles du haut 
+  + sur feuille manuscrite : noté feuilles bas + feuilles haut pour les ef, ih, jc, po (T101)
+
 * Number of leaflets : for compound leaves.
 * **SRL**: Specific root length ($m.g^{-1}$)
 * Root to shoot ratio 

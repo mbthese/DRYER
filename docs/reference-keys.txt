@@ -77,3 +77,9 @@ pca
 plant-morphology
 morphology-of-the-leaf
 leaf-hydraulic-traits
+results
+description
+analyses
+covariation
+height-diameter-leaves
+height-graph

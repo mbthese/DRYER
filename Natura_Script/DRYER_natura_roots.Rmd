@@ -1,0 +1,20 @@
+---
+title: "05-Natura Results"
+author: "Marion Boisseaux"
+date: "30/08/2022"
+output: html_document
+---
+
+# Libraries
+
+# Data
+
+# Roots
+
+More profuse (higher root length density, RLD) and deeper root systems are often viewed as desirable traits for drought adaptation (Valdez 2014). But while roots are potentially important for plants under drought stress, they do not contribute to drought adaptation in all stress conditions since in many cases the degree of differences in root growth among genotypes do not explain the degrees of differences in yield Valdez 2014). This can be interpreted in different ways: 
+- (i) root depth and/or RLD are not akin to water extraction; 
+- (ii) deep or profuse rooting would have no effect in shallow soil, in soil where
+there is no water at depth, or under conditions of mild water stress. 
+
+
+

@@ -1,0 +1,47 @@
+---
+title: "Bioinfo"
+author: "Marion Boisseaux"
+date: "2023-03-28"
+output: html_document
+---
+
+# Env't
+
+```{bash}
+module purge
+module load bioinfo/snakemake-5.25.0 #snakemake env't
+module load system/Miniconda3-4.7.10 #activate conda
+```
+
+
+# Before running a batch
+
+Bien s'assurer que le dry run et le dag fonctionne.
+
+```{bash}
+cd workflow
+
+#dry run
+
+snakemake -s Snakefile -np
+
+# dag
+
+snakemake --cores 1 -s Snakefile --dag | dot -Tsvg > dag.svg
+
+```
+
+# Run batch
+
+```{bash}
+sbatch sub_smk.sh
+
+#check batch
+qstat -u mboisseaux
+squeue -u mboisseaux
+
+#dernier job_id en date
+46153745
+
+```
+

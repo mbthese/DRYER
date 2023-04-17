@@ -10,7 +10,7 @@ library(kableExtra)
 
 species <- data.frame(taxon = c(
   "Eperua_falcata", 
-  "Iryanthera hostmannii", 
+  "Iryanthera_hostmannii", 
   "Jacaranda_copaia subsp. copaia",
   "Pterocarpus_officinalis",
   "Symphonia_globulifera",
@@ -23,6 +23,7 @@ kable(select(species, Genus, Species), caption = "Studied species.")
 
 ```{r speciesPhylogeny, echo=FALSE, fig.cap="Selected", message=FALSE, warning=FALSE}
 library(ggtree)
+library(V.PhyloMaker)
 
 paracou <- read_csv("Greenhouse_document/phylogeny/Paracou_database20210830.csv") %>% 
   dplyr::select(Family, Genus, Species) %>% 
@@ -31,8 +32,8 @@ paracou <- read_csv("Greenhouse_document/phylogeny/Paracou_database20210830.csv"
   mutate(species = paste(Genus, Species), genus = Genus, family = Family) %>% 
   dplyr::select(species, genus, family, taxon) %>% 
   mutate(taxon = as.character(taxon))
-#tree <- phylo.maker(sp.list = paracou, tree = GBOTB.extended, nodes = nodes.info.1, scenarios = "S3")
-#save(tree, file = "./document/phylogeny/phylogeny.Rdata")
+tree <- phylo.maker(sp.list = paracou, tree = GBOTB.extended, nodes = nodes.info.1, scenarios = "S3")
+save(tree, file = "Greenhouse_document/phylogeny/phylogeny.Rdata")
 load("Greenhouse_document/phylogeny/phylogeny.Rdata")
 fortify(tree$scenario.3) %>% 
   mutate(species = gsub("_", " ", label)) %>% 
@@ -40,8 +41,8 @@ fortify(tree$scenario.3) %>%
   ggtree(aes(col = taxon), layout="circular") + 
   geom_tiplab2(aes(alpha = !is.na(taxon), size = !is.na(taxon))) +
   theme_tree(legend.position='right', legend.text = element_text(face = "italic")) +
-  scale_alpha_manual("taxon", values = c(0.2, 1)) +
-  scale_size_manual("taxon", values = c(1, 2))
+  scale_alpha_manual("taxon", values = c(0.2, 5)) +
+  scale_size_manual("taxon", values = c(1, 5))
 ```
 
 

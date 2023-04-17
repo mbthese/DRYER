@@ -1,0 +1,49 @@
+---
+title: "ngs_filter_separation_16S_ITS"
+author: "Marion Boisseaux"
+date: "2023-03-27"
+output: html_document
+---
+
+# Data
+
+The initial ngsfilter is on the hard drive as *ngs_filter_final2*. Here, we suggest to divide the analysis to first handle 16S bacteria and then ITS fungi data and then glomeromycetes. 
+
+# 16S
+
+```{r}
+library(readr)
+library(dplyr)
+
+
+ngs_filter <- read.delim2("E:/Sophie_pipeline/obitools/resources/DRYER_natura/DRYER_natura_ngsfilter.txt", header = FALSE)
+
+data_16S <- ngs_filter %>%
+  tidyr::separate(col = V2, sep = "_", into = c("A", "B", "C", "D", "E", "F", "G", "H")) %>%
+  filter(D== "16S") %>%
+  mutate(V2 = paste0(A, "_", B, "_", C, "_", D, "_", E, "_", `F`, "_",`H`)) %>%
+  relocate(V2, .after= V1) %>%
+  dplyr::select(-A, -B, -C, -D, -E, -`F`, -`G`, -`H`)
+
+
+write.table(x= data_16S, file = "E:/DRYER_natura_data/ngs_filter_16S.tab", col.names = FALSE, quote = FALSE, sep = "\t", row.names = FALSE)
+
+```
+
+#ITS
+
+```{r}
+
+ngs_filter <- read.delim2("E:/Sophie_pipeline/obitools/resources/DRYER_natura/DRYER_natura_ngsfilter.txt", header = FALSE)
+
+data_ITS2 <- ngs_filter %>%
+  tidyr::separate(col = V2, sep = "_", into = c("A", "B", "C", "D", "E", "F", "G", "H")) %>%
+  filter(D== "ITS2") %>%
+  mutate(V2 = paste0(A, "_", B, "_", C, "_", D, "_", E, "_", `F`, "_",`H`)) %>%
+  relocate(V2, .after= V1) %>%
+  dplyr::select(-A, -B, -C, -D, -E, -`F`, -`G`, -`H`)
+
+
+write.table(x= data_ITS2, file = "E:/DRYER_natura_data/ngs_filter_ITS2.tab", col.names = FALSE, quote = FALSE, sep = "\t", row.names = FALSE)
+```
+

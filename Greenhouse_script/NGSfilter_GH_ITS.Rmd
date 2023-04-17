@@ -1,0 +1,96 @@
+---
+title: "Ngsfilter GH ITS"
+author: "Marion Boisseaux"
+date: "2023-02-02"
+output: html_document
+---
+
+  
+# libraries
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(readxl)
+library(googlesheets4)
+```
+
+
+
+# ITS
+```{r}
+taglist <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/Materiel&Method/Microbial/taglist.csv")
+
+ITS_resultat_dosage <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/ITS_ALL.csv")  %>% mutate(samples= Code) %>% mutate(Marqueur = Marker) %>% mutate(organ = Organ)
+
+
+ITS_resultat_dosage <- ITS_resultat_dosage %>% mutate(project = "DRYER_greenhouse") %>% rename(marker = Marqueur)
+
+
+library(readr)
+correspondance_tag <- read.csv("Greenhouse_data/Microbio/Leaves/tag/corresp_tag_Leaves_vf2_GH.csv") %>% select(-V1) %>% distinct(samples, pair_tag_name, pair_tag_seq) %>% na.omit() 
+
+correspondance_tag <- correspondance_tag[correspondance_tag$pair_tag_name != "r3:f6", ]
+
+ITS_resultat_dosage$samples <- as.character(ITS_resultat_dosage$samples)
+
+ITS_filter <- right_join(correspondance_tag, ITS_resultat_dosage)
+
+#check for duplicates
+ITS_filter$pair_tag_name[duplicated(ITS_filter$pair_tag_name)] 
+
+
+##no replicates :)
+ITS_filter$pair_tag_seq[duplicated(ITS_filter$pair_tag_seq)] #no replicates :)
+
+ITS_filter  <- ITS_filter  %>% 
+  separate(pair_tag_name, sep=':', into=c('barcode_reverse_name', 'barcode_forward_name')) %>%
+  separate(pair_tag_seq, sep=':', into=c('barcode_reverse', 'barcode_forward')) 
+
+ITS_filter <-ITS_filter  %>%  
+  mutate(primer_F_seq	= "GTGAATCATCGAATCTTTGAA", primer_R_seq = "TCCTCCGCTTATTGATATGC") %>%   
+  rename(forward_primers_sequence = primer_F_seq) %>%
+  rename(reverse_primers_sequence = primer_R_seq) 
+
+ITS_filter <- ITS_filter %>% mutate(marker = 'ITS') %>% mutate(organ = 'Leaf')
+
+ITS_filter <- ITS_filter %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_","_",samples)) 
+
+ITS_filter <- ITS_filter %>% select(project, organ, marker, barcode_reverse_name, barcode_forward_name, barcode_reverse, barcode_forward, forward_primers_sequence, reverse_primers_sequence, samples, samples_name)
+
+
+#format fasteris
+FASTERIS_ITS_GH <- ITS_filter %>% select(samples_name, barcode_forward, barcode_reverse, forward_primers_sequence, reverse_primers_sequence) 
+
+
+```
+
+
+
+### ITS2 duplicates verifications
+```{r}
+#yes, there are no replicates
+ITS_filter$samples<-gsub("R","", ITS_filter$samples)
+
+ITS_filter$organ[duplicated(ITS_filter$organ)]  
+leaf <- ITS_filter$samples[which(ITS_filter$organ == "Leaf")] #yes there are 280 samples ITS2 leaves and the rest is controls
+
+#controls
+controls <- ITS_filter$sample_type[which(ITS_filter$sample_type != "sample")] 
+controls[which(controls == "control_sterilisation")] # 5 sterilisation control
+controls[which(controls == "control_extraction")] #5 extraction control
+controls[which(controls == "control_PCR")] # 25 PCR controls, only negatives put in the pool. 
+
+```
+
+##write file ITS
+```{r}
+write.csv(ITS_filter, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ngsfilter/ITS_GH_ngsfilter.csv")
+
+#format fasteris
+write.csv(FASTERIS_ITS_GH, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ngsfilter/fasteris_ITS_GH_ngsfilter_bis.csv")
+```
+
+
+

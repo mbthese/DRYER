@@ -70,8 +70,12 @@ T71_NONdestructive <-
 
 T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
 
+T101_NONdestructive <- 
+  googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ItJdPwjk5uwm6xcuP79dnaRvxP88lwVACGWBStx0NvI/edit#gid=0", range = "non_destructif")
 
-Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
+T101_NONdestructive <- subset(T101_NONdestructive, select = Time:WUE)
+
+Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive, T101_NONdestructive)
 
 str(Data_NonDes)
 Data_NonDes$Block<-as.character(Data_NonDes$Block)
@@ -102,6 +106,25 @@ head(Data_NonDes.acp)
 ```{r data acp, include=FALSE}
 
 #PCAshiny(Data_NonDes.acp)
+Data_NonDes.acp$Time <- factor(Data_NonDes.acp$Time, levels = c("t0", "t21", "t27", "t71", "t51", "t57", "t101"))
+res.PCA<-PCA(Data_NonDes.acp[,-c(2,3,4,5,6)],quali.sup=c(1),graph=FALSE)
+library(factoextra)
+
+
+
+fviz_pca_ind(res.PCA,
+             geom.ind = "point", # Montre les points seulement (mais pas le "text")
+             col.ind = Data_NonDes.acp$Time, # colorer by groups
+             palette = c("#000000", "#ffcc00", "#ff6f00", "#ff0000", "#1ab8db", "#1583eb", "#2b8fed"),
+             addEllipses = TRUE, # Ellipses de concentration
+             legend.title = "Groups",
+             ellipse.type = "confidence"
+)+ theme_classic() + scale_shape_manual(values =c(16,16,16,16,16,16,16))
+
+
+
+
+
 
 ```
 

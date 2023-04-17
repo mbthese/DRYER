@@ -1,0 +1,317 @@
+---
+title: "Construction NGS filter"
+author: "Marion Boisseaux"
+date: "2022-10-03"
+output: html_document
+---
+
+# libraries
+```{r}
+library(tidyr)
+library(dplyr)
+library(readxl)
+library(googlesheets4)
+```
+
+
+# Construciton NGS filter
+
+# 16S 
+
+```{r}
+ngs_filter_16s  <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1cJSPsAQScAIF9YBswBFNwoOyTdKMWEaj7E5st51Z0Ug/edit#gid=287069895", range ='NGS_filter_16S')
+
+# if probelms use: gs4_auth(scopes = "https://www.googleapis.com/auth/spreadsheets.readonly" )
+```
+
+### 16S duplicates verifications
+```{r}
+#check for duplicates
+ngs_filter_16s$pair_tag_name[duplicated(ngs_filter_16s$pair_tag_name)] #yes, there are no replicates
+ngs_filter_16s$pair_tag_seq[duplicated(ngs_filter_16s$pair_tag_seq)] #yes, there are no replicates
+ngs_filter_16s$samples<-gsub("R","", ngs_filter_16s$samples)
+ngs_filter_16s$samples[duplicated(ngs_filter_16s$samples)]
+
+ngs_filter_16s$organ[duplicated(ngs_filter_16s$organ)]  
+leaf <- ngs_filter_16s$samples[which(ngs_filter_16s$organ == "leaf")] #yes there are 70 samples 16S leaves
+root <-  ngs_filter_16s$samples[which(ngs_filter_16s$organ == "root")] # yes, there are 63 samples 16S roots
+
+#duplicated plate and holes
+plate_origine <-  ngs_filter_16s %>%
+  separate(plate_original, sep=';', into=c('plate_R1', 'plate_R2', 'plate_R3'))
+plate_origine$plate_R1[duplicated(plate_origine$plate_R1)]  
+plate_origine$plate_R2[duplicated(plate_origine$plate_R2)]
+plate_origine$plate_R3[duplicated(plate_origine$plate_R3)] #ok, no two holes are the same, good
+
+#controls
+controls <- ngs_filter_16s$sample_type[which(ngs_filter_16s$sample_type != "sample")] 
+controls[which(controls == "control_sterilisation")] # 5 sterilisation control
+controls[which(controls == "control_extraction")] #5 extraction control
+controls[which(controls == "control_PCR")] # 25 PCR controls, only negatives put in the pool. 
+
+```
+
+### adjusting format for FASTERIS
+```{r}
+
+ngs_filter_16S_final <- ngs_filter_16s %>% 
+  separate(pair_tag_name, sep=':', into=c('barcode_reverse_name', 'barcode_forward_name')) %>%
+  separate(pair_tag_seq, sep=':', into=c('barcode_reverse', 'barcode_forward')) %>% # barcode or tag, same.
+  rename(forward_primers_sequence = primer_F_seq) %>%
+  rename(reverse_primers_sequence = primer_R_seq) %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_",sample_type,"_",samples)) 
+
+write.csv(ngs_filter_16S_final, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter_16S.csv")
+```
+
+# ITS
+```{r}
+taglist <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/Materiel&Method/Microbial/taglist.csv")
+
+ITS_resultat_dosage <- read_excel("Natura_data/7_Microbio/Dosage_ADN/ITS/resultats plan PL pool .xlsx", sheet = "dosage" ) %>% select(`N°plaque`, sample_type, samples, organ, ligne, colone, Marqueur,`conc moyen`, `vol à prelever`)
+
+
+ITS_resultat_dosage <- ITS_resultat_dosage %>% drop_na(`vol à prelever`)
+
+ITS_resultat_dosage <- ITS_resultat_dosage %>% mutate(project = "DRYER_natura") %>% rename(marker = Marqueur)
+
+ITS_resultat_dosage <- ITS_resultat_dosage  %>% separate(samples, sep=' ', into=c('samples', 'replicate')) 
+
+
+library(readr)
+correspondance_tag <- read_csv("Natura_data/7_Microbio/All/corresp_tag_ALL_vf_Natura.csv") %>% select(-V1) %>% distinct(samples, pair_tag_name, pair_tag_seq) %>% na.omit()
+
+ITS_filter <- right_join(correspondance_tag, ITS_resultat_dosage)
+
+#check for duplicates
+ITS_filter$pair_tag_name[duplicated(ITS_filter$pair_tag_name)] #no replicates :)
+ITS_filter$pair_tag_seq[duplicated(ITS_filter$pair_tag_seq)] #no replicates :)
+
+ITS_filter  <- ITS_filter  %>% 
+  separate(pair_tag_name, sep=':', into=c('barcode_reverse_name', 'barcode_forward_name')) %>%
+  separate(pair_tag_seq, sep=':', into=c('barcode_reverse', 'barcode_forward')) 
+
+ITS_filter <-ITS_filter  %>%  
+  mutate(primer_F_seq	= "GTGAATCATCGAATCTTTGAA", primer_R_seq = "TCCTCCGCTTATTGATATGC") %>%   
+  rename(forward_primers_sequence = primer_F_seq) %>%
+  rename(reverse_primers_sequence = primer_R_seq) 
+
+ITS_filter <- ITS_filter %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_",sample_type,"_",samples)) 
+
+ITS_filter <- ITS_filter %>% select(project, organ, marker, barcode_reverse_name, barcode_forward_name, barcode_reverse, barcode_forward, forward_primers_sequence, reverse_primers_sequence, samples, sample_type, samples_name)
+
+
+```
+
+
+
+
+
+### ITS2 duplicates verifications
+```{r}
+#yes, there are no replicates
+ITS_filter$samples<-gsub("R","", ITS_filter$samples)
+
+ITS_filter$organ[duplicated(ITS_filter$organ)]  
+leaf <- ITS_filter$samples[which(ITS_filter$organ == "leaf")] #yes there are 71 samples ITS2 leaves
+
+#Feuille : 
+#1 ind qui n’a pas du tout marché le 61 
+#7 ind ont marché avec 1 repliquat
+#27 ind ont marché avec 2 repliquat
+#37 ind ont marché avec 3 repliquat
+
+root <-  ITS_filter$samples[which(ITS_filter$organ == "root")] # yes, there are 59 samples ITS2
+
+#Racine :
+#13 ind n’ont pas marché du tout 
+#25 ont marché avec 1 repliquat
+#16 ind ont marché avec 2 repliquat
+#18 ind ont marché avec 3 repliquat
+
+
+#controls
+controls <- ITS_filter$sample_type[which(ITS_filter$sample_type != "sample")] 
+controls[which(controls == "control_sterilisation")] # 5 sterilisation control
+controls[which(controls == "control_extraction")] #5 extraction control
+controls[which(controls == "control_PCR")] # 25 PCR controls, only negatives put in the pool. 
+
+```
+
+##write file ITS
+```{r}
+write.csv(ITS_filter, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ITS_filter.csv")
+```
+
+
+#Glomero
+```{r}
+
+Glomero_dosage <- read_excel("Natura_data/7_Microbio/Dosage_ADN/glomero/copie de bilan pool.xlsx") %>% select(`N°plaque`, sample_type, samples, organ, ligne, colone, Marqueur,`conc moyen`, `vol à prelever`)
+
+
+Glomero_dosage <- Glomero_dosage %>% drop_na(`vol à prelever`)
+
+Glomero_dosage <- Glomero_dosage %>% mutate(project = "DRYER_natura") %>% rename(marker = Marqueur)
+
+Glomero_dosage <- Glomero_dosage  %>% separate(samples, sep=' ', into=c('samples', 'replicate')) 
+
+
+library(readr)
+correspondance_tag <- read_csv("Natura_data/7_Microbio/All/corresp_tag_ALL_vf_Natura.csv") %>% select(-V1) %>% distinct(samples, pair_tag_name, pair_tag_seq) %>% na.omit()
+
+glomero_filter <- right_join(correspondance_tag, Glomero_dosage)
+
+#check for duplicates
+glomero_filter$pair_tag_name[duplicated(glomero_filter$pair_tag_name)] #no replicates :)
+glomero_filter$pair_tag_seq[duplicated(glomero_filter$pair_tag_seq)] #no replicates :)
+
+glomero_filter  <- glomero_filter  %>% 
+  separate(pair_tag_name, sep=':', into=c('barcode_reverse_name', 'barcode_forward_name')) %>%
+  separate(pair_tag_seq, sep=':', into=c('barcode_reverse', 'barcode_forward')) 
+
+glomero_filter <-glomero_filter  %>%  
+  mutate(primer_F_seq	= "GGGAGGTAGTGACAATAAATAAC", primer_R_seq = "CCCAACTATCCCTATTAATCAT") %>%   
+  rename(forward_primers_sequence = primer_F_seq) %>%
+  rename(reverse_primers_sequence = primer_R_seq) %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_",sample_type,"_",samples)) 
+
+glomero_filter <- glomero_filter %>% select(project, organ, marker, barcode_reverse_name, barcode_forward_name, barcode_reverse, barcode_forward, forward_primers_sequence, reverse_primers_sequence, samples, sample_type, samples_name)
+
+```
+
+### GLOMERO duplicates verifications
+```{r}
+#yes, there are no replicates
+glomero_filter$samples<-gsub("R","", glomero_filter$samples)
+
+glomero_filter$organ[duplicated(glomero_filter$organ)]  
+
+root <-  glomero_filter$samples[which(glomero_filter$organ == "root")] # yes, there are 60 samples ITS2
+
+
+#Voici le bilan pour les glomero :
+#60 individus ont fonctionné
+#24 ind avec 1 reliquat
+#23 ind avec 2 reliquats
+#13 ind avec 3 reliquats
+
+#controls
+controls <- glomero_filter$sample_type[which(glomero_filter$sample_type != "sample")] 
+controls[which(controls == "control_sterilisation")] # 2 sterilisation control, ok only roots
+controls[which(controls == "control_extraction")] #2 extraction control, of only roots
+controls[which(controls == "control_PCR")] # 10 PCR controls, only negatives put in the pool. 
+
+```
+
+##write glomero filter
+```{r}
+write.csv(glomero_filter, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/glomero_filter.csv")
+```
+
+
+#NGS filter Natura
+
+```{r}
+
+filter_16S <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter_16S.csv")
+
+filter_ITS <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ITS_filter.csv")
+
+filter_glomero <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/glomero_filter.csv")
+
+filter_16S <- filter_16S %>% select(-plate_pool, -plate_original)
+ngs_filter <- rbind(filter_16S, filter_ITS)
+ngs_filter <- rbind(ngs_filter, filter_glomero)
+
+write.csv(ngs_filter, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter.csv")
+```
+
+#checks on all ngs
+```{r}
+
+ngs_filter$organ[duplicated(ngs_filter$organ)]  
+leaf <- ngs_filter$samples[which(ngs_filter$organ == "leaf")] #yes there are 141 samples leaves
+
+#Feuille : 
+#ITS 71 
+#16S 70
+
+root_ngs <-  ngs_filter$samples[which(ngs_filter$organ == "root")] # yes, there are 182 samples
+
+#Racine :
+#59 ITS
+#16S 63
+#glomero 60
+
+
+#controls
+controls <- ngs_filter$sample_type[which(ngs_filter$sample_type != "sample")] 
+controls[which(controls == "control_sterilisation")] # 12 sterilisation control
+controls[which(controls == "control_extraction")] #12 extraction control
+controls[which(controls == "control_PCR")] # 60 PCR controls, only negatives put in the pool. 
+
+
+#cleaning controls
+ngs_filter<- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter.csv")
+ngs_filter$samples<-gsub("PC-tag","PCR-tag", ngs_filter$samples) 
+
+ngs_filter_final <- ngs_filter %>% select(-samples_name)
+
+ngs_filter_final<- ngs_filter_final %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_",sample_type,"_",samples)) 
+
+write.csv(ngs_filter_final, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter_final.csv")
+```
+
+
+#bind with species
+```{r}
+individual_species  <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1cJSPsAQScAIF9YBswBFNwoOyTdKMWEaj7E5st51Z0Ug/edit#gid=287069895", range ='Individuals') 
+
+species <- individual_species %>% select(Code, Family, Genus, Species) %>% rename(samples = Code) 
+
+species$samples <- as.character(species$samples)
+
+ALL <- left_join(ngs_filter_final, species)
+
+ngs_filter_final2 <- ALL %>% select(-X.1, -X)
+
+write.csv(ngs_filter_final2, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Natura_data/7_Microbio/NGS filter/ngs_filter_final2.csv")
+```
+
+
+#last checks with primer sequences
+```{r}
+#16S ref : (Laforest‐Lapointe et al., 2017)
+#799F	AACMGGATTAGATACCCKG
+#1115R AGGGTTGCGCTCGTTG
+
+bacteria_F <- ngs_filter_final2$forward_primers_sequence[which(ngs_filter_final2$forward_primers_sequence == "AACMGGATTAGATACCCKG")] #168 oui
+
+bacteria_R <- ngs_filter_final2$reverse_primers_sequence[which(ngs_filter_final2$reverse_primers_sequence == "AGGGTTGCGCTCGTTG")] #168  oui !
+
+#ITS
+#ITS4 Reverse : TCCTCCGCTTATTGATATGC
+#ITS86f GTGAATCATCGAATCTTTGAA
+
+champi_F <- ngs_filter_final2$forward_primers_sequence[which(ngs_filter_final2$forward_primers_sequence == "GTGAATCATCGAATCTTTGAA")] # 165 oui
+
+Champi_R <- ngs_filter_final2$forward_primers_sequence[which(ngs_filter_final2$reverse_primers_sequence == "TCCTCCGCTTATTGATATGC")] #165 oui
+
+#glomero
+
+The Nested PCR approach used consisted in a first amplification round with AMF-specific primers AML1 and AML2 (Lee et al. 2008) and a supplementary amplification round with taggedprimers AMADF (5′-GGGAGGTAGTGACAATAAAT
+AAC-3′, 121 nucleotides downstream from AML1 primer;
+newly designed by Desirò 2013) and AMDGR "-CCC AAC
+TAT CCC TAT TAA TCA T" (Sato et al.
+2005) which amplify ~423 bp of the 18S V3-V4 hypervariable
+domains.
+
+glom_F <- ngs_filter_final2$forward_primers_sequence[which(ngs_filter_final2$forward_primers_sequence == "GGGAGGTAGTGACAATAAATAAC")] # 74 oui
+
+glom_R <- ngs_filter_final2$forward_primers_sequence[which(ngs_filter_final2$reverse_primers_sequence == "CCCAACTATCCCTATTAATCAT")] # 74 oui
+
+```
+

@@ -1,0 +1,1082 @@
+---
+title: "Greenhouse-ITS"
+author: "Marion Boisseaux"
+date: "2022-11-03"
+output: html_document
+---
+
+# libraries
+```{r}
+library(tidyr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(googlesheets4)
+```
+
+#
+
+Dosage sauf les premieres colonne de GH3-10 et GH11
+
+GH1 a fonctionné, préparation du pool ITS pour les individus ayant fonctionnés
+
+Dosage Data
+
+```{r}
+# if probelms use:
+
+gs4_auth(scopes = "https://www.googleapis.com/auth/spreadsheets.readonly" )
+
+Dosage_031122 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1m63OLFtHUGLw1KRIloehXt0vAXiuDBUd4aB8TQy-arU/edit#gid=0", sheet ="Dosage")
+
+#round 2
+Dosage_cayenne_021222 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1wgk4jsdtM7grXQWlPa0hYR-TJ5psrywSx8gx6Y847lI/edit#gid=0")
+
+Dosage_cayenne_021222$Column <- 
+  
+#round3
+Dosage_cayenne_010523 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ZKHhOetow3wqgR0QisyS7hZOThb0ba-TAehQwD41VAw/edit#gid=0")
+```
+
+#Round 1 - 03/11/2022
+##pooled concentrations for GH1
+```{r}
+
+GH1 <- Dosage_031122 %>% filter(Plate == 'GH1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH1_success <- GH1 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+GH1_success$Individual <- as.character(GH1_success$Individual)
+
+GH1_success$Individual <- str_sub(GH1_success$Individual, 1, 3)
+
+GH1_success <- GH1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH1_success <- GH1_success[!duplicated(GH1_success$Individual), ]
+
+pool <- GH1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+```
+
+
+###write pool GH1
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH1_pool_ITS.csv")
+```
+
+##GH2
+
+```{r}
+GH2 <- Dosage_031122 %>% filter(Plate == 'GH2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH2_success <- GH2 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+GH2_success$Individual <- as.character(GH2_success$Individual)
+
+GH2_success$Individual <- str_sub(GH2_success$Individual, 1, 3)
+
+GH2_success <- GH2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH2_success <- GH2_success[!duplicated(GH2_success$Individual), ]
+
+pool <- GH2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH2
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH2_pool_ITS.csv")
+```
+
+Atttention pour GH3-GH10, pas de colonne 1 (yet) ! (dosage pas encore fait)
+
+##GH3
+
+```{r}
+GH3 <- Dosage_031122 %>% filter(Plate == 'GH3') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH3_success <- GH3 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH3_success$Individual <- as.character(GH3_success$Individual)
+
+GH3_success$Individual <- str_sub(GH3_success$Individual, 1, 3)
+
+GH3_success <- GH3_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH3_success <- GH3_success[!duplicated(GH3_success$Individual), ]
+
+pool <- GH3_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH3
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH3_pool_ITS.csv")
+```
+
+##GH4
+```{r}
+GH4 <- Dosage_031122 %>% filter(Plate == 'GH4') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH4_success <- GH4 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH4_success$Individual <- as.character(GH4_success$Individual)
+
+GH4_success$Individual <- str_sub(GH4_success$Individual, 1, 3)
+
+GH4_success <- GH4_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH4_success <- GH4_success[!duplicated(GH4_success$Individual), ]
+
+pool <- GH4_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH4
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH4_pool_ITS.csv")
+```
+
+##GH5
+
+```{r}
+GH5 <- Dosage_031122 %>% filter(Plate == 'GH5') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH5_success <- GH5 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH5_success$Individual <- as.character(GH5_success$Individual)
+
+GH5_success$Individual <- str_sub(GH5_success$Individual, 1, 3)
+
+GH5_success <- GH5_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH5_success <- GH5_success[!duplicated(GH5_success$Individual), ]
+
+pool <- GH5_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH5
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH5_pool_ITS.csv")
+```
+
+GH 6 : temoin + pas bien ressorti
+
+```{r}
+GH6 <- Dosage_031122 %>% filter(Plate == 'GH6') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH6_success <- GH6 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH6_success$Individual <- as.character(GH6_success$Individual)
+
+GH6_success$Individual <- str_sub(GH6_success$Individual, 1, 3)
+
+GH6_success <- GH6_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH6_success <- GH6_success[!duplicated(GH6_success$Individual), ]
+
+pool <- GH6_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH6
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH6_pool_ITS.csv")
+```
+
+GH 7 : r² pas bon
+
+```{r}
+GH7 <- Dosage_031122 %>% filter(Plate == 'GH7') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH7_success <- GH7 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH7_success$Individual <- as.character(GH7_success$Individual)
+
+GH7_success$Individual <- str_sub(GH7_success$Individual, 1, 3)
+
+GH7_success <- GH7_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH7_success <- GH7_success[!duplicated(GH7_success$Individual), ]
+
+pool <- GH7_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH7
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH7_pool_ITS.csv")
+```
+
+
+##GH 8
+
+
+```{r}
+GH8 <- Dosage_031122 %>% filter(Plate == 'GH8') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH8_success <- GH8 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH8_success$Individual <- as.character(GH8_success$Individual)
+
+GH8_success$Individual <- str_sub(GH8_success$Individual, 1, 3)
+
+GH8_success <- GH8_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH8_success <- GH8_success[!duplicated(GH8_success$Individual), ]
+
+pool <- GH8_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH8
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH8_pool_ITS.csv")
+```
+
+##GH9
+
+```{r}
+GH9 <- Dosage_031122 %>% filter(Plate == 'GH9') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH9_success <- GH9 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH9_success$Individual <- as.character(GH9_success$Individual)
+
+GH9_success$Individual <- str_sub(GH9_success$Individual, 1, 3)
+
+GH9_success <- GH9_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH9_success <- GH9_success[!duplicated(GH9_success$Individual), ]
+
+pool <- GH9_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH9
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH9_pool_ITS.csv")
+```
+
+##GH10
+
+```{r}
+GH10 <- Dosage_031122 %>% filter(Plate == 'GH10') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH10_success <- GH10 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH10_success$Individual <- as.character(GH10_success$Individual)
+
+GH10_success$Individual <- str_sub(GH10_success$Individual, 1, 3)
+
+GH10_success$Individual[which(GH10_success$Individual== "3 1")] <- 3
+
+GH10_success$Individual[which(GH10_success$Individual== "3 3")] <- 3
+
+GH10_success$Individual[which(GH10_success$Individual== "5 1")] <- 5
+
+GH10_success$Individual[which(GH10_success$Individual== "5 2")] <- 5
+
+GH10_success$Individual[which(GH10_success$Individual== "5 3")] <- 5
+
+GH10_success <- GH10_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH10_success <- GH10_success[!duplicated(GH10_success$Individual), ]
+
+pool <- GH10_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH10
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH10_pool_ITS.csv")
+```
+
+##GH11
+```{r}
+GH11 <- Dosage_031122 %>% filter(Plate == 'GH11') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+GH11_success <- GH11 %>% filter(`Volume per
+ replicate
+  µl` < 22)
+
+GH11_success$Individual <- as.character(GH11_success$Individual)
+
+GH11_success$Individual <- str_sub(GH11_success$Individual, 1, 3)
+
+GH11_success <- GH11_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+GH11_success <- GH11_success[!duplicated(GH11_success$Individual), ]
+
+pool <- GH11_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+```
+
+###write pool GH11
+```{r}
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH11_pool_ITS.csv")
+```
+
+##summary
+```{r}
+Pool_success <- rbind(GH1_success, GH11_success, GH10_success, GH9_success, GH2_success, GH3_success, GH4_success, GH5_success, GH6_success, GH7_success, GH8_success)
+
+GH1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH1_pool_ITS.csv")
+
+
+GH2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH2_pool_ITS.csv")
+
+GH3_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH3_pool_ITS.csv")
+
+GH4_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH4_pool_ITS.csv")
+
+GH5_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH5_pool_ITS.csv")
+
+GH6_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH6_pool_ITS.csv")
+
+GH7_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH7_pool_ITS.csv")
+
+GH8_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH8_pool_ITS.csv")
+
+GH9_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH9_pool_ITS.csv")
+
+#entered as date 166 but it's indv 9
+
+GH9_success$Individual[GH9_success$Individual == 166] = 9
+
+GH10_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH10_pool_ITS.csv")
+
+#entered as date
+
+GH10_success$Individual[GH10_success$Individual == 164] = 3
+
+GH10_success$Individual[GH10_success$Individual == 165] = 5
+
+#nothing came out for GH11
+#GH11_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/GH11_pool_ITS.csv")
+
+
+Pool_success_round1 <- rbind(GH1_success, GH10_success, GH9_success, GH2_success, GH3_success, GH4_success, GH5_success, GH6_success, GH7_success, GH8_success)
+
+
+#volume too low: Code 529, 61,
+Pool_success_round1 <- Pool_success_round1[!(Pool_success_round1$Individual == "529" | Pool_success_round1$Individual == "61"),]
+
+
+#volume ok: Code 78
+Pool_success_round1[nrow(Pool_success_round1) + 1,] <- c("", "DRYER_greenhouse", "GH3", "E", "5", "78", "ITS", "leaf", "1.21", "33.33", "27", "1", "1.26", "26.4")
+
+Pool_success_round1 <- Pool_success_round1 %>% 
+  filter(Individual != 'PCR')
+
+
+```
+
+
+
+#Round 2 - 02/12/2022
+
+##Compo1
+```{r}
+Compo1 <- Dosage_cayenne_021222 %>% filter(Plate == 'Compo1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+Compo1 <- Compo1 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+Compo1_success <- Compo1 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+Compo1_success$Individual <- as.character(Compo1_success$Individual)
+
+Compo1_success$Individual <- str_sub(Compo1_success$Individual, 1, 3)
+
+Compo1_success <- Compo1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+Compo1_success <- Compo1_success[!duplicated(Compo1_success$Individual), ]
+
+pool <- Compo1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Compo1_pool_ITS_051222.csv")
+```
+
+##Compo2
+```{r}
+Compo2 <- Dosage_cayenne_021222 %>% filter(Plate == 'Compo2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+Compo2 <- Compo2 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+
+Compo2_success <- Compo2 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+Compo2_success$Individual <- as.character(Compo2_success$Individual)
+
+Compo2_success$Individual <- str_sub(Compo2_success$Individual, 1, 3)
+
+Compo2_success <- Compo2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+Compo2_success <- Compo2_success[!duplicated(Compo2_success$Individual), ]
+
+pool <- Compo2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Compo2_pool_ITS_051222.csv")
+```
+
+##TM1
+
+```{r}
+TM1 <- Dosage_cayenne_021222 %>% filter(Plate == 'TM1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+TM1 <- TM1 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+TM1_success <- TM1 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+TM1_success$Individual <- as.character(TM1_success$Individual)
+
+TM1_success$Individual <- str_sub(TM1_success$Individual, 1, 3)
+
+TM1_success <- TM1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+TM1_success <- TM1_success[!duplicated(TM1_success$Individual), ]
+
+pool <- TM1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/TM1_pool_ITS_051222.csv")
+```
+
+
+##TM2
+
+```{r}
+TM2 <- Dosage_cayenne_021222 %>% filter(Plate == 'TM2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+TM2 <- TM2 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+TM2_success <- TM2 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+TM2_success$Individual <- as.character(TM2_success$Individual)
+
+TM2_success$Individual <- str_sub(TM2_success$Individual, 1, 3)
+
+TM2_success <- TM2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+TM2_success <- TM2_success[!duplicated(TM2_success$Individual), ]
+
+pool <- TM2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/TM2_pool_ITS_051222.csv")
+```
+
+##VS 1
+
+```{r}
+VS1 <- Dosage_cayenne_021222 %>% filter(Plate == 'VS1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+VS1 <- VS1 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+VS1_success <- VS1 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+VS1_success$Individual <- as.character(VS1_success$Individual)
+
+VS1_success$Individual <- str_sub(VS1_success$Individual, 1, 3)
+
+VS1_success <- VS1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+VS1_success <- VS1_success[!duplicated(VS1_success$Individual), ]
+
+pool <- VS1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/VS1_pool_ITS_051222.csv")
+```
+
+##VS 2
+
+```{r}
+VS2 <- Dosage_cayenne_021222 %>% filter(Plate == 'VS2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+VS2 <- VS2 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+VS2_success <- VS2 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+VS2_success$Individual <- as.character(VS2_success$Individual)
+
+VS2_success$Individual <- str_sub(VS2_success$Individual, 1, 3)
+
+VS2_success <- VS2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+VS2_success <- VS2_success[!duplicated(VS2_success$Individual), ]
+
+pool <- VS2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/VS2_pool_ITS_051222.csv")
+```
+
+##IH 1
+
+
+```{r}
+IH1 <- Dosage_cayenne_021222 %>% filter(Plate == 'IH1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+IH1 <- IH1 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+IH1_success <- IH1 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+IH1_success$Individual <- as.character(IH1_success$Individual)
+
+IH1_success$Individual <- str_sub(IH1_success$Individual, 1, 3)
+
+IH1_success <- IH1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+IH1_success <- IH1_success[!duplicated(IH1_success$Individual), ]
+
+pool <- IH1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/IH1_pool_ITS_051222.csv")
+```
+
+##IH 2
+
+
+```{r}
+IH2 <- Dosage_cayenne_021222 %>% filter(Plate == 'IH2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+IH2 <- IH2 %>% filter(`Volume per
+ replicate
+  µl` < 20)
+
+
+IH2_success <- IH2 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+IH2_success$Individual <- as.character(IH2_success$Individual)
+
+IH2_success$Individual <- str_sub(IH2_success$Individual, 1, 3)
+
+IH2_success <- IH2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+IH2_success <- IH2_success[!duplicated(IH2_success$Individual), ]
+
+pool <- IH2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/IH2_pool_ITS_051222.csv")
+```
+
+#Summary round 2
+```{r}
+
+Compo1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Compo1_pool_ITS_051222.csv")
+
+Compo2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Compo2_pool_ITS_051222.csv")
+
+TM1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/TM1_pool_ITS_051222.csv")
+
+TM2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/TM2_pool_ITS_051222.csv")
+
+VS2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/VS2_pool_ITS_051222.csv")
+
+VS1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/VS1_pool_ITS_051222.csv")
+
+IH1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/IH1_pool_ITS_051222.csv")
+
+IH2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/IH2_pool_ITS_051222.csv")
+
+Pool_success2 <- rbind(Compo1_success, Compo2_success, TM1_success, TM2_success, VS2_success, VS1_success, IH1_success, IH2_success)
+
+Pool_success2 <- Pool_success2 %>% 
+  filter(Individual != 'PCR') %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+write.csv(Pool_success, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/IH2_pool_success_ITS_051222.csv")
+```
+
+#Counting what samples we have
+```{r}
+Indv <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/149M2FuvhAEsOysrsdpfIEvobh7W2pM7e105BK0y58G8/edit#gid=0", sheet = "Individuals") %>% select(Code, Treatment, Species)
+
+Time <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/149M2FuvhAEsOysrsdpfIEvobh7W2pM7e105BK0y58G8/edit#gid=0", sheet = "Extraction_Leaves") %>% select(Code, Time)
+
+#Round 1
+
+Pool_success_round1 <- Pool_success_round1 %>%
+  rename(Code = Individual) %>%
+  select(Code) %>%
+  mutate(Marker = "ITS") %>%
+  mutate(Organ = "Leaf")
+
+
+
+Pool_success_round1$Code <- as.numeric(Pool_success_round1$Code)
+
+ITS_round1 <- left_join(Pool_success_round1, Indv, by= "Code")
+
+#Round 2
+Pool_success_051222 <- Pool_success %>% 
+  rename(Code = Individual) %>% 
+  select(Code) %>%
+  mutate(Marker = "ITS") %>%
+  mutate(Organ = "Leaf")
+
+
+Pool_success_051222 <- as.data.frame(Pool_success_051222)
+
+Pool_success_051222$Code <- as.numeric(Pool_success_051222$Code)
+
+ITS <- left_join(Pool_success_051222, Indv, by = "Code")
+
+ITS_ALL <- rbind(ITS, ITS_round1) %>% left_join(Time)
+
+#checks
+
+counts <- ITS_ALL %>% 
+  group_by(Species) %>% 
+  count(Species, Time, Treatment) %>% na.omit()
+
+write.csv(counts,"C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Pool_number_of_samples.csv" )
+```
+
+#Round 3 - 05/01/2023
+
+
+
+##Plaque 1
+```{r}
+pl1 <- Dosage_cayenne_010523 %>% filter(Plate == 'Pl1') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+pl1 <- pl1 %>% filter(`Volume per
+ replicate
+  µl` < 14) #car dosage fait 3 fois (3*3 µL)
+
+
+pl1_success <- pl1 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+pl1_success$Individual <- as.character(pl1_success$Individual)
+
+pl1_success$Individual <- str_sub(pl1_success$Individual, 1, 3)
+
+pl1_success <- pl1_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+pl1_success <- pl1_success[!duplicated(pl1_success$Individual), ]
+
+pool <- pl1_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/pl1_pool_ITS_05012023.csv")
+```
+
+##Plaque 2
+```{r}
+pl2 <- Dosage_cayenne_010523 %>% filter(Plate == 'Pl2') %>% dplyr::select(-`Pooled
+ concentrations 
+ng/µL`, -`Volume per 
+individuals
+µL`)
+
+#il y a un volume de purifiat max de 22 µL
+
+pl2 <- pl2 %>% filter(`Volume per
+ replicate
+  µl` < 20) #car dosage fait 3 fois (3*3 µL)
+
+
+pl2_success <- pl2 %>% filter(`Volume per
+ replicate
+  µl` > 0)
+
+pl2_success$Individual <- as.character(pl2_success$Individual)
+
+pl2_success$Individual <- str_sub(pl2_success$Individual, 1, 3)
+
+pl2_success <- pl2_success %>%
+  group_by(Individual) %>%
+  mutate(PoolConcentration = mean(`Picogreen 
+concentration 
+ng/µL`))
+
+pl2_success <- pl2_success[!duplicated(pl2_success$Individual), ]
+
+pool <- pl2_success %>%
+  mutate(Volume_a_prelever_par_individu = 33.33/PoolConcentration)
+
+pool$Column <- as.character(pool$Column)
+
+pool <- pool %>% filter(Individual != 774) #deja mis en fait round precedent
+pool <- pool %>% filter(Individual != 602) #deja mis en fait round precedent
+pool <- pool %>% filter(Individual != '34 ') #deja mis en fait round precedent
+
+write.csv(pool, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/pl2_pool_ITS_05012023.csv")
+```
+
+#Counting what samples we have
+```{r}
+Indv <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/149M2FuvhAEsOysrsdpfIEvobh7W2pM7e105BK0y58G8/edit#gid=0", sheet = "Individuals") %>% select(Code, Treatment, Species)
+
+Time <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/149M2FuvhAEsOysrsdpfIEvobh7W2pM7e105BK0y58G8/edit#gid=0", sheet = "Extraction_Leaves") %>% select(Code, Time)
+
+#Round 1
+
+Pool_success_round1 <- Pool_success_round1 %>%
+  rename(Code = Individual) %>%
+  select(Code) %>%
+  mutate(Marker = "ITS") %>%
+  mutate(Organ = "Leaf")
+
+
+
+Pool_success_round1$Code <- as.numeric(Pool_success_round1$Code)
+
+ITS_round1 <- left_join(Pool_success_round1, Indv, by= "Code")
+
+#Round 2
+Pool_success2 <- Pool_success2 %>% 
+  rename(Code = Individual) %>% 
+  select(Code) %>%
+  mutate(Marker = "ITS") %>%
+  mutate(Organ = "Leaf")
+
+
+Pool_success2 <- as.data.frame(Pool_success2)
+
+Pool_success2$Code <- as.numeric(Pool_success2$Code)
+
+ITS <- left_join(Pool_success2, Indv, by = "Code")
+
+#round 3
+pl1_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/pl1_pool_ITS_05012023.csv")
+
+pl2_success <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/pl2_pool_ITS_05012023.csv")
+
+Pool_success3 <- rbind(pl1_success, pl2_success)
+
+Pool_success3 <- Pool_success3 %>%
+  rename(Code = Individual) %>%
+  select(Code) %>%
+  mutate(Marker = "ITS") %>%
+  mutate(Organ = "Leaf")
+
+
+Pool_success3 <- Pool_success3[-24,]
+
+
+Pool_success3$Code <- as.numeric(Pool_success3$Code)
+
+ITS_round3 <- left_join(Pool_success3, Indv, by= "Code")
+
+ITS_ALL <- rbind(ITS, ITS_round1, ITS_round3) %>% left_join(Time) %>% na.omit()
+
+write.csv(ITS_ALL,"C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/ITS_ALL.csv" )
+
+#checks
+
+counts <- ITS_ALL %>% 
+  group_by(Species) %>% 
+  count(Species, Time, Treatment) %>% na.omit()
+
+write.csv(counts,"C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ITS/Pool/Pool_number_of_samples2.csv" )
+```

@@ -1,0 +1,143 @@
+---
+title: "VWC_soil"
+author: "Marion Boisseaux"
+date: "27/09/2022"
+output: html_document
+---
+
+Soil data
+
+# Controls
+```{r}
+library(readr)
+library(timetk)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+
+TMS_Control_316 <- read_delim("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/Fichiers Calibrés/TMS3calibrControl_316.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+ TMS_Control_316$`Date & time` <- as.POSIXct(TMS_Control_316$`Date & time`, format = "%d/%m/%Y %H:%M") %>% as_datetime(tz = "America/Cayenne") 
+
+TMS_Control_316  <- TMS_Control_316 %>% filter(`Date & time` < '2022-02-06') 
+
+
+TMS_Control_316  <- TMS_Control_316  %>% mutate(Moisture = `Vol. moisture`*100 ) %>% mutate(Treatment = 'Control')
+
+Control_316 <- TMS_Control_316 %>%
+ mutate(date = date(`Date & time`)) %>% 
+  group_by(date) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value)) + geom_line(color = "#305BD6", size = 2) + theme_classic() + labs(x = "", y = "Volumetric water content (%)") + coord_cartesian(ylim = c(0, 50))
+```
+
+```{r}
+TMS3calibrControl_511 <- read_delim("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/Fichiers Calibrés/TMS3calibrControl_511.csv", 
+   delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+Control <- TMS3calibrControl_511
+
+Control$`Date & time` <- as.POSIXct(Control$`Date & time`, format = "%d/%m/%Y %H:%M") %>% as_datetime(tz = "America/Cayenne") 
+
+Control <- Control %>% filter(`Date & time` < '2022-02-06') 
+
+Control <- Control %>% filter(`Date & time` > '2021-10-29') 
+
+
+Control <- Control %>% mutate(Moisture = `Vol. moisture`*100 ) %>% mutate(Treatment = 'Control')
+
+Control_511<- Control %>%
+  mutate(date = date(`Date & time`)) %>% 
+  group_by(date) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value)) + geom_line(color = "#305BD6", size = 2) + theme_classic() + labs(x = "", y = "Volumetric water content (%)") + coord_cartesian(ylim = c(0, 50))
+```
+
+# D1
+
+```{r}
+
+TMS3calibrD1_64 <- read_delim("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/Fichiers Calibrés/TMS3calibrD1_64.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+D1 <- TMS3calibrD1_64
+
+D1$`Date & time` <- as.POSIXct(D1$`Date & time`, format = "%d/%m/%Y %H:%M") %>% as_datetime(tz = "America/Cayenne") 
+
+D1 <- D1 %>% filter(`Date & time` < '2022-01-08') 
+
+D1 <- D1 %>% filter(`Date & time` > '2021-10-29') 
+
+D1 <- D1 %>% mutate(Moisture = `Vol. moisture`*100 ) %>% mutate(Treatment = 'D1')
+
+D1_64 <- D1 %>%
+  mutate(date = date(`Date & time`)) %>% 
+  group_by(date) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value)) + geom_line(color = "#FFC443", size = 2) + theme_classic() + labs(x = "", y = "Volumetric water content (%)") + coord_cartesian(ylim = c(0, 50))
+
+```
+
+#D2
+
+```{r}
+TMS3calibrD2_138 <- read_delim("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/Fichiers Calibrés/TMS3calibrD2_138.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+D2 <- TMS3calibrD2_138
+
+D2$`Date & time` <- as.POSIXct(D2$`Date & time`, format = "%d/%m/%Y %H:%M") %>% as_datetime(tz = "America/Cayenne") 
+
+D2 <- D2 %>% filter(`Date & time` < '2022-01-08') 
+
+D2 <- D2 %>% filter(`Date & time` > '2021-10-29') 
+
+D2 <- D2 %>% mutate(Moisture = `Vol. moisture`*100 ) %>% mutate(Treatment = 'D2')
+
+D2 <- D2 %>%
+  mutate(date = date(`Date & time`)) %>% 
+  group_by(date) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value)) + geom_line(color = "#eb7c1c", size = 2) + theme_classic() + labs(x = "", y = "Volumetric water content (%)") + coord_cartesian(ylim = c(0, 50))
+
+```
+#D3
+```{r}
+TMS3calibrD3_345 <- read_delim("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/Soil/Fichiers Calibrés/TMS3calibrD3_345.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+D3_345 <- TMS3calibrD3_345
+
+D3_345$`Date & time` <- as.POSIXct(D3_345$`Date & time`, format = "%d/%m/%Y %H:%M") %>% as_datetime(tz = "America/Cayenne") 
+
+D3_345 <- D3_345 %>% filter(`Date & time` < '2022-02-08') 
+
+D3_345 <- D3_345 %>% filter(`Date & time` > '2021-10-29') 
+
+D3_345 <- D3_345 %>% mutate(Moisture = `Vol. moisture`*100 ) %>% mutate(Treatment = 'D3')
+
+D3_345 %>%
+  mutate(date = date(`Date & time`)) %>% 
+  group_by(date) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value)) + geom_line(color = "#eb1f1c", size = 2) + theme_classic() + labs(x = "", y = "Volumetric water content (%)") + coord_cartesian(ylim = c(0, 50))
+
+```
+
+
+# Combine
+```{r}
+soil <- rbind(TMS_Control_316, Control, D1, D2, D3_345)
+
+library(rio)
+export(soil, "prelim_sol.csv")
+
+soil <- soil %>%
+  mutate(date = date(`Date & time`)) %>% 
+  group_by(date, Treatment) %>% 
+  summarise(Value = mean(Moisture)) %>%
+  ggplot(aes(x=date, y=Value, group = Treatment, color = Treatment)) + geom_line(size = 2) +  scale_color_manual(values = c("#305BD6", "#FFC443", "#eb7c1c", "#eb1f1c"), labels=c('Control', 'D1', 'D2', 'D3')) + theme_classic() + labs(x = "", y = "Volumetric water content (%)", size = 10) + coord_cartesian(ylim = c(0, 50)) + theme(text = element_text(size = 25)) 
+
+ggsave(filename = "Soil_VWC.png", plot = soil, bg = "white", width = 20, height = 8, dpi = 600)
+```

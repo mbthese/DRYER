@@ -1,0 +1,92 @@
+---
+title: "NGSfilter_GH_16S"
+author: "Marion Boisseaux"
+date: "2023-03-14"
+output: html_document
+---
+
+# libraries
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(readxl)
+library(googlesheets4)
+```
+
+
+
+# 16S
+```{r}
+taglist <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/Materiel&Method/Microbial/taglist.csv")
+
+bac16S_resultat_dosage <- read.csv("C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/16S/Round3_140223/Pool_VF_avec_rajout.csv") %>% mutate(samples= Individual) %>% mutate(Marqueur = Marker) %>% mutate(organ = Organ) %>% mutate(sample_type = Type) %>%mutate(control_type = ControlType)
+
+
+bac16S_resultat_dosage <- bac16S_resultat_dosage %>% mutate(project = "DRYER_greenhouse") 
+
+
+library(readr)
+correspondance_tag <- read.csv("Greenhouse_data/Microbio/Leaves/tag/corresp_tag_Leaves_vf2_GH.csv") %>% select(-V1) %>% distinct(samples, pair_tag_name, pair_tag_seq) %>% na.omit() 
+
+correspondance_tag <- correspondance_tag[correspondance_tag$pair_tag_name != "r3:f6", ]
+
+bac16S_resultat_dosage$samples <- as.character(bac16S_resultat_dosage$samples)
+
+bac16S_filter <- right_join(correspondance_tag, bac16S_resultat_dosage)
+
+#check for duplicates
+bac16S_filter$pair_tag_name[duplicated(bac16S_filter$pair_tag_name)] 
+
+
+##no replicates :)
+bac16S_filter$pair_tag_seq[duplicated(bac16S_filter$pair_tag_seq)] #no replicates :)
+
+bac16S_filter  <- bac16S_filter  %>% 
+  separate(pair_tag_name, sep=':', into=c('barcode_reverse_name', 'barcode_forward_name')) %>%
+  separate(pair_tag_seq, sep=':', into=c('barcode_reverse', 'barcode_forward')) 
+
+bac16S_filter <-bac16S_filter  %>%  
+  mutate(primer_F_seq	= "AACMGGATTAGATACCCKG", primer_R_seq = "AGGGTTGCGCTCGTTG") %>%   
+  rename(forward_primers_sequence = primer_F_seq) %>%
+  rename(reverse_primers_sequence = primer_R_seq) 
+
+bac16S_filter <- bac16S_filter %>% mutate(marker = '16S') %>% mutate(organ = 'Leaf')
+
+bac16S_filter <- bac16S_filter %>%
+  mutate(samples_name = paste0(project,"_",organ,"_",marker,"_","_",samples)) 
+
+bac16S_filter <- bac16S_filter %>% select(project, organ, marker, barcode_reverse_name, barcode_forward_name, barcode_reverse, barcode_forward, forward_primers_sequence, reverse_primers_sequence, samples, samples_name, sample_type, control_type)
+
+
+#format fasteris
+FASTERIS_16S_GH <- bac16S_filter %>% select(samples_name, barcode_forward, barcode_reverse, forward_primers_sequence, reverse_primers_sequence) 
+
+
+```
+
+
+
+### 16S duplicates verifications
+```{r}
+
+bac16S_filter$organ[duplicated(bac16S_filter$organ)]  
+samples <- bac16S_filter$samples[which(bac16S_filter$sample_type == "sample")] #yes there are 292 samples 16S leaves and the rest is controls
+
+#controls
+controls <- bac16S_filter$sample_type[which(bac16S_filter$sample_type == "control")] 
+
+control_sterilisation <- bac16S_filter$samples_name[which(bac16S_filter$control_type == "sterilisation")] #il y en a 4
+control_extraction <- bac16S_filter$samples_name[which(bac16S_filter$control_type == "extraction")] #il y en a 4
+control_PCR <- bac16S_filter$samples_name[which(bac16S_filter$control_type == "PCR")] #il y en a 6
+
+```
+
+##write file 16S
+```{r}
+write.csv(bac16S_filter, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ngsfilter/16S_ngsfilter.csv")
+
+#format fasteris
+write.csv(FASTERIS_16S_GH, "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Microbio/Leaves/ngsfilter/fasteris_16S_GH_ngsfilter_bis.csv")
+```
+

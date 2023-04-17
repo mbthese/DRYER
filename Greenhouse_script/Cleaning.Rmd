@@ -1,0 +1,301 @@
+---
+title: "Cleaning"
+author: "Marion Boisseaux"
+date: "25/09/2022"
+output: html_document
+---
+# Dryer data
+
+```{r}
+data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1sY3QcKLcGr_XV_-49DxeHnrTtk0zkntAuQQh4ojZ51E/edit#gid=1146050748", range = 'Traits')
+```
+
+ Final data :
+ 
+export(Data1, "Greenhouse_data.csv") #### the FINAL data (without LA and roots still)
+
+# Psypro data combining
+
+```{r}
+library(dplyr)
+
+
+T0 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "non_destructif") %>% select(UniqueCode, Pmidday, Time)
+
+T21 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+T27 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+T51<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+T57<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+T71 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+T101 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ItJdPwjk5uwm6xcuP79dnaRvxP88lwVACGWBStx0NvI/edit#gid=0", range = "non_destructif")%>% select(UniqueCode, Pmidday, Time)
+
+Data_NonDes <- bind_rows(T0,T21, T27, T51, T57, T71, T101)
+
+data_omit <- Data_NonDes %>% na.omit()
+
+data_essai <- merge(Data_NonDes, data, by=c("UniqueCode","Time"))
+
+data_essai2 <- left_join(data, Data_NonDes)
+  
+library(rio)
+export(data_essai2, 'data_pmidday.csv')
+```
+
+# Ajout traits destructifs
+
+```{r}
+T0 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1hxXws0kkgQhkC3T023X6QZw5o-RAjnNo8c3_KcWfTpw/edit#gid=799954127", range = "destructif") %>% select(UniqueCode, Time, Block, Sblock, Treatment, Species, Height,	Diameter,	Nb_leaves,RWC_corr,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot) %>% rename(RWC= RWC_corr)
+
+
+T21 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Vkmx3XCVR4L0QG22b_-zcIFutezT59gUlmr1ALW4V2Y/edit#gid=258591157",range = "destructif")  %>% select(UniqueCode, Time, Block, Sblock, Treatment, Species, Height,	Diameter,	Nb_leaves,RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+T27 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1SQekhd-T9yTKDTILUuHF0NY3Nlggy4enzFhSXLxJlK0/edit#gid=822184942",range = "destructif")%>% select(UniqueCode, Time,Block, Sblock, Treatment, Species, Height,	Diameter,	Nb_leaves,RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+T51_destructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1lmgpcbXdVcC2de3_-uc3g0w_P8Ab7z1m4faLhd2EmXI/edit#gid=539250691", range = "destructif")%>% select(UniqueCode, Time,Block, Sblock, Treatment, Species,RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+#ajout height, diameter, nb leaves
+
+data_height_t51 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1MCTMj4Zw9CHYj_pYPgUh65ileKenQVvqCuxiEejSX5E/edit#gid=0") %>% select(UniqueCode, Height, Diameter, NbLeaves_Total) %>% rename( Nb_leaves= NbLeaves_Total)
+
+
+T51 <- left_join(T51_destructive, data_height_t51)
+
+
+T57_destructive<- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rh34QE6izuGEnB4eQFLn4lv5oEf2CaFscT1Tsjc6NQA/edit#gid=822184942", range = "destructif")%>% select(UniqueCode, Time, Block, Sblock, Treatment, Species,RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+#ajout height, diameter, nb leaves
+
+data_height_t57 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1btxFeXLK0j8gFA4WRvI0xNqO8211kid371neY7Qj2AM/edit#gid=0") %>% select(UniqueCode, T57_Height, T57_Diameter, T57_Nb_leaves) %>% rename( Height = T57_Height, Diameter = T57_Diameter, Nb_leaves= T57_Nb_leaves)
+
+T57 <- left_join(T57_destructive, data_height_t57)
+
+T71_destructive <- 
+googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dWF6sbroB_6kJdzW1OnaLVpohykcKx7c/edit#gid=258591157", range = "destructif")%>% select(UniqueCode, Time, Block, Sblock, Treatment, Species,RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+#ajout height, diameter, nb leaves 
+
+data_height_t71 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1i12T_C68Bvss05J3-LlWAQmNnytbdQ_r60SQ3I-eLa0/edit#gid=0") %>% select(UniqueCode, T71_Height, T71_Diameter, T71_NbLeaves_Total) %>% rename( Height = T71_Height, Diameter = T71_Diameter, Nb_leaves= T71_NbLeaves_Total)
+
+T71 <- left_join(T71_destructive, data_height_t71)
+
+T101_destructive <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ItJdPwjk5uwm6xcuP79dnaRvxP88lwVACGWBStx0NvI/edit#gid=0", range = "destructif")%>% select(UniqueCode, Time,Block, Sblock, Treatment, Species, RWC,	MeanLT,	LeafSurface,	LeafWeight,	RootWeight,	StemWeight,	RootShoot)
+
+data_height_t101 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1gpMeECaLhuP9frbeMGvr1PjerB-2THzKJvoPUlFfLm4/edit#gid=0", range= "dhlt101") %>% select(UniqueCode, Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves= NbLeaves_Total)
+
+T101 <- left_join(T101_destructive, data_height_t101)
+
+#combine all
+DataDes <- bind_rows(T0,T21,T27, T51, T57, T71, T101)
+
+
+```
+
+# Data combine
+
+```{r}
+DataDes #Data destruction
+
+DataNonDes <- data_essai2
+
+essai <- full_join(DataNonDes, DataDes)
+
+#export all greenhouse data
+
+export(essai, "Greenhouse_full_data.csv")
+
+```
+
+# missing height, diamter and nb leaves for all
+
+```{r}
+Data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1sY3QcKLcGr_XV_-49DxeHnrTtk0zkntAuQQh4ojZ51E/edit#gid=1941239201", range = "Traits") %>% select(Time, UniqueCode, Block, Sblock, Treatment, Species, Height, Diameter, Nb_leaves)
+
+#ajouter des Height, diamter, nbleaves data all 
+
+Data1 <- Data %>% filter(Time == 't0')
+
+height_t0 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1bB-baD-dJS4iMqVv6nR0vhfv5SgRFJj6gkLvJc7UXU0/edit#gid=598092754", range = "Indv") %>% select(UniqueCode, Time, Block, Sblock, Treatment, Species, Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves = NbLeaves_Total)
+
+Data2 <- right_join(Data1, height_t0)
+
+Data_t0 <- left_join(Data2, Data1)
+
+#t21
+Data1 <- Data %>% filter(Time == 't21')
+
+height_t21 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1mwfDSZfJdRcFRU2UmeeVz3dxjHiAcvgKiMzvaNgKCjI/edit#gid=858865895", range = "Sheet1") %>% select(UniqueCode, Time, Block, Sblock, Treatment,Species, Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves = NbLeaves_Total)
+
+Data2 <- right_join(Data1, height_t21)
+
+Data_t21 <- left_join(Data2, Data1)
+
+#t27
+Data1 <- Data %>% filter(Time == 't27')
+
+height_t27 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/10ubQDESSYhJHhHpMQ_XoIxR9xYQWfO54qitU7ddGz9A/edit#gid=770489906", range = "Indv") %>% select(UniqueCode, Time, Block, Sblock, Treatment,Species, Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves = NbLeaves_Total)
+
+Data2 <- right_join(Data1, height_t27)
+
+Data_t27 <- left_join(Data2, Data1)
+
+#t71
+Data1 <- Data %>% filter(Time == 't71')
+
+height_t71 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1i12T_C68Bvss05J3-LlWAQmNnytbdQ_r60SQ3I-eLa0/edit#gid=0", range = "Sheet1") %>% select(UniqueCode, Species, Block, Sblock, Treatment,T71_Height, T71_Diameter, T71_NbLeaves_Total) %>% rename(Nb_leaves = T71_NbLeaves_Total, Height = T71_Height, Diameter= T71_Diameter)
+
+height_t71 <- height_t71 %>% mutate("Time" = 't71')
+
+Data2 <- right_join(Data1, height_t71)
+
+Data_t71 <- left_join(Data2, Data1) 
+
+#t51
+Data1 <- Data %>% filter(Time == 't51')
+
+height_t51 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1MCTMj4Zw9CHYj_pYPgUh65ileKenQVvqCuxiEejSX5E/edit#gid=0", range = "Sheet1") %>% select(UniqueCode, Species, Block, Sblock, Treatment,Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves = NbLeaves_Total)
+
+height_t51 <- height_t51 %>% mutate("Time" = 't51')
+
+Data2 <- right_join(Data1, height_t51)
+
+Data_t51 <- left_join(Data2, Data1) 
+
+#t57
+Data1 <- Data %>% filter(Time == 't57')
+
+height_t57 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1btxFeXLK0j8gFA4WRvI0xNqO8211kid371neY7Qj2AM/edit#gid=0", range = "Sheet1") %>% select(UniqueCode, Species,Block, Sblock, Treatment, T57_Height, T57_Diameter, T57_Nb_leaves) %>% rename(Nb_leaves = T57_Nb_leaves, Height = T57_Height, Diameter = T57_Diameter)
+
+height_t57 <- height_t57 %>% mutate("Time" = 't57')
+Data2 <- right_join(Data1, height_t57)
+
+Data_t57 <- left_join(Data2, Data1) 
+
+#t101
+Data1 <- Data %>% filter(Time == 't101')
+
+height_t101 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1gpMeECaLhuP9frbeMGvr1PjerB-2THzKJvoPUlFfLm4/edit#gid=0", range = "dhlt101") %>% select(UniqueCode, Species, Block, Sblock, Treatment,Height, Diameter, NbLeaves_Total) %>% rename(Nb_leaves = NbLeaves_Total)
+
+height_t101 <- height_t101 %>% mutate("Time" = 't101')
+
+Data2 <- right_join(Data1, height_t101)
+
+Data_t101 <- left_join(Data2, Data1) 
+
+#Combine all height, diameter nb leaves data
+Data_HDL <- bind_rows(Data_t0,Data_t21,Data_t27, Data_t51, Data_t57, Data_t71, Data_t101)
+
+export(Data_HDL, "Data_HDL.csv")
+```
+
+
+# Combine trait data with partial HDL 
+```{r}
+essai #trait data
+
+Data_trait <- right_join(essai, Data_HDL)
+
+intermediate_gs <- essai %>% filter(Time == "t14")
+
+intermediate_gs2 <- essai %>% filter(Time == "t8")
+
+intermediate <- bind_rows(intermediate_gs, intermediate_gs2)
+
+Data_trait2 <- bind_rows(Data_trait, intermediate)
+
+
+export(Data_trait2, "Data_trait_greenhouse_without_LA_SRL.csv")
+```
+
+# problem t57
+
+```{r}
+Data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1sY3QcKLcGr_XV_-49DxeHnrTtk0zkntAuQQh4ojZ51E/edit#gid=1941239201", range = 'Traits')
+
+essai <- read_csv("Greenhouse_data/data_pmidday.csv")
+
+essai <- essai%>% select(Time, UniqueCode, Chloro, gs, gs_bis, FvFm, WUE, E, Asat, Pmidday)
+
+Data_t57 <- Data %>% filter(Time == 't57')
+
+#option 1 - it works !!
+
+Data1 <- full_join(essai, Data, by= c("Time", "UniqueCode"))
+Data1$Chloro <- coalesce(Data1[["Chloro.x"]], Data1[["Chloro.y"]])
+Data1$gs <- coalesce(Data1[["gs.x"]], Data1[["gs.y"]])
+Data1$gs_bis <- coalesce(Data1[["gs_bis.x"]], Data1[["gs_bis.y"]])
+Data1$FvFm <- coalesce(Data1[["FvFm.x"]], Data1[["FvFm.y"]])
+Data1$WUE <- coalesce(Data1[["WUE.x"]], Data1[["WUE.y"]])
+Data1$Asat <- coalesce(Data1[["Asat.x"]], Data1[["Asat.y"]])
+Data1$E <- coalesce(Data1[["E.x"]], Data1[["E.y"]])
+Data1$Pmidday <- coalesce(Data1[["Pmidday.x"]], Data1[["Pmidday.y"]])
+
+Data1 <- Data1 %>% select(Time, UniqueCode, Block, Sblock, Treatment, RealTreatment, Species, Chloro, gs, gs_bis, FvFm, WUE, E, Asat, Pmidday, Height, Diameter, Nb_leaves, RWC, MeanLT, LeafSurface, LeafWeight, RootWeight, StemWeight, RootShoot)
+
+export(Data1, "Greenhouse_data.csv") #### the FINAL data (without LA and roots still)
+
+#option 2
+Time <- c("t57")
+
+for( j in 1:length(Time)){
+for(i in 1:length(Data$UniqueCode)) {
+  if(is.na(Data$gs[i])) {
+    Data$gs[i] <- essai$gs[i]
+    
+  }
+  
+}
+}
+  
+if(is.na(Data$Chloro[i])) {
+    Data$Chloro[i] <- essai$Chloro[i]
+    
+  }
+  else {
+    print("Wow, that's awesome")
+  }
+  if(is.na(Data$FvFm[i])) {
+    Data$FvFm[i] <- essai$FvFm[i] *1000
+    
+  }
+  else {
+    print("Wow, that's awesome")
+  }
+  if(is.na(Data$WUE[i])) {
+    Data$WUE[i] <- essai$WUE[i]
+    
+  }
+  else {
+    print("Wow, that's awesome")
+  }
+  if(is.na(Data$E[i])) {
+    Data$E[i] <- essai$E[i]
+    
+  }
+  else {
+    print("Wow, that's awesome")
+    
+  }
+  if(is.na(Data$Asat[i])) {
+    Data$Asat[i] <- essai$Asat[i]
+    
+  }
+  else {
+    print("Wow, that's awesome") }
+  
+  if(is.na(Data$Pmidday[i])) {
+    Data$Pmidday[i] <- essai$Pmidday[i]
+    
+  }
+  else {
+    print("Wow, that's awesome")
+  }
+}
+}
+
+```
+

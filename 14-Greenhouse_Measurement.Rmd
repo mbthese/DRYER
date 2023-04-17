@@ -1,139 +1,263 @@
 c# Results
 
-## All individuals
+#Library
 
-### Seedling heights
-
-```{r Height, echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
 
 library(dplyr)
 library(readxl)
-
-DHLT0 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT0.xlsx", 
-    sheet = "Indv", col_types = c("text", "numeric",
-        "numeric", "numeric", "numeric", 
-        "text", "skip", "skip", "text", "numeric", 
-        "numeric", "numeric", "text"))
-
-DHLT21 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT21.xlsx", 
-    sheet = "Sheet1", col_types = c("text","numeric", 
-        "numeric", "numeric", "numeric", 
-        "text", "skip", "skip", "text", "numeric", 
-        "numeric", "numeric", "text"))
-
-DHLT27 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT27.xlsx", 
-    sheet = "Indv", col_types = c("text","numeric", 
-        "numeric", "numeric", "numeric", 
-        "text", "skip", "skip", "text", "numeric", 
-        "numeric", "numeric", "numeric", 
-        "numeric", "text"))
-
-DHLT51 <-read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT51 - D1 Recovery.xlsx", 
-    sheet = "Sheet1")
-
-DHLT57 <- read_excel("Greenhouse_data/DiametreHauteurNbLeaves/DiametreHauteurLeafT57-D2-recovery.xlsx", 
-    sheet = "Indv", col_types = c("text","numeric", 
-        "numeric", "numeric", "numeric", 
-        "text", "skip", "skip", "text", "skip", 
-        "skip", "skip", "skip", "skip", "skip", 
-        "skip", "skip", "skip", "skip", "numeric", 
-        "numeric", "numeric", "text", "numeric", 
-        "text"))
- 
-
-DataDHL <- bind_rows(DHLT0, DHLT21, DHLT27, DHLT51, DHLT57)
-```
-
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-
-library(ggplot2)
-
-library(dplyr)
-library(ggplot2)
-
-DataDHL %>%
- filter(!(Remarques %in% c("Feuilles : 12 elastique vert / 8 elastique rose; Hauteur : 16 vert / 14,5 rose\r\ndiametre: rose 5.20 / vert 5,87", 
-"5 bleu, 5 rouge\r\nhauteur: 24.5 bleu / 32 rouge", "feuille: 7 bleu / 1 sans elastique\r\nhauteur: 44 bleu/ 8.5 autre\r\ndiamtre: bleu 4,67/ sans elastique 2,86\r\ncas special: je compte que la branche bleue qui est principale", 
-"3 rouge, 2 orange\r\nhauteur: rouge 28 / orange 18\r\ndiametre: rouge 2,86/ 1.89 orange", "feuille : 8 (bleue) / 5 (verte)\r\nhauteur: 47.5 (bleue) / 16.5 ( verte)", 
-"fourche: (rouge) 10 / (verte) 8\r\nhauteur (rouge) 16 / (verte) 12.5\r\ndiametre: rose 2,38 / verte 1.87", 
-"4 bleu, 6 rose\r\nhauteur 19 bleue/ 32 rose\r\ndiametre tige bleue 2.76 / tige rose 4.04 / diametre endessous 7.84", 
-"fourche: 8(violet) / 1 (orange)\r\nhauteur: violet 52.5 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\ndiametre: 4,87 violet / 1.49 orange", 
-"6 violet, 11 orange\r\n20 violet (hauteur) / 44 (orange)\r\ndiametre 6,36 pris à la base", "10 bleu clair, 6 bleu foncé\r\nhauteur: bleu clair 23.5/ bleu foncé 16\r\ndiametre à la base", 
-"7 bleu, 10 vert, 4 orange partant de la bleue \r\nhauteur bleu: 30 / 26 vert\r\ndiametre : 3,81 bleu / 3.25 verte", 
-"11 orange, 5 rouge\r\nhauteur: orange 45 / rouge rien", "8 verts / 6 orange\r\n22.5 verte / 20 orange : hauteur\r\ndiametre : 4,74 à la base", 
-"4 orange +
- 4 bleus\r\nhauteur: 18.5 orange / 13 bleue\r\ndiametre : orange 3,55 / bleue 2.31", "4 vert et 8 rouge\r\nhauteur: 14 verte/ rouge 35\r\ndiametre : verte 2,42 / rouge 3.79"
-)) | is.na(Remarques)) %>%
- filter(!(RemarquesT21 %in% c("hauteur: 38 bleu / 37 rouge\r\n7 bleu, 6 rouge", 
-"hauteur: 51 (bleue) / 19 ( verte)\r\ndiametre: 522 / (269)\r\nfeuille : 11 (bleue) / 6 (verte)", "hauteur 19 bleue/ 37 rose\r\ndiametre tige bleue 2.35 / tige rose 4.08 \r\n4 bleu, 7 rose", 
-"hauteur: violet 56 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\n 9(violet) / 1 (orange)", 
-"20 violet (hauteur) / 51 (orange)\r\n6 violet, 13 orange", "12 bleu clair, 8 bleu foncé\r\n\r\nhauteur: bleu clair 25/ bleu foncé 16.5\r\n", 
-"hauteur: 14 verte/ rouge 40\r\ndiametre : verte 2,93 / rouge 3.98\r\n4 vert et 10 rouge")) | is.na(RemarquesT21)) %>%
- filter(!(T27_Remarques %in% c("Hauteur : 18 vert / 18 rose\r\ndiametre: rose 442 / vert 433", "hauteur orange 30, rose 27.5 \r\ndiametre: rouge 301/ 258 orange"
- )) | is.na(T27_Remarques)) %>%
- ggplot() +
- aes(x = Time, y = Height, colour = Treatment) +
- geom_boxplot(shape = "circle", fill = "#112446") +
- scale_color_manual(values = list(C0 = "#3C8DE6", D1 = "#31B425", D2 = "#FFE609", D3 = "#FF9F4A")) +
- labs(x = "Time", y = "Species", title = "Plant growth ", subtitle = "Height measurements") +
- theme_minimal() +
- facet_wrap(vars(Species), scales = "free")
+library(googlesheets)
+library(googledrive)
 
 
 ```
-Quick lookout: pteoff at t21 days?? 
-
-### Stem diameter
-```{r Stem diameter, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
 
 
-library(dplyr)
-library(ggplot2)
+# Height / Diameter / Leaves
 
-DataDHL %>%
- filter(!(Remarques %in% c("Feuilles : 12 elastique vert / 8 elastique rose; Hauteur : 16 vert / 14,5 rose\r\ndiametre: rose 5.20 / vert 5,87", 
-"5 bleu, 5 rouge\r\nhauteur: 24.5 bleu / 32 rouge", "feuille: 7 bleu / 1 sans elastique\r\nhauteur: 44 bleu/ 8.5 autre\r\ndiamtre: bleu 4,67/ sans elastique 2,86\r\ncas special: je compte que la branche bleue qui est principale", 
-"3 rouge, 2 orange\r\nhauteur: rouge 28 / orange 18\r\ndiametre: rouge 2,86/ 1.89 orange", "feuille : 8 (bleue) / 5 (verte)\r\nhauteur: 47.5 (bleue) / 16.5 ( verte)", 
-"fourche: (rouge) 10 / (verte) 8\r\nhauteur (rouge) 16 / (verte) 12.5\r\ndiametre: rose 2,38 / verte 1.87", 
-"4 bleu, 6 rose\r\nhauteur 19 bleue/ 32 rose\r\ndiametre tige bleue 2.76 / tige rose 4.04 / diametre endessous 7.84", 
-"fourche: 8(violet) / 1 (orange)\r\nhauteur: violet 52.5 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\ndiametre: 4,87 violet / 1.49 orange", 
-"6 violet, 11 orange\r\n20 violet (hauteur) / 44 (orange)\r\ndiametre 6,36 pris à la base", "10 bleu clair, 6 bleu foncé\r\nhauteur: bleu clair 23.5/ bleu foncé 16\r\ndiametre à la base", 
-"7 bleu, 10 vert, 4 orange partant de la bleue \r\nhauteur bleu: 30 / 26 vert\r\ndiametre : 3,81 bleu / 3.25 verte", 
-"11 orange, 5 rouge\r\nhauteur: orange 45 / rouge rien", "8 verts / 6 orange\r\n22.5 verte / 20 orange : hauteur\r\ndiametre : 4,74 à la base", 
-"4 orange +
- 4 bleus\r\nhauteur: 18.5 orange / 13 bleue\r\ndiametre : orange 3,55 / bleue 2.31", "4 vert et 8 rouge\r\nhauteur: 14 verte/ rouge 35\r\ndiametre : verte 2,42 / rouge 3.79"
-)) | is.na(Remarques)) %>%
- filter(!(RemarquesT21 %in% c("hauteur: 38 bleu / 37 rouge\r\n7 bleu, 6 rouge", 
-"hauteur: 51 (bleue) / 19 ( verte)\r\ndiametre: 522 / (269)\r\nfeuille : 11 (bleue) / 6 (verte)", "hauteur 19 bleue/ 37 rose\r\ndiametre tige bleue 2.35 / tige rose 4.08 \r\n4 bleu, 7 rose", 
-"hauteur: violet 56 / 7 orange\r\ncas special, on ne prend pas en compte la petite feuille\r\n 9(violet) / 1 (orange)", 
-"20 violet (hauteur) / 51 (orange)\r\n6 violet, 13 orange", "12 bleu clair, 8 bleu foncé\r\n\r\nhauteur: bleu clair 25/ bleu foncé 16.5\r\n", 
-"hauteur: 14 verte/ rouge 40\r\ndiametre : verte 2,93 / rouge 3.98\r\n4 vert et 10 rouge")) | is.na(RemarquesT21)) %>%
- filter(!(T27_Remarques %in% c("Hauteur : 18 vert / 18 rose\r\ndiametre: rose 442 / vert 433", "hauteur orange 30, rose 27.5 \r\ndiametre: rouge 301/ 258 orange"
- )) | is.na(T27_Remarques)) %>%
- ggplot() +
- aes(x = Time, y = Diameter, colour = Treatment) +
- geom_boxplot(shape = "circle", fill = "#112446") +
- scale_color_manual(values = list(C0 = "#487DF2", D1 = "#31B425", D2 = "#EBEC20", D3 = "#F49E09")) +
- labs(x = "Time", y = "Stem diameter (mm)", title = "Plant growth", subtitle = "Stem diameter measurements") +
- theme_minimal() +
- facet_wrap(vars(Species), scales = "free")
+```{r Combining_DHLdata, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+#t0
+
+DHLT0 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1bB-baD-dJS4iMqVv6nR0vhfv5SgRFJj6gkLvJc7UXU0/edit#gid=598092754", range = "Indv") %>% select(-Remarques, -BatchNbr) %>% 
+  mutate(Time='t0')
+  
+  
+  
+#t21
+DHLT21 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1mwfDSZfJdRcFRU2UmeeVz3dxjHiAcvgKiMzvaNgKCjI/edit#gid=858865895", range = "Sheet1") %>% select(-RemarquesT21, -BatchNbr) %>% 
+  mutate(Time='t21')
+
+#t27
+
+DHLT27 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/10ubQDESSYhJHhHpMQ_XoIxR9xYQWfO54qitU7ddGz9A/edit#gid=770489906", range = "Indv") %>% select(-T27_Remarques, -BatchNbr) %>% 
+  mutate(Time='t27')
+
+#T51
+DHLT51 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1MCTMj4Zw9CHYj_pYPgUh65ileKenQVvqCuxiEejSX5E/edit#gid=0", range = "Sheet1") %>% select(-RemarquesT51) %>% 
+  mutate(Time= 't51')
+
+
+#T57
+DHLT57 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1btxFeXLK0j8gFA4WRvI0xNqO8211kid371neY7Qj2AM/edit#gid=0", range = "Sheet1")
+
+DHLT57 <- DHLT57 %>% 
+  select(UniqueCode, Block, Sblock, Treatment, Species, T57_Height, T57_Diameter, T57_Nb_leaves, T57_Nb_dead_leaves, T57_Nb_future_leaves)%>%
+  mutate(Time= 't57') %>%
+  relocate(Time, .before= UniqueCode)
+
+DHLT57$T57_Nb_dead_leaves<- as.numeric(unlist(DHLT57$T57_Nb_dead_leaves))
+
+DHLT57 <- DHLT57 %>% 
+  rename(Height = T57_Height, Diameter = T57_Diameter, NbLeaves_Total = T57_Nb_leaves, NbLeaves_dead =T57_Nb_dead_leaves, NbLeaves_Future = T57_Nb_future_leaves)
+
+#T71 
+
+DHLT71 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1i12T_C68Bvss05J3-LlWAQmNnytbdQ_r60SQ3I-eLa0/edit#gid=0", range = "Sheet1")
+
+DHLT71 <- DHLT71 %>% 
+  select(UniqueCode, Block, Sblock, Treatment, Species, T71_Height, T71_Diameter, T71_NbLeaves_Under, T71_NbLeaves_Above, T71_NbLeaves_Total, T71_Nb_dead_leaves, T71_Nb_future_leaves)%>%
+  mutate(Time= 't71') %>%
+  relocate(Time, .before= UniqueCode)
+
+DHLT71$T71_Height <- as.numeric(unlist(DHLT71$T71_Height))
+
+DHLT71 <- DHLT71 %>% 
+  rename(Height = T71_Height, Diameter = T71_Diameter, NbLeaves_Under = T71_NbLeaves_Under, NbLeaves_Above= T71_NbLeaves_Above, NbLeaves_Total = T71_NbLeaves_Total, NbLeaves_dead = T71_Nb_dead_leaves, NbLeaves_Future = T71_Nb_future_leaves)
+
+#T101
+
+DHLT101 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1gpMeECaLhuP9frbeMGvr1PjerB-2THzKJvoPUlFfLm4/edit#gid=0", range = "dhlt101") %>% select(-comment_T101)
+
+DHLT101$NbLeaves_Future <- as.numeric(DHLT101$NbLeaves_Future)
+
+#merge
+DataDHL <- bind_rows(DHLT0, DHLT21, DHLT27, DHLT51, DHLT57, DHLT71, DHLT101)
+
+gs_auth()
+
+data(DataDHL)
+
+googledrive::drive_create("DataDHL", path = "~/These/DRYERgreenhouse/Height", type = "spreadsheet")
+
+## Direct storage
+# Create an empty spreadsheet. It is stored as an object with a sheet_id and drive_id 
+ss <- googledrive::drive_create("DataDHL", path = "~/These/DRYERgreenhouse/Height", type = "spreadsheet")
+
+# Put the data.frame in the spreadsheet and provide the sheet_id so it can be found
+googlesheets4::sheet_write(data = DataDHL, ss = ss, sheet = "Sheet1")
 
 ```
 
-### Number of leaves
-```{r echo=FALSE}
-library(ggplot2)
-
-```
-
-## Wilting stages
+# Wilting stages
 
 Link to indesign document
 
+#DHL graphs
 
+## height graph
+```{r Heightgraphs}
+DHL <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1qUIORsjMQW_fb-Bd2Ts8lTHzHA1N7hSWlAZ97Mdv9aw/edit#gid=0", range = "Sheet1")
 
+#resistance + reislience T21 + T51
+
+DHL %>%
+ filter(Time %in% c("t21", "t51")) %>%
+ ggplot() +
+  aes(x = Time, y = Height, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D1 = "#7ACE72"
+    )
+  ) +
+  labs(title = "Height") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance + reislience T27 + T57
+
+DHL %>%
+ filter(Time %in% c("t27", "t57")) %>%
+ ggplot() +
+  aes(x = Time, y = Height, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D2 = "#fafafa"
+    )
+  ) +
+  labs(title = "Height") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance + reislience T71 + T101
+
+DHL %>%
+ filter(Time %in% c("t71", "t101")) %>% 
+  mutate(Time = factor(Time, levels=c("t71", "t101"))) %>%
+ ggplot() +
+  aes(x = Time, y = Height, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D3 = "#f59b42"
+    )
+  ) +
+  labs(title = "Height") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance
+DHL %>%
+ filter(Time %in% c("t0", "t21", "t27", "t71")) %>% 
+ ggplot() +
+  aes(x = Time, y = Height, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D1 = "#7ACE72",
+      D2 = "#fafafa",
+      D3 = "#f59b42"
+    )
+  ) +
+  labs(title = "Height") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+```
+
+##diameter graphs
+```{r Diameter}
+DHL <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1qUIORsjMQW_fb-Bd2Ts8lTHzHA1N7hSWlAZ97Mdv9aw/edit#gid=0", range = "Sheet1")
+
+#resistance + reislience T21 + T51
+
+DHL %>%
+ filter(Time %in% c("t21", "t51")) %>%
+ ggplot() +
+  aes(x = Time, y = Diameter, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D1 = "#7ACE72"
+    )
+  ) +
+  labs(title = "Diameter") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance + reislience T27 + T57
+
+DHL %>%
+ filter(Time %in% c("t27", "t57")) %>%
+ ggplot() +
+  aes(x = Time, y = Diameter, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D2 = "#fafafa"
+    )
+  ) +
+  labs(title = "Diameter") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance + reislience T71 + T101
+
+DHL %>%
+ filter(Time %in% c("t71", "t101")) %>% 
+  mutate(Time = factor(Time, levels=c("t71", "t101"))) %>%
+ ggplot() +
+  aes(x = Time, y = Diameter, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D3 = "#f59b42"
+    )
+  ) +
+  labs(title = "Diameter") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+
+#resistance
+DHL %>%
+ filter(Time %in% c("t0", "t21", "t27", "t71")) %>% 
+ ggplot() +
+  aes(x = Time, y = Diameter, fill = Treatment) +
+  geom_boxplot(shape = "circle") +
+  scale_fill_manual(
+    values = list(
+      C0 = "#0817FE",
+      D1 = "#7ACE72",
+      D2 = "#fafafa",
+      D3 = "#f59b42"
+    )
+  ) +
+  labs(title = "Height") +
+  theme_minimal() +
+  facet_wrap(vars(Species))
+```
+
+# stomatal conductance gs
+
+```{r intermediate_gs}
+#intermediate gs
+
+t8 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1FaJTPoIdiUYW0xuebZsOPCclcZOxSZy6STZRLpl75VI/edit#gid=2004401054", range = "gs sem 02/11") %>% select(-DateColl, -Height, -Diameter, -Nb_leaves, -comment)
+
+t14 <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1FaJTPoIdiUYW0xuebZsOPCclcZOxSZy6STZRLpl75VI/edit#gid=2004401054", range = "gs sem 08/11") %>% select(-DateColl, -Height, -Diameter, -Nb_leaves, -comment)
+
+#merge
+intermediate_gs <- bind_rows(t8, t14) 
+
+```
 
 
 
@@ -168,8 +292,24 @@ googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1al3U5pv2FQ0dW
 
 T71_NONdestructive <- subset(T71_NONdestructive, select = Time:WUE)
 
+T101_NONdestructif <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1ItJdPwjk5uwm6xcuP79dnaRvxP88lwVACGWBStx0NvI/edit#gid=0", range = "non_destructif")
 
-Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive)
+T101_NONdestructif <- subset(T101_NONdestructif, select = Time:WUE)
+
+
+Data_NonDes <- bind_rows(T0_NONdestructive,T21_NONdestructive,T27_NONdestructive, T51_NONdestructive, T57_NONdestructive, T71_NONdestructive, T101_NONdestructif)
+
+Data_NonDes_essai <- bind_rows(Data_NonDes, intermediate_gs)
+
+gs_auth()
+
+
+## Direct storage
+# Create an empty spreadsheet. It is stored as an object with a sheet_id and drive_id 
+ss <- googledrive::drive_create("Traits", path = "~/These/DRYERgreenhouse/", type = "spreadsheet")
+
+# Put the data.frame in the spreadsheet and provide the sheet_id so it can be found
+googlesheets4::sheet_write(data = Data_NonDes_essai, ss = ss, sheet = "Sheet1")
 
 library(rio)
 #export(Data, "datagreenhouse.csv")

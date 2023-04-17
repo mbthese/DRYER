@@ -1,0 +1,520 @@
+---
+title: "Greenhouse_analysis"
+author: "Marion Boisseaux"
+date: "26/09/2022"
+output: html_document
+---
+# Libraries
+```{r}
+library(dplyr)
+library(tidyverse)
+
+
+```
+
+
+# Data
+```{r}
+library(googlesheets4)
+Data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1sY3QcKLcGr_XV_-49DxeHnrTtk0zkntAuQQh4ojZ51E/edit#gid=1941239201", range = 'Traits')
+
+# if probelms use: gs4_auth(scopes = "https://www.googleapis.com/auth/spreadsheets.readonly" )
+
+long <- Data %>% 
+  dplyr::select(-gs_bis, -LeafSurface, -LeafWeight, -RootWeight, -StemWeight) %>%
+  gather(Trait, Value, -Time, -UniqueCode, -Block,
+         -Sblock, -Treatment, -Species) %>% 
+  group_by(Time, Species, Treatment, Trait) %>% 
+  summarise(Mean = mean(Value, na.rm=TRUE), n= n(), SD = sd(Value, na.rm = TRUE), SE = SD/sqrt(n)) 
+
+long<-  Data
+
+C <- Data %>% filter(Treatment == "C0") %>% mutate(Moisture= "")
+
+C$Moisture <- as.numeric(C$Moisture)
+
+if (C$Time = 't0'){
+  c$Moisture <- 41.1
+}
+
+for (i in 1:dim(C)[1]) {
+    if (C$Time[i] == "t0") {
+      C$Moisture[i] <- 41.1
+    } 
+}
+
+for (i in 1:dim(C)[1]) {
+    if (C$Time[i] == "t8") {
+      C$Moisture[i] <- 43.3
+    } 
+}
+
+for (i in 1:dim(C)[1]) {
+    if (C$Time[i] == "t14") {
+      C$Moisture[i] <- 44
+    } 
+}
+
+for (i in 1:dim(C)[1]) {
+    if (C$Time[i] == "t21") {
+      C$Moisture[i] <- 44.1
+    } 
+   if (C$Time[i] == "t51") {
+      C$Moisture[i] <- 40.6
+   }
+    if (C$Time[i] == "t27") {
+      C$Moisture[i] <- 40.8
+}  
+  if (C$Time[i] == "t57") {
+      C$Moisture[i] <- 39.3
+  }
+  if (C$Time[i] == "t71") {
+      C$Moisture[i] <- 40.7
+  }
+  if (C$Time[i] == "t101") {
+      C$Moisture[i] <- 39.4
+}
+}
+
+
+# D1
+
+D1 <- long %>% filter(Treatment == "D1") %>% mutate(Moisture= "")
+
+D1$Moisture <- as.numeric(D1$Moisture)
+
+
+for (i in 1:dim(D1)[1]) {
+    if (D1$Time[i] == "t0") {
+      D1$Moisture[i] <- 41.1
+    } 
+}
+
+for (i in 1:dim(D1)[1]) {
+    if (D1$Time[i] == "t8") {
+      D1$Moisture[i] <- 33.4
+    } 
+}
+
+for (i in 1:dim(D1)[1]) {
+    if (D1$Time[i] == "t14") {
+      D1$Moisture[i] <- 31.4
+    } 
+}
+
+for (i in 1:dim(D1)[1]) {
+    if (D1$Time[i] == "t21") {
+      D1$Moisture[i] <- 26
+    } 
+   if (D1$Time[i] == "t51") {
+      D1$Moisture[i] <- 36.6
+   }
+    if (D1$Time[i] == "t27") {
+      D1$Moisture[i] <- 34.1
+}  
+  if (D1$Time[i] == "t57") {
+      D1$Moisture[i] <- 35.1
+  }
+  if (D1$Time[i] == "t71") {
+      D1$Moisture[i] <- 35
+  }
+  
+}
+
+## D2
+
+D2 <- long %>% filter(Treatment == "D2") %>% mutate(Moisture= "")
+
+D2$Moisture <- as.numeric(D2$Moisture)
+
+
+for (i in 1:dim(D2)[1]) {
+    if (D2$Time[i] == "t0") {
+      D2$Moisture[i] <- 33.5
+    } 
+}
+
+for (i in 1:dim(D2)[1]) {
+    if (D2$Time[i] == "t8") {
+      D2$Moisture[i] <- 29.5
+    } 
+}
+
+for (i in 1:dim(D2)[1]) {
+    if (D2$Time[i] == "t14") {
+      D2$Moisture[i] <- 28.4
+    } 
+}
+
+for (i in 1:dim(D2)[1]) {
+    if (D2$Time[i] == "t21") {
+      D2$Moisture[i] <- 26.8
+    } 
+   if (D2$Time[i] == "t51") {
+      D2$Moisture[i] <- 37
+   }
+    if (D2$Time[i] == "t27") {
+      D2$Moisture[i] <- 24.4
+}  
+  if (D2$Time[i] == "t57") {
+      D2$Moisture[i] <- 37.3
+  }
+  if (D2$Time[i] == "t71") {
+      D2$Moisture[i] <- 31.6
+  }
+  
+}
+
+#D3
+D3 <- long %>% filter(Treatment == "D3") %>% mutate(Moisture= "")
+
+D3$Moisture <- as.numeric(D3$Moisture)
+
+
+for (i in 1:dim(D3)[1]) {
+    if (D3$Time[i] == "t0") {
+      D3$Moisture[i] <- 32.5
+    } 
+}
+
+for (i in 1:dim(D3)[1]) {
+    if (D3$Time[i] == "t8") {
+      D3$Moisture[i] <-28.2 
+    } 
+}
+
+for (i in 1:dim(D3)[1]) {
+    if (D3$Time[i] == "t14") {
+      D3$Moisture[i] <- 25.9
+    } 
+}
+
+for (i in 1:dim(D3)[1]) {
+    if (D3$Time[i] == "t21") {
+      D3$Moisture[i] <- 22
+    } 
+   if (D3$Time[i] == "t51") {
+      D3$Moisture[i] <-12.4
+   }
+    if (D3$Time[i] == "t27") {
+      D3$Moisture[i] <- 19.2
+}  
+  if (D3$Time[i] == "t57") {
+      D3$Moisture[i] <- 10.9
+  }
+  if (D3$Time[i] == "t71") {
+      D3$Moisture[i] <- 10.4
+  }
+  if (D3$Time[i] == "t101") {
+      D3$Moisture[i] <- 35
+  }
+  
+}
+
+
+## combine
+Long_soil <- rbind(C, D1, D2, D3)
+```
+
+
+# Preliminary results 
+
+```{r}
+RWC <- Long_soil %>% filter(Trait == 'RWC') %>% select(-Trait) %>% rename(RWC = Mean, RWC_SD = SD, RWC_n = n, RWC_SE = SE)
+Pmidday <- Long_soil %>% filter(Trait == 'Pmidday') %>% select(-Trait) %>% rename(Pmidday = Mean, Pmidday_SD = SD, Pmidday_n = n, Pmidday_SE = SE)
+
+RWC_Pmidday <- left_join(RWC, Pmidday)
+
+
+model_0 <- lmer(RWC ~ Moisture + (0 + Moisture | Species), RWC) # have everyone starts at 100 (fixed intercept for all) and evaluate the different slopes of the different species
+model <- lm(RWC ~ Moisture * Species, RWC)
+
+predict(y, model_0)
+
+dd_m = data.frame(Moisture= c(0:50), IH_slope = 3.44341, EF_slope=
+                  Intercept =68.41)
+
+# Predictor vs Criterion {ggplot2} - separate regression lines
+ggplot(data = RWC_Pmidday, 
+       aes(x = Moisture,
+           y = RWC,
+           colour=Species)) + 
+  geom_smooth(method=lm, se= FALSE) + 
+  geom_point(size = 2) +
+  
+  xlab("Volumetric Water Content (%)") + ylab("RWC (%)")
+
+Species <- c('Epe.fal', 'Iry.hos', 'Jac.cop', 'Pte.off', 'Sym.off', 'Tac.mel' , 'Vir.sur')
+Moisture2 <- c(0:50, "")
+
+
+library(ggplot2)
+
+
+a <-  Long_soil %>%
+ filter(Time  %in% c('t0', 't21', 't27', 't71')) %>%
+ ggplot() +
+ aes(x = Moisture, y = RWC, colour = Species) +
+ scale_color_manual(values = c("#f17423", "#a68107", "#70ad47", "#4fcfb3", "#3bc4ed", "#bf89f5", "#ff00ffff"), labels=c('Epe.fal', 'Iry.hos', 'Jac.cop' , 'Pte.off','Sym.off','Tac.mel', 'Vir.sur')) +
+ geom_point(shape = "circle", size = 2.35) +
+ geom_smooth(method = lm, se=FALSE) +
+  scale_x_reverse() + 
+ theme_minimal()+
+   xlab("Soil water content (%)") + ylab("Leaf relative water content (%)")+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"),legend.title = element_text(size = 20), legend.text = element_text(size = 15)) +ylim(20,100)
+
+a
+ggsave(filename = "Resistance_RWC_moisture.png", plot = a, bg = "white", width = 10, height = 8, dpi = 600)
+
+b <- Long_soil %>%
+  filter(Species != "Epe.fal")%>%
+ filter(Time == c("t71", "t101")) %>%
+ ggplot() +
+ aes(x = Moisture, y = RWC, colour = Species) +
+scale_color_manual(values = c( "#a68107", "#70ad47", "#4fcfb3", "#3bc4ed", "#bf89f5", "#ff00ffff"), labels=c('Iry.hos', 'Jac.cop' , 'Pte.off','Sym.off','Tac.mel', 'Vir.sur')) +
+ geom_point(shape = "circle", size = 2.35) +
+ geom_smooth(method = lm, se=FALSE) +
+ theme_minimal()+
+   xlab("Soil water content (%)") + ylab("Leaf relative water content (%)")+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"),legend.title = element_text(size = 20), legend.text = element_text(size = 15)) + ylim(20,100)
+ b
+ ggsave(filename = "Last_Resilience_RWC_moisture.png", plot = b, bg = "white", width = 10, height = 8, dpi = 600)
+
+# install.packages("devtools")
+devtools::install_github("thomasp85/patchwork")
+library(patchwork)
+
+c <-(a | b ) + plot_layout(guides = "collect")
+
+ ggsave(filename = "RWC_moisture.png", plot = c, bg = "white", width = 20, height = 8, dpi = 600)
+```
+
+
+## RWC
+```{r}
+
+library(dplyr)
+library(ggplot2)
+
+# Create a group-means data set
+long %>%
+ggplot(aes(Time, Value, col = Species)) +
+  geom_line() +
+  facet_wrap(~Trait)
+
+
+library(dplyr)
+library(ggplot2)
+Long_soil$Time <- ordered(Long_soil$Time, levels = c('t0', 't21', 't27', 't51', 't57', 't71', 't101'))
+
+labels <- c('Epe.fal'="Eperua falcata", 'Iry.hos' ="Iryanthera hostmannii", 'Jac.cop'="Jacaranda copaia subsp. copaia", 'Pte.off'= "Pterocarpus officinalis", 'Sym.off'="Symphonia globulifera", 'Tac.mel' ="Tachigali melinonii", 'Vir.sur' ="Virola surinamensis")
+
+#Resistance
+
+drought_color <- c( C0 = "#305BD6", T = "#FFC443")
+
+long_resistance <- Long_soil %>% filter(Time %in% c("t0", "t21", "t27", "t71"))  %>% filter(Trait %in% "Pmidday") 
+
+long_resistance$Treatment[long_resistance$Treatment == "D1"] <- "T"      
+long_resistance$Treatment[long_resistance$Treatment == "D2"] <- "T" 
+long_resistance$Treatment[long_resistance$Treatment == "D3"] <- "T" 
+
+Resistance_RWC <- long_resistance %>%
+ filter(Trait %in% "Pmidday") %>%
+ filter(!is.na(Mean)) %>%
+ ggplot() +
+ aes(x = Mean, y = Moisture, color = Species) +
+ geom_point() +
+ geom_line(size = 2, color= "#FFC443")+
+ scale_color_manual(values = drought_color, labels=c('Control', 'Drought treatment')) +
+ labs(x = "Moisture (%)", y = "Relative leaf water content (%)") +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(25, 100)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resistance_RWC_moisture.png", plot = Resistance_RWC, bg = "white", width = 20, height = 8, dpi = 600)
+
+# Resilience 
+
+drought_color <- c( C0 = "#305BD6", T = "#FFC443")
+
+long_resilience <- long %>% filter(Time %in% c("t0", "t21", "t27", "t51","t57", "t71", "t101")) %>% filter(Trait == 'RWC')
+
+long_resilience$Time <- ordered(long_resilience$Time, levels = c('t0', 't21', 't27', 't51', 't57', 't71', 't101'))
+
+Resilience_RWC_3 <- long_resilience %>%
+ filter(Time %in% c("t0", "t21", "t27", "t71", "t51", "t57", "t101"))%>% 
+  filter(Treatment %in% c('C0', 'D3')) %>%
+ filter(!is.na(Mean)) %>%
+ ggplot() +
+ aes(x = Time, y = Mean, group = Treatment , color = Treatment) +
+ geom_point() +
+ geom_line(size = 2)+
+ scale_color_manual(values =  c( C0 = "#305BD6", D1 = "#41bf24", D2 = "#249dbf", D3 = "#bf242e"), labels=c('Control', 'Drought treatment', 'Drought treatment', 'Drought treatment')) +
+ labs(x = "Time", y = "Relative leaf water content (%)") +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(0, 100)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resilience_RWC_3.png", plot = Resilience_RWC_3, bg = "white", width = 20, height = 8, dpi = 600)
+
+
+
+
+```
+
+## Pmidday
+
+```{r}
+long_resistance <- long %>% filter(Time %in% c("t0", "t21", "t27", "t71")) %>% filter(Trait == 'Pmidday')
+
+long_resistance$Treatment[long_resistance$Treatment == "D1"] <- "T"      
+long_resistance$Treatment[long_resistance$Treatment == "D2"] <- "T" 
+long_resistance$Treatment[long_resistance$Treatment == "D3"] <- "T" 
+
+Resistance_Pmidday <- long_resistance %>%
+ filter(Trait %in% "Pmidday") %>%
+ filter(!is.na(Mean)) %>%
+ filter(!is.na(Species)) %>%
+ ggplot() +
+ aes(x = Time, y = Mean, group = Treatment , color = Treatment) +
+ geom_point() +
+ geom_line(size = 2)+
+ scale_color_manual(values = drought_color, labels=c('Control', 'Drought treatment')) +
+ labs(x = "Time", y = "Midday leaf water potential (MPa)") +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(-6, 0)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resistance_Pmidday.png", plot = Resistance_Pmidday, bg = "white", width = 20, height = 8, dpi = 600)
+```
+
+
+## gs
+```{r}
+
+long_resistance <- long %>% filter(Time %in% c("t0", "t8", "t14", "t21", "t27", "t71")) %>% filter(Trait == 'gs')
+
+long_resistance$Time <- ordered(long_resistance$Time, levels = c('t0','t8', 't14', 't21', 't27', 't71'))
+
+long_resistance$Treatment[long_resistance$Treatment == "D1"] <- "T"      
+long_resistance$Treatment[long_resistance$Treatment == "D2"] <- "T" 
+long_resistance$Treatment[long_resistance$Treatment == "D3"] <- "T" 
+
+Resistance_gs <- long_resistance %>%
+ filter(Trait %in% "gs") %>%
+ filter(!is.na(Mean)) %>%
+ filter(!is.na(Species)) %>%
+ ggplot() +
+ aes(x = Time, y = Mean, group = Treatment , color = Treatment) +
+ geom_point() +
+ geom_line(size = 2)+
+ scale_color_manual(values = drought_color, labels=c('Control', 'Drought treatment')) +
+ labs(x = "Time", y = "Leaf stomatal conductance (mmol.m^-2.s^-1)") +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(0, 600)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resistance_gs.png", plot = Resistance_gs, bg = "white", width = 20, height = 8, dpi = 600)
+```
+
+## FvFvm
+
+```{r}
+
+long_resistance <- long %>% filter(Time %in% c("t0", "t21", "t27", "t71")) %>% filter(Trait == 'FvFm')
+
+long_resistance$Time <- ordered(long_resistance$Time, levels = c('t0', 't21', 't27', 't71'))
+
+long_resistance$Treatment[long_resistance$Treatment == "D1"] <- "T"      
+long_resistance$Treatment[long_resistance$Treatment == "D2"] <- "T" 
+long_resistance$Treatment[long_resistance$Treatment == "D3"] <- "T" 
+
+Resistance_fvfm <- long_resistance %>%
+ filter(Trait %in% "FvFm") %>%
+ filter(!is.na(Mean)) %>%
+ filter(!is.na(Species)) %>%
+ ggplot() +
+ aes(x = Time, y = Mean, group = Treatment , color = Treatment) +
+ geom_point() +
+ geom_line(size = 2)+
+ scale_color_manual(values = drought_color, labels=c('Control', 'Drought treatment')) +
+ labs(x = "Time", y = "FvFm") +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(0, 1)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resistance_fvfm.png", plot = Resistance_fvfm, bg = "white", width = 20, height = 8, dpi = 600)
+```
+
+# Asat
+```{r}
+long_resistance <- long %>% filter(Time %in% c("t0", "t21", "t27", "t71")) %>% filter(Trait == 'Asat')
+
+long_resistance$Time <- ordered(long_resistance$Time, levels = c('t0', 't21', 't27', 't71'))
+
+long_resistance$Treatment[long_resistance$Treatment == "D1"] <- "T"      
+long_resistance$Treatment[long_resistance$Treatment == "D2"] <- "T" 
+long_resistance$Treatment[long_resistance$Treatment == "D3"] <- "T" 
+
+Resistance_Asat <- long_resistance %>%
+ filter(Trait %in% "Asat") %>%
+ filter(!is.na(Mean)) %>%
+ filter(!is.na(Species)) %>%
+ ggplot() +
+ aes(x = Time, y = Mean, group = Treatment , color = Treatment) +
+ geom_point() +
+ geom_line(size = 2)+
+ scale_color_manual(values = drought_color, labels=c('Control', 'Drought treatment')) +
+ ylab(expression("Asat ("*mu ~ mol ~ m^-2 ~ s^-1 * ")")) +
+ theme_minimal() +
+ facet_wrap(vars(Species), labeller = as_labeller(labels)) +#scales = free  +
+  coord_cartesian(ylim = c(0, 15)) +
+  geom_errorbar(aes(ymin=Mean-SD, ymax=Mean+SD), width=.2,
+                 position=position_dodge(0.05))  +#standard deviation
+ theme_minimal()+
+ theme(axis.text=element_text(size=20),
+        axis.title=element_text(size=20,face="bold"))+
+  theme(strip.text.x = element_text(size = 20)) + #size of facet text
+  theme(legend.title = element_text(size = 20), legend.text = element_text(size = 15))
+  
+ggsave(filename = "Resistance_Asat.png", plot = Resistance_Asat, bg = "white", width = 20, height = 8, dpi = 600)
+```
+

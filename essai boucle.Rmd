@@ -1,0 +1,68 @@
+---
+title: "Untitled"
+author: "Marion Boisseaux"
+date: "2023-02-22"
+output: html_document
+---
+
+une action
+une autre action
+une action
+une autre action
+une action
+une autre action
+une action
+une autre action
+une action
+une autre action
+
+
+repeat[5]
+une action
+une autre action
+
+
+machin <- path
+truc <- dks
+
+
+```{r}
+doss <- pathtodoss
+allfiles <- list.files(doss)
+
+nom_var <- c("")
+nbcol <- match(names(data),nom_var)
+
+
+store_a <- NULL
+for (i in data[,nbcol]){
+  
+  
+  plotlist[[names(data)[nbcol]]] <- local({
+    ggplot(x=trmtmt
+           y=i)
+    
+    
+  })
+  
+  currentfile <- allfiles[i]
+  a <- fun(currentfile)
+  store_a <- c(store_a,a)
+}
+
+a <- 2
+if(a<5){print("dfldkf")
+}else{print("df")}
+
+
+
+ifelse(a<5,"df")
+
+
+i <-5
+while (i<10) {
+  print(i)
+  i <- i+1
+  
+}
+```

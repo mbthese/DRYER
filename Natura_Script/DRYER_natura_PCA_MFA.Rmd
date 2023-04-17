@@ -1,0 +1,209 @@
+---
+title: "Natura-PCA"
+author: "Marion Boisseaux"
+date: "22/09/2022"
+output: html_document
+---
+# Libraries
+
+```{r librairies_results}
+library(tidyverse)
+library(ggfortify)
+library(dplyr)
+library(factoextra)
+library(FactoMineR)
+library(Factoshiny)
+library(corrplot) 
+library(ggpubr)
+library(ggfortify)
+library(agricolae)
+library(rstatix)
+library(kableExtra)
+library(V.PhyloMaker)
+library(ggfortify)
+library(ggtree)
+library(readxl)
+library(lme4)
+library(ggeffects) #draw plots of models
+library(nlme)
+library(sjPlot) #for plotting lmer and glmer mods
+library(gridExtra)
+library(rio)
+library(vegan)
+```
+
+
+
+# Data
+
+```{r}
+data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/13NVmdKXHo6wZKErSje-4_Iv8C-6uHz_KuBTiUL6oifE/edit#gid=27160926", range = "traits") 
+
+# To get SLA
+data_SLA <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/13NVmdKXHo6wZKErSje-4_Iv8C-6uHz_KuBTiUL6oifE/edit#gid=27160926", range = "LA") %>% select (Code, LA_rwc) 
+
+data_SLA <- data %>% select(Code, DW) %>% left_join(data_SLA)
+
+data_SLA <- data_SLA %>% mutate(SLA = LA_rwc/DW)
+
+data_SLA <- data_SLA %>% select(Code, SLA) 
+
+data <- left_join(data, data_SLA)
+
+data <- data %>% select(Code, Name, gmin, Ptlp , LA , SLA , RootShoot , RootLength_Total , RootDiameter , SRL , LA_Total , Height , StemDiameter , LSWC , StomatalDensity , LT)
+
+
+data2 <- data %>% na.omit()
+
+data <- data2
+
+
+```
+
+
+# PCA
+
+```{r}
+g <- autoplot(princomp(~ gmin + Ptlp + LA + SLA + RootShoot + RootLength_Total + RootDiameter + SRL + LA_Total + Height + StemDiameter + LSWC + StomatalDensity + LT, data = data, cor = T),
+         data = data, colour = "Name", alpha = 0.4, size = 2,
+         loadings = T, loadings.label = T, loadings.label.repel = T, 
+         #loadings.label.hjust = c(0, -1,0, 0,0),
+         #loadings.label.vjust = c(0, 0, 0, 0, 0),
+         loadings.label.colour = 'black', loadings.colour = 'black',
+         loadings.label.size = 6) +
+  geom_hline(aes(yintercept = 0), col = 'black', linetype = "dotted") +
+  geom_vline(aes(xintercept = 0), col = 'black', linetype = "dotted")  +
+  scale_color_discrete(name="Species",
+                         breaks=c("Eperua falcata", "Iryanthera hostmannii", "Jacaranda copaia subsp. copaia", "Pterocarpus officinalis", "Symphonia globulifera", "Tachigali melinonii", "Virola surinamensis"),
+                         labels=c(expression(italic("Eperua falcata")), expression(italic("Iryanthera hostmannii")), expression(italic("Jacaranda copaia subsp. copaia")), expression(italic("Pterocarpus officinalis")),expression(italic( "Symphonia globulifera")), expression(italic("Tachigali melinonii")), expression(italic("Virola surinamensis"))))+
+  theme_classic() +
+  stat_ellipse(aes(col = Name), level = 0.80, size = 0.8)+
+    theme(legend.position = c(0.85,0.2), legend.title = element_text(size = 20),  legend.text = element_text(size=15))
+
+g
+ggsave(filename = "PCA_Natura.png", plot = g, bg = "white", width = 12, height = 8, dpi = 600)
+
+
+```
+
+# MFA
+
+```{r}
+
+data <- data %>% select(Name, gmin, Ptlp, SLA, RootLength_Total, RootDiameter, SRL,  LSWC , StomatalDensity , LT)
+
+data <- data %>% relocate(LSWC, .after = Ptlp) %>% relocate(StomatalDensity, .after = LSWC) %>% relocate(LT, .after = LSWC) 
+
+
+
+
+
+res = MFA(data, group=c(1,6,3), type=c("n",rep("s",2)), name.group=c("Identity","Leaf traits","Root traits"), num.group.sup=c(1))
+
+
+fviz_screeplot(res)
+fviz_mfa_var(res, "group")
+
+#Metradica_log: the data set used
+#group: a vector indicating the number of variables in each group
+#type: the type of the variables in each group. "s" for scaled continuous variables, "c" for centered (unscaled) continuous variables and "n" for categorical variables
+#ncp: number of dimensions kept in the result
+#name.group: names of the groups
+#num.group.sup: indexes of the supplementary groups
+
+#red color = active groups of variables
+#green color = supplementary groups of variables
+
+# "#ff80ff" : rose
+# "#E3B02D" : marron
+# "#5bb349" :
+# "#2D91E3" :
+
+# Contribution to the first dimension
+fviz_contrib(res, "group", axes = 1,  fill = c(  "#E3B02D","#5bb349"), color = "#ffffff") + theme_classic()
+# Contribution to the second dimension
+fviz_contrib(res, "group", axes = 2, fill = c("#5bb349", "#E3B02D"), color = "#ffffff") + theme_classic()
+
+
+
+quanti.var <- get_mfa_var(res, "quanti.var")
+quanti.var 
+
+var<- fviz_mfa_var(res, "quanti.var", palette = c("#5bb349", "#E3B02D"), labelsize = 8,
+              repel = TRUE) + theme_classic() +
+  theme(text = element_text(size = 20),
+        axis.title = element_text(size = 20),
+        axis.text = element_text(size = 20))
+
+var
+ggsave(filename = "VAR_LES_RES_Natura.png", plot = var, bg = "white", width = 8, height = 8, dpi = 600)
+
+# Coordinates
+head(quanti.var$coord)
+# Cos2: quality on the factore map
+head(quanti.var$cos2)
+# Contributions to the dimensions
+head(quanti.var$contrib)
+
+# Contributions to dimension 1
+fviz_contrib(res, choice = "quanti.var", axes = 1, top = 20, col.var= "group", color= "white" ) +  scale_fill_manual("Groups", values = c("#dec33c", "#5bb349", "#1e81b0"))
+
+# Contributions to dimension 2
+fviz_contrib(res, choice = "quanti.var", axes = 2, top = 20, col.var= "group", color= "white" ) +  scale_fill_manual("Groups", values = c("#dec33c", "#5bb349", "#1e81b0"))
+
+# Color by cos2 values: quality on the factor map
+fviz_mfa_var(res, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             col.var.sup = "violet", repel = TRUE)
+
+#create a bar plot of variables cos2
+fviz_cos2(res, choice = "quanti.var", axes = 1)
+
+#for individuals
+ind <- get_mfa_ind(res)
+ind
+
+fviz_mfa_ind(res, quali.var="Name", label="non", #remove points labelling
+             palette = "jco",
+             repel = TRUE)
+
+
+         
+mfa <- fviz_mfa_ind(res,
+                    geom = c("point", "text"),
+             habillage = "Name", # color by groups 
+             palette = c("Paired"), #color blind friendly
+             addEllipses = TRUE, ellipse.type = "confidence", 
+             repel = TRUE, # Avoid text overlapping
+             label="none",
+             cex.lab=1.5,
+             labelsize = 20, 
+             pointsize = 5) + theme_classic() +
+  theme(text = element_text(size = 20),legend.text = element_text(size = 14),
+        axis.title = element_text(size = 20),
+        axis.text = element_text(size = 20))
+
+mfa
+ggsave(filename = "MFA_LES_RES_Natura.png", plot = mfa, bg = "white", width = 12, height = 8, dpi = 600)
+
+fviz_ellipses(res, c("Name"), repel = TRUE, invisible = c("ind"))
+
+grp <- as.factor(data$Name)
+
+
+#to remove individuals add : invisible = c("ind","ind.sup")
+
+#ellipses
+#"Character specifying frame type. Possible values are "convex", "confidence" or types supported by stat_ellipse() including one of c("t", "norm", "euclid") for plotting concentration ellipses.
+
+#"convex": plot convex hull of a set o points.
+
+#"confidence": plot confidence ellipses arround group mean points as coord.ellipse()[in FactoMineR].
+
+#"t": assumes a multivariate t-distribution.
+
+#"norm": assumes a multivariate normal distribution.
+
+#"euclid": draws a circle with the radius equal to level, representing the euclidean distance from the center. This ellipse probably won't appear circular unless coord_fixed() is applied.#
+```
+

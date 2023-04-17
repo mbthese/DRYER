@@ -1,9 +1,4 @@
-test <- function(n1, n2) {
-  result  <- n1 + n2
-  return(result)
-}
-test(3,8)
-
+# Test 1 -----------
 
 PSYPRO_THESE <-
   function(Path_calibration,Path_psyprofolder, Time, Species, Series,Path_results) {
@@ -117,7 +112,7 @@ CalibrationPsyproNONA<- drop_na(CalibrationPsypro)
       g <- a %>%  ggplot(aes(x = sec,y =`psy uV`))+
         geom_point( ) +
         ggtitle ( label = paste0("sensor_",b,"  Pos_",i))
-      ggsave(filename = paste0("sensor_",i,'.jpg'), plot = g, device = "jpg", path = Path_results)
+      ggsave(filename = paste0("sensor_",i,'.jpg'), plot = g, device = "jpg", path = Path_results)+ ylim(c(5,20))
       g2 <- a %>% ggplot(aes(x = sec,y =`psy uV`))+
         geom_point( ) +
         ggtitle ( label = paste0("sensor_",b,"  Pos_",i))
@@ -149,17 +144,21 @@ CalibrationPsyproNONA<- drop_na(CalibrationPsypro)
     # Save it in the working directory
   }
 
+# Test 2 ---------------
 
-PSYPRO_THESE(Path_calibration = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib.csv", Path_psyprofolder = 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_input',Time = 'T71', Species = 'Ef_Ih', Series = '0', Path_results = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_results_1312/T71/Ef_Ih/0")
+PSYPRO_THESE(Path_calibration = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib092022.csv", Path_psyprofolder = 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Psypro_input',Time = 'T0', Species = 'Ef_Ih', Series = '1', Path_results = "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3_DRYERproject/Greenhouse_data/Psypro_results_2309/T0/Ef_Ih/1")
 
-------------------
+# Test 3 -------- 
+
+
+#Test that I have been using for my calculation of Pmidday in a boucle.
   
   
 library(devtools)
 install_github("LafontRapnouilTristan/EcophyCofog")
 
-path_to_calibration <- "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib102021.csv"
-psypro_output <- 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_input' #output of psypro but the inout to the function
+path_to_calibration <- "C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/1_Greenhouse_DRYER/data/Psypro_calibration/calib092022.csv"
+psypro_output <- 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/DRYER/3-DRYERproject/Greenhouse_data/Psypro_input' #output of psypro but the inout to the function
 
 #faire une boucle pour faire les 6 series
 #vecteur espèces, et faire une boucle dans une boucle
@@ -167,14 +166,14 @@ psypro_output <- 'C:/Users/marion.boisseaux/Dropbox/Mon PC (Jaboty20)/Documents/
 library(EcophyCofog)
 
 files<-list.files(psypro_output)
-species <- c("Ef_Ih", "Jc_Po", "Sg_Tm", "Vs")
-usedset <- c("0","1","2","3","4", "5", "6")
+species <- c("jc_po", "sg_tm")
+usedset <- c("1")
 
 for (i in files) {
   for (j in species){
     for (k in usedset){
       psypro(usedset = k,
-             lim = c(-1,25),
+             lim = c(-100,100),
              ID_vec = c(NA,NA,NA,NA,NA,NA,NA,NA),
              psypro_output = paste0(psypro_output,"/", i,"/", j, "/"),
              path_to_calibration = path_to_calibration)
@@ -184,8 +183,4 @@ for (i in files) {
   
 }
 
-psypro(usedset = 0,
-  lim = c(-1,25),
-  ID_vec = c(NA,NA,NA,NA,NA,NA,NA,NA),
-  psypro_output = psypro_output,
-  path_to_calibration = path_to_calibration)
+

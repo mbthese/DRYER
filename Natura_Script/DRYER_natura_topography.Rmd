@@ -1,0 +1,60 @@
+---
+title: "Coordinates"
+author: "Marion Boisseaux"
+date: "2023-04-17"
+output: html_document
+---
+
+```{r}
+library(plyr)
+library(tidyverse)
+library(knitr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+#path to files extrated from qgis with utm for each sampling
+path <- "../2_Natura_DRYER/Document/"
+
+myfiles <- list.files(path=path, pattern = "*.csv", full.names = TRUE ) #it will read the file with * being the replaced value each time
+
+data = ldply(myfiles, read.csv, sep = ";")
+
+data <- as_tibble(data) %>%
+  select(Genus, Species, Code, GPS, X, Y, ele) %>%
+  filter(!is.na(Code))
+
+#duplicate 50, because same as 51, same batch
+row = which(data$Code == 50)
+times = 1
+data2 <- data[rep(row, times),]
+data2$Code <- "51"
+data <- rbind(data, data2 )
+
+#separate the line Code 5-6, to make it 5 and 6
+row = which(data$Code == '5-6')
+times = 2
+data2 <- data[rep(row, times),]
+data2$Code <- c("5", "6")
+data <- rbind(data, data2 )
+
+data <- data %>%
+  filter(Code != '5-6') 
+
+data$Code <- as.numeric(data$Code) 
+
+data <- data %>%
+  dplyr::select(Code, X, Y, ele)
+```
+
+#merge with DRYER info collect
+```{r}
+info_collect <- readxl::read_xlsx("./Natura_data/DRYER_infocollect_morpho.xlsx")
+
+info_collect <- left_join(info_collect, data, by= c("Code"))
+
+write.csv(info_collect, "./Natura_data/DRYER_infocollect_morpho.csv")
+write.csv(info_collect, "../2_Natura_DRYER/rawdata/DRYER_infocollect_morpho.csv")
+
+```
+
